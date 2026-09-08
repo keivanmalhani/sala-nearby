@@ -175,6 +175,15 @@ a{color:var(--lamp);text-decoration:none}
 .rail .day b{font-size:15px;font-weight:700;line-height:1.1}
 .rail .day em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
 
+/* SEARCH. 73 films across 35 cinemas and 31 days, and the only way to find one was to
+   scroll. One box, one piece of state, drawn into both lists. */
+.srch{padding:9px 14px 4px;background:var(--surface)}
+.srch input{-webkit-appearance:none;appearance:none;width:100%;min-height:42px;
+  padding:0 13px;border-radius:11px;border:1px solid var(--line);background:var(--ground);
+  color:var(--ink);font:400 15px/1 "Bricolage Grotesque",system-ui,-apple-system,sans-serif}
+.srch input::placeholder{color:var(--ink-3)}
+.srch input:focus{outline:2px solid var(--lamp);outline-offset:-1px;border-color:var(--lamp)}
+
 .count{padding:11px 16px 7px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
 .count b{color:var(--lamp);font-weight:600}
 
@@ -445,6 +454,8 @@ button.pw:active{opacity:.72}
     <section class="pane on" id="pane-shows" role="tabpanel" aria-label="Showtimes">
       <div class="rail dates chrome" id="dates"></div>
       <div class="rail chrome" id="filters"></div>
+      <div class="srch"><input id="q" type="search" inputmode="search" autocomplete="off"
+        placeholder="Find a film" aria-label="Find a film"></div>
       <div class="count mono" id="scount"></div>
       <div id="showlist"></div>
       <div class="stamp" id="stamp"></div>
@@ -462,6 +473,8 @@ button.pw:active{opacity:.72}
 
     <!-- FILMS -->
     <section class="pane" id="pane-films" role="tabpanel" aria-label="Films">
+      <div class="srch"><input id="qf" type="search" inputmode="search" autocomplete="off"
+        placeholder="Find a film" aria-label="Find a film"></div>
       <div class="count mono" id="fcount"></div>
       <div id="filmlist"></div>
     </section>
@@ -704,6 +717,17 @@ function hueOf(fid) {
    on the page, and without this the console fills with 404s on every single launch. Any
    Cinemex film whose poster is genuinely missing still falls back through onerror. */
 function hasArtwork(fid) { return /^\d+$/.test(String(fid)); }
+
+/* Search folds accents both ways, so "senoritas" finds "Señoritas" and "Odisea" finds it
+   back. Half these titles carry a tilde or an accent and nobody types them on a phone.
+   The original title is searched too -- he is as likely to think "The Odyssey". */
+function fold(s) {
+  return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+function matchesQuery(f) {
+  if (!S.q) return true;
+  return fold(f && f.n).includes(S.q) || fold(f && f.o).includes(S.q);
+}
 function posterCard(fid, name, cls, tappable) {
   const t = tappable ? "button" : "span";
   const attrs = tappable
@@ -768,6 +792,7 @@ const S = {
   day: 0,
   filter: "all",   // all | now | sub | imax | atmos | plat
   tab: "shows",
+  q: "",           // the search box, shared by both lists
 };
 try { const t = localStorage.getItem("sala.theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
 
@@ -841,7 +866,10 @@ function filterCounts() {
     let n = 0;
     for (const c of SHOWS.cin) {
       for (const s of c.s) {
-        if (s[2] === S.day && passes(s[1], s[3], dayIso, k)) n++;
+        // The search narrows these too, or a chip stays lit for showings the search has
+        // already taken off the list and tapping it lands on an empty page.
+        if (s[2] === S.day && passes(s[1], s[3], dayIso, k)
+            && matchesQuery(SHOWS.films[s[0]])) n++;
       }
     }
     out[k] = n;
@@ -875,7 +903,7 @@ function renderFilters() {
 function renderShows() {
   const dayIso = DAYS[S.day];
   const cins = cinemasSorted();
-  let total = 0, shown = 0;
+  let total = 0, shown = 0, withAny = 0;
   const html = cins.map(c => {
     // group this cinema's sessions for the chosen day: film -> format -> times
     const byFilm = new Map();
@@ -883,6 +911,7 @@ function renderShows() {
       if (s[2] !== S.day) continue;
       total++;
       if (!passes(s[1], s[3], dayIso)) continue;
+      if (!matchesQuery(SHOWS.films[s[0]])) continue;
       shown++;
       if (!byFilm.has(s[0])) byFilm.set(s[0], new Map());
       const fm = byFilm.get(s[0]);
@@ -890,6 +919,7 @@ function renderShows() {
       fm.get(s[1]).push(s);
     }
     if (!byFilm.size) return "";
+    withAny++;
     const F = far(c.dist);
     const v = c.v != null ? V[c.v] : null;
     const films = [...byFilm.entries()]
@@ -924,11 +954,17 @@ function renderShows() {
         <span class="far"><b>${F.d}</b><em>${F.w}</em></span>
       </button>${films}</div>`;
   }).join("");
-  $("showlist").innerHTML = html || `<div class="empty"><b>Nothing matches</b>
-    Try another day, or clear the filter.</div>`;
-  const lbl = { all: "showings", now: "starting in the next four hours", sub: "subtitled showings",
-                imax: "IMAX showings", atmos: "Dolby Atmos showings", plat: "Platino showings" }[S.filter];
-  $("scount").innerHTML = `<b>${shown}</b> ${esc(lbl)} &middot; ${cins.length} cinemas`;
+  $("showlist").innerHTML = html || (S.q
+    ? `<div class="empty"><b>No film called that</b>
+       Nothing playing this day matches &ldquo;${esc(S.q)}&rdquo;. Try another day, or clear the box.</div>`
+    : `<div class="empty"><b>Nothing matches</b>
+       Try another day, or clear the filter.</div>`);
+  let lbl = { all: "showings", now: "starting in the next four hours", sub: "subtitled showings",
+              imax: "IMAX showings", atmos: "Dolby Atmos showings", plat: "Platino showings" }[S.filter];
+  if (shown === 1) lbl = lbl.replace(/showings$/, "showing");
+  $("scount").innerHTML = `<b>${shown}</b> ${esc(lbl)}${
+    S.q ? ` matching &ldquo;${esc(S.q)}&rdquo;` : ""} &middot; ${withAny} ${
+    withAny === 1 ? "cinema" : "cinemas"}`;
   /* THE GUIDE TAB IS GONE, so this no longer points at it. It said "Cinepolis and the
      independents are in the Guide with their own links" for the whole afternoon after the
      tab was removed, which is a footnote pointing at a place that does not exist. */
@@ -954,9 +990,12 @@ function renderFilms() {
       }
     }
     return { fid, f, n, near, types: [...types] };
-  }).filter(r => r.n).sort((a, b) => b.n - a.n);
+  }).filter(r => r.n && matchesQuery(r.f)).sort((a, b) => b.n - a.n);
 
-  $("fcount").innerHTML = `<b>${rows.length}</b> films playing ${S.day === 0 ? "today" : "that day"} near you`;
+  const nf = rows.length === 1 ? "film" : "films";
+  $("fcount").innerHTML = S.q
+    ? `<b>${rows.length}</b> ${nf} matching &ldquo;${esc(S.q)}&rdquo; ${S.day === 0 ? "today" : "that day"}`
+    : `<b>${rows.length}</b> ${nf} playing ${S.day === 0 ? "today" : "that day"} near you`;
   $("filmlist").innerHTML = rows.map(r => {
     const F = r.near ? far(km(origin, { lat: r.near.lat, lng: r.near.lng })) : null;
     return `<button class="frow haspos" data-film="${esc(r.fid)}">
@@ -966,7 +1005,7 @@ function renderFilms() {
           ${r.near ? "&middot; nearest " + esc(r.near.n) + (F ? " " + F.d : "") : ""}</span>
         <span class="fm">${fmtBadges(r.types, 3)}</span></span>
       <span class="cnt"><b>${r.n}</b><em>showings</em></span></button>`;
-  }).join("") || `<div class="empty"><b>Nothing that day</b></div>`;
+  }).join("") || `<div class="empty"><b>${S.q ? "No film called that" : "Nothing that day"}</b></div>`;
 }
 
 /* THE SYNOPSES, fetched once rather than baked in. posters/index.json is written by
@@ -1336,6 +1375,29 @@ document.addEventListener("click", e => {
     return map && map.easeTo({ center: [HOME.lng, HOME.lat], zoom: 13.1, duration: 450 });
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+
+/* ONE BOX, TWO INPUTS. Showtimes and Films are separate panes, and the box has to be at
+   the top of whichever list he is looking at, so the two are kept in step through S.q
+   rather than through the DOM. Debounced: re-drawing 8,300 showtimes on every keystroke
+   is felt on a phone. */
+let qTimer = null;
+function onQuery(e) {
+  const raw = e.target.value;
+  const v = fold(raw).trim();
+  [$("q"), $("qf")].forEach(el => { if (el && el !== e.target) el.value = raw; });
+  if (v === S.q) return;
+  S.q = v;
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => {
+    renderFilters();
+    renderShows();
+    if (S.tab === "films") renderFilms();
+  }, 120);
+}
+["q", "qf"].forEach(id => {
+  const el = $(id);
+  if (el) el.addEventListener("input", onQuery);
+});
 
 $("themebtn").addEventListener("click", () => {
   const cur = document.documentElement.dataset.theme ||
