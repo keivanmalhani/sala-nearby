@@ -80,7 +80,7 @@ quietly lists nothing on Thursday looks exactly like a page that is fine.
 
 **Cinema weeks in Mexico start on Thursday**, so a pull made on a Tuesday has the current
 week in full and only advance sales past Wednesday. Refreshing on a Thursday or later gets
-the most out of it. The 8 September pull went from 5,445 showings to 7,825 purely because
+the most out of it. The 8 September pull went from 5,445 showings to 7,853 purely because
 Thursday-to-Sunday had been published in between; Tuesday and Wednesday barely moved.
 
 `CINEMEX-API.md` has the endpoints, the version-in-the-path trap, and why this runs at

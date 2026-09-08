@@ -167,6 +167,9 @@ a{color:var(--lamp);text-decoration:none}
 .rail button{flex:none;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--ground);font-size:13px;font-weight:500;color:var(--ink-2);white-space:nowrap;min-height:38px;display:inline-flex;align-items:center;gap:7px}
 .rail button i{width:8px;height:8px;border-radius:50%;display:block}
 .rail button[aria-pressed="true"]{background:var(--lamp);border-color:var(--lamp);color:var(--lamp-ink)}
+/* Nothing of this kind on the selected day. Kept in place rather than removed so the row
+   does not reflow under his thumb as he moves along the date rail. */
+.rail button[disabled]{opacity:.34;border-style:dashed}
 .rail button[aria-pressed="true"] i{box-shadow:0 0 0 1.5px var(--lamp-ink)}
 .rail .day{flex-direction:column;gap:1px;padding:5px 12px;min-width:56px}
 .rail .day b{font-size:15px;font-weight:700;line-height:1.1}
@@ -352,6 +355,34 @@ a{color:var(--lamp);text-decoration:none}
   .vgrp .vl{font-size:11px}
   .count{font-size:11px}
   .sheet .go a{min-height:48px}
+}
+
+/* TABLET, and this is a rejection reason rather than a nicety. Apple runs every
+   submission on an iPad whether or not you built for one, and "iPad UI broken" is on the
+   short list of things they turn apps away for. Stretched to 1024 points this layout put
+   the venue name at the far left with its walking distance pinned nine hundred pixels
+   away on the right, and a row of sixty-pixel time chips floating in an ocean of empty
+   ground. Nothing was broken; it just read as a phone screen someone had dragged wider.
+
+   The fix is a reading column, not a tablet redesign -- none of these panes wants to be
+   two panes, and a second column of showtimes would be worse than one. The chrome keeps
+   its full-bleed background and centres its own contents with padding instead of a
+   max-width, so the top bar and the tab bar still read as bars rather than as cards
+   hovering in the middle of the screen.
+
+   The map is deliberately exempt. It is a map; it should have the whole screen. */
+@media (min-width:760px){
+  :root{--col:720px}
+  .top{padding-left:max(calc(env(safe-area-inset-left,0px) + 14px),calc((100% - var(--col))/2));
+       padding-right:max(calc(env(safe-area-inset-right,0px) + 14px),calc((100% - var(--col))/2))}
+  .rail{padding-left:max(14px,calc((100% - var(--col))/2));
+        padding-right:max(14px,calc((100% - var(--col))/2))}
+  .tabs{padding-left:max(0px,calc((100% - var(--col))/2));
+        padding-right:max(0px,calc((100% - var(--col))/2))}
+  .count,.stamp,#showlist,#filmlist{max-width:var(--col);margin-left:auto;margin-right:auto}
+  /* The stamp's top border is the last thing on the page, so at full bleed it drew a rule
+     across 1024 points under a 720-point column. */
+  .stamp{border-top-color:transparent;box-shadow:inset 0 1px 0 var(--line-2)}
 }
 
 @media (min-width:900px){
@@ -653,9 +684,9 @@ function isToday(iso) {
 const hhmm = m => String(Math.floor(m / 60) % 24).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
 
 /* ---------- filters ---------- */
-function passes(fmtIdx, mins, dayIso) {
+function passes(fmtIdx, mins, dayIso, which) {
   const t = SHOWS.fmts[fmtIdx].t || [];
-  switch (S.filter) {
+  switch (which === undefined ? S.filter : which) {
     case "now": return isToday(dayIso) && mins >= nowMins() - 10 && mins <= nowMins() + 240;
     case "sub": return t.includes("lang_sub");
     case "imax": return t.includes("imax");
@@ -678,18 +709,61 @@ function renderDates() {
   // each of those is noise, not choice.
   const have = new Set();
   SHOWS.cin.forEach(c => c.s.forEach(s => have.add(s[2])));
-  const idxs = [...have].sort((a, b) => a - b).slice(0, 14);
+  // EVERY DAY THAT HAS A SHOWING, not the first fortnight. This used to be
+  // `.slice(0, 14)`, and the payload carries whatever Cinemex has on sale -- 31 days on
+  // the 8 September pull -- so 1,045 showings were being shipped in the page and could
+  // not be reached from the interface at all. That includes the things most worth
+  // knowing about in advance: the Avengers Endgame bonus week, Linkin Park in October,
+  // and the Queen and Lalisa IMAX dates at Parque Delta.
+  //
+  // `have` is built from the sessions themselves, so every chip on the rail is a day
+  // with something on it. The rail scrolls; that is what it is for.
+  const idxs = [...have].sort((a, b) => a - b);
   $("dates").innerHTML = idxs.map(i => {
     const L = dayLabel(DAYS[i], i);
     return `<button class="day" data-day="${i}" aria-pressed="${S.day === i}">
       <b>${esc(L.b)}</b><em>${esc(L.e)}</em></button>`;
   }).join("");
 }
+const FILTER_OPTS = [["all", "Everything"], ["now", "Starting soon"], ["sub", "Subtitled"],
+                     ["imax", "IMAX"], ["atmos", "Atmos"], ["plat", "Platino"]];
+
+/** How many showings each filter would find on the selected day. */
+function filterCounts() {
+  const dayIso = DAYS[S.day], out = {};
+  for (const [k] of FILTER_OPTS) {
+    let n = 0;
+    for (const c of SHOWS.cin) {
+      for (const s of c.s) {
+        if (s[2] === S.day && passes(s[1], s[3], dayIso, k)) n++;
+      }
+    }
+    out[k] = n;
+  }
+  return out;
+}
+
 function renderFilters() {
-  const opts = [["all", "Everything"], ["now", "Starting soon"], ["sub", "Subtitled"],
-                ["imax", "IMAX"], ["atmos", "Atmos"], ["plat", "Platino"]];
-  $("filters").innerHTML = opts.map(([k, l]) =>
-    `<button data-filter="${k}" aria-pressed="${S.filter === k}">${esc(l)}</button>`).join("");
+  // A CHIP THAT CANNOT FIND ANYTHING IS NOW DISABLED RATHER THAN OFFERED.
+  //
+  // Sweeping every day against every filter, 63 of the 186 combinations rendered
+  // "Nothing matches", and 30 of those were a single chip: "Starting soon" means the next
+  // four hours, so it can never match on a day that is not today -- and it was offered on
+  // all thirty future days anyway. The rest are real absences: no IMAX showing on a given
+  // Tuesday, no Platino on a sparse advance-sale date.
+  //
+  // Offering a control that is guaranteed to find nothing is a dead end, which is one of
+  // the things App Review turns apps away for, and it is bad on its own terms: a greyed
+  // chip tells him at a glance what is actually on that day, which is information the
+  // empty screen was making him hunt for.
+  const counts = filterCounts();
+  // If the day changed out from under the current filter -- he was on IMAX and tapped a
+  // day with no IMAX -- fall back rather than showing him an empty list under a chip that
+  // is about to grey out.
+  if (!counts[S.filter]) S.filter = "all";
+  $("filters").innerHTML = FILTER_OPTS.map(([k, l]) =>
+    `<button data-filter="${k}" aria-pressed="${S.filter === k}"${counts[k] ? "" : " disabled"}
+      ${counts[k] ? "" : `aria-label="${esc(l)}, nothing on this day"`}>${esc(l)}</button>`).join("");
 }
 
 function renderShows() {
@@ -1120,7 +1194,12 @@ function setTab(t) {
 document.addEventListener("click", e => {
   const tab = e.target.closest(".tabs button"); if (tab) return setTab(tab.dataset.tab);
   const day = e.target.closest("[data-day]");
-  if (day) { S.day = +day.dataset.day; renderDates(); renderShows();
+  // renderFilters BEFORE renderShows, and it is not cosmetic: it is what greys out the
+  // chips that cannot match the newly-selected day, and it is also what drops a filter
+  // that has just become impossible back to "Everything". Without it here, moving along
+  // the date rail while a filter is on lands on an empty list under a chip that is still
+  // lit up.
+  if (day) { S.day = +day.dataset.day; renderDates(); renderFilters(); renderShows();
              if (S.tab === "films") renderFilms(); return; }
   const f = e.target.closest("[data-filter]");
   if (f) { S.filter = f.dataset.filter; renderFilters(); renderShows(); return; }
