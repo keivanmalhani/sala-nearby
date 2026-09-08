@@ -51,10 +51,12 @@
   if (same) {
     console.log("PASS -- the installed app is serving the published build");
   } else {
-    const at = (s) => (s.match(/Showtimes read ([0-9T :-]+)/) || [])[1] || "?";
+    // The rendered "Showtimes read ..." line does not exist in the source -- it is built
+    // at render time from SHOWS.at -- so read that field instead, which is in the file.
+    const at = (s) => (s.match(/"at":"([^"]+)"/) || [])[1] || "?";
     console.log("FAIL -- the app is serving an older build");
-    say("cached stamp", at(cached));
-    say("published stamp", at(net));
+    say("cached pull", at(cached));
+    say("published pull", at(net));
     console.log("  fix: the install handler must precache with " +
                 "new Request(u, {cache: 'reload'})");
   }
