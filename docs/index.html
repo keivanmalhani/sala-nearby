@@ -1066,6 +1066,36 @@ function cinemaSheet(cid) {
   openSheet(head, go, body, "var(--c-std)");
 }
 
+/* THE GUIDE WRITING, PUT WHERE IT IS ACTUALLY NEEDED. He removed the Guide tab and kept
+   the writing -- "what IMAX with Laser means in this city" is the part no ticketing app
+   has, and it is useless behind a tab and useful next to the badge that raised the
+   question. A film sheet shows only the formats that film actually plays in, so nobody
+   reads about Platino for a film that is not in one. Wording is the audited copy from the
+   old guide, unchanged. Nothing is written here for a format the audit did not cover. */
+const FORMAT_NOTE = {
+  imax: ["IMAX with Laser",
+    "A 4K laser projector, twelve channels of sound and a 1.90:1 screen. Every IMAX in "
+    + "Mexico is that kind; the tall 1.43:1 rooms do not exist here. Parque Delta and "
+    + "Antara are the two near Roma."],
+  dolby_atmos: ["Dolby Atmos",
+    "Speakers overhead as well as around you. You hear it most in a room built for it, "
+    + "which here means the CinemeXtremo screens."],
+  platinum: ["Platino",
+    "Full recliners, a waiter and a menu, at a flat price, usually 200 to 230 pesos. It "
+    + "is about the seat, not the screen."],
+  premium: ["Premium",
+    "Just a wider, softer seat. Not a format. Most Cinemex sites near Roma sell every "
+    + "seat as Premium."],
+  traditional: ["Standard",
+    "An ordinary room, and the cheapest ticket in the building."],
+  v3d: ["3D", "Glasses are sold at the counter for a few pesos if you do not bring your own."],
+  lang_sub: ["Subtitulada",
+    "Original audio, Spanish subtitles."],
+  lang_es: ["Espanol",
+    "Dubbed into Spanish. Most family films only play this way, so it is worth checking "
+    + "before you book."],
+};
+
 function filmSheet(fid) {
   const f = SHOWS.films[fid];
   if (!f) return;
@@ -1084,7 +1114,8 @@ function filmSheet(fid) {
   const go = rows.length
     ? `<a class="pri" href="${gmaps(rows[0][0].lat, rows[0][0].lng)}" target="_blank" rel="noopener">Walk to the nearest</a>`
     : "";
-  const body = `<div class="sec"><h3>${rows.length} cinemas, nearest first</h3></div>` + rows.map(([c, list]) => {
+  const body = `<div class="sec"><h3>${rows.length} ${
+    rows.length === 1 ? "cinema" : "cinemas"}, nearest first</h3></div>` + rows.map(([c, list]) => {
     const F = far(km(origin, { lat: c.lat, lng: c.lng }));
     const byFmt = new Map();
     list.forEach(s => { if (!byFmt.has(s[1])) byFmt.set(s[1], []); byFmt.get(s[1]).push(s); });
@@ -1106,7 +1137,21 @@ function filmSheet(fid) {
       <span><span class="n">${esc(c.n)}</span></span>
       <span class="far"><b>${F.d}</b><em>${F.w}</em></span></button>${vers}</div>`;
   }).join("");
-  openSheet(head, go, body, "var(--c-big)");
+  // Only the formats this film actually plays in, in a fixed order so the screen comes
+  // before the seat and the seat before the language.
+  const ORDER = ["imax", "dolby_atmos", "v3d", "platinum", "premium", "traditional",
+                 "lang_sub", "lang_es"];
+  const types = new Set();
+  rows.forEach(([, list]) => list.forEach(s =>
+    ((SHOWS.fmts[s[1]] || {}).t || []).forEach(t => types.add(t))));
+  const notes = ORDER.filter(t => types.has(t) && FORMAT_NOTE[t]);
+  const gloss = notes.length
+    ? `<div class="sec"><h3>What these formats mean</h3><dl class="spec">` + notes.map(t => {
+        const [k, txt] = FORMAT_NOTE[t];
+        return `<dt>${esc(k)}</dt><dd>${esc(txt)}</dd>`;
+      }).join("") + `</dl></div>`
+    : "";
+  openSheet(head, go, body + gloss, "var(--c-big)");
 }
 
 function venueSheet(i) {
