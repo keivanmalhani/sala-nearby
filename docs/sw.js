@@ -18,7 +18,7 @@
 // from the cached shell first and he sees the previous build for one more launch -- which
 // is exactly what happened while this change was being tested: the page on screen was two
 // edits behind the file on disk.
-const V = "sala-v10";
+const V = "sala-v11";
 const SHELL = V + "-shell";
 const LIB = V + "-lib";
 const TILES = V + "-tiles";
@@ -38,7 +38,20 @@ const PRECACHE = [
 self.addEventListener("install", (e) => {
   // addAll is atomic: one 404 and NOTHING is cached, which is the honest behaviour --
   // a half-populated shell cache is an app that opens to a broken page offline.
-  e.waitUntil(caches.open(SHELL).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
+  //
+  // `cache: "reload"` IS LOAD-BEARING AND BUMPING THE VERSION ABOVE IS NOT ENOUGH WITHOUT
+  // IT. GitHub Pages serves index.html with `cache-control: max-age=600`, so for ten
+  // minutes after a publish the browser's own HTTP cache still holds the old file --
+  // and a plain addAll is served from it. The result is the worst of both: a brand new
+  // cache name, correctly installed, correctly claiming clients, holding the previous
+  // build. Caught 2026-09-08 with `sala-v10-shell` serving a page stamped 10:04 with no
+  // search box in it, twenty minutes after the search had gone live. "reload" makes each
+  // of these go to the network.
+  e.waitUntil(
+    caches.open(SHELL)
+      .then((c) => c.addAll(PRECACHE.map((u) => new Request(u, { cache: "reload" }))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", (e) => {
