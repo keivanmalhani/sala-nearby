@@ -4,17 +4,25 @@
  * because the three kinds of thing here go stale on completely different clocks:
  *
  *   shell    the page, the icons, the manifest. Changes when I republish.
- *   lib      Leaflet and the Google fonts. Immutable, versioned in their own URLs.
- *   tiles    map imagery. Never changes, but there is an unbounded number of it.
+ *   lib      MapLibre and the Google fonts. Immutable, versioned in their own URLs.
+ *   tiles    map data. Never changes, but there is an unbounded number of it.
+ *   posters  one JPEG per film. Changes only when the film list does.
  *
  * The showtimes are baked into the page rather than fetched, so they ride along in the
  * shell and there is nothing separate to cache. They are a stamped snapshot either way;
  * every time chip links to Cinemex checkout, which is always live.
  */
-const V = "sala-v2";
+// BUMPED ON EVERY PUBLISH, and it has to be. The activate handler deletes any cache whose
+// name is not in the current set, so changing this is what makes a new version actually
+// reach a phone that already has the old one. Without a bump the navigation handler answers
+// from the cached shell first and he sees the previous build for one more launch -- which
+// is exactly what happened while this change was being tested: the page on screen was two
+// edits behind the file on disk.
+const V = "sala-v4";
 const SHELL = V + "-shell";
 const LIB = V + "-lib";
 const TILES = V + "-tiles";
+const POSTERS = V + "-posters";
 const TILE_MAX = 700;          // roughly all of Roma, Condesa, Juarez and Doctores at z16
 
 const PRECACHE = [
@@ -35,7 +43,7 @@ self.addEventListener("install", (e) => {
 
 self.addEventListener("activate", (e) => {
   e.waitUntil((async () => {
-    const keep = new Set([SHELL, LIB, TILES]);
+    const keep = new Set([SHELL, LIB, TILES, POSTERS]);
     for (const k of await caches.keys()) if (!keep.has(k)) await caches.delete(k);
     await self.clients.claim();
   })());
@@ -74,7 +82,7 @@ self.addEventListener("fetch", (e) => {
 
   // MAP TILES. Cache-first and never revalidated: a tile at a given z/x/y is the same
   // picture forever, so a conditional request would be a round trip to be told nothing.
-  if (url.hostname === "server.arcgisonline.com") {
+  if (url.hostname === "tiles.openfreemap.org") {
     e.respondWith((async () => {
       const c = await caches.open(TILES);
       const hit = await c.match(req);
@@ -92,7 +100,26 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // LEAFLET AND THE FONTS. Both are versioned in their own URLs, so cache-first with a
+  // THE POSTERS. Same origin, but they must be cached deliberately rather than falling
+  // through to the read-only branch at the bottom -- that one answers from the cache and
+  // otherwise goes to the network, so a poster never entered the cache at all and every
+  // one of them was a broken image with no signal. Cache-first: a poster for a given film
+  // id does not change, and refresh-posters.py writes a new file when a film does.
+  if (url.origin === self.location.origin && url.pathname.indexOf("/posters/") >= 0) {
+    e.respondWith((async () => {
+      const c = await caches.open(POSTERS);
+      const hit = await c.match(req);
+      if (hit) return hit;
+      try {
+        const r = await fetch(req);
+        if (r && r.ok) await c.put(req, r.clone());
+        return r;
+      } catch (_) { return new Response("", { status: 504 }); }
+    })());
+    return;
+  }
+
+  // MAPLIBRE AND THE FONTS. Both are versioned in their own URLs, so cache-first with a
   // quiet background refresh is safe and makes the second launch instant.
   if (url.hostname === "cdnjs.cloudflare.com"
       || url.hostname === "fonts.googleapis.com"

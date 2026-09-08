@@ -20,14 +20,14 @@ screen with no browser bars, and works with no signal after the first launch.
 
 ## How it is built
 
-One self-contained HTML file, no framework, no build step for the page itself. Leaflet for
-the map, Esri's Light Gray Canvas for the tiles, a service worker for offline.
+One self-contained HTML file, no framework, no build step for the page itself. MapLibre GL
+for the map, OpenFreeMap's vector tiles, a service worker for offline.
 
 `build.py` turns the original published page into this one. It does three things:
 
 1. **Strips 7.8 MB of base64 map tiles.** They had to be baked in because the original was
    published somewhere whose content policy blocks every image host. On its own domain the
-   map layer is ordinary, and the page drops from 8.1 MB to 329 KB, which is most of why
+   map layer is ordinary, and the page drops from 8.1 MB to a few hundred KB, which is most of why
    it launches instantly.
 2. **Gives it a real `<head>`** — the web app manifest, `apple-mobile-web-app-capable`,
    theme colours, icons. Those tags are what iOS reads when you Add to Home Screen; without
@@ -37,26 +37,57 @@ the map, Esri's Light Gray Canvas for the tiles, a service worker for offline.
 
 ### On picking a tile host
 
-Three free ones were tried. **All three answered HTTP 200** and two of them served a
-refusal painted into the image:
+The map was Leaflet over Esri's Light Gray Canvas raster tiles until 8 September, when he
+photographed it zoomed in and said it was blurry. It was. **Esri has no tile above zoom
+16** — 17, 18 and 19 all return an identical 2,521-byte image reading "Map data not yet
+available" — so Leaflet was stretching a zoom-16 picture across a zoom-18 view. Stretching
+pixels is what blurry is.
 
-| Host | Status | What the picture actually was |
+A different raster host only moves the ceiling up a level. Vector tiles carry geometry
+rather than pixels, so the renderer redraws roads and labels at whatever scale the screen
+is at, and it is sharp at every zoom. That is why the map is now MapLibre GL over
+OpenFreeMap — free, no key, no request limit, OpenStreetMap data.
+
+Four hosts were looked at, and **three of the four answered HTTP 200**:
+
+| Host | What came back | Verdict |
 |---|---|---|
-| Esri Light Gray Canvas | 200, 18 KB | a real map |
-| CARTO `light_all` | 200, 24 KB | "API KEY REQUIRED" watermarked across it |
-| OpenStreetMap standard | 200, 7 KB | "Access blocked — App is not following the tile usage policy" |
+| OpenFreeMap vector | 333 KB of real protobuf at z14 | in use |
+| CARTO `light_all` raster | 200, 24 KB, "API KEY REQUIRED" watermarked across it | refused |
+| OpenStreetMap raster | 200, 7 KB, "Access blocked — not following the usage policy" | refused |
+| Esri Light Gray Canvas | 200, 2,521 bytes, "Map data not yet available" above z16 | the bug |
 
-No status check can tell those apart. Zoom 17 and above from Esri returns a 2,521-byte
-tile reading "Map data not yet available", identical byte-for-byte at 17, 18 and 19, so
-`maxNativeZoom` is 16 and Leaflet upscales past it.
+**No status check separates any of those.** Only opening the picture does, which is why
+they were opened. If the tile host is ever swapped again, look at a tile.
 
 ## Showtimes are a snapshot
 
-They were pulled from Cinemex's public API and are stamped in the page. Re-running the
-fetch and rebuilding refreshes them. Every showtime chip links to Cinemex, so the price and
-the seat map are always live even when this listing is a few days old.
+They were pulled from Cinemex's public API and are stamped in the page. Every showtime chip
+links to Cinemex checkout, so the price and the seat map are always live even when this
+listing is a few days old.
+
+To refresh them:
+
+    /opt/homebrew/bin/python3 refresh-showtimes.py --dry-run   # fetch and check only
+    /opt/homebrew/bin/python3 refresh-showtimes.py             # write into the page
+    /opt/homebrew/bin/python3 refresh-posters.py               # posters for any new films
+    # then bump the cache name in docs/sw.js, or an installed phone keeps the old build
+
+The refresh refuses to write a payload that is materially worse than the published one --
+fewer cinemas, a big drop in showtimes, fewer films, or a first day that is not today. An
+empty answer from an API is a perfectly successful set of HTTP requests, and a page that
+quietly lists nothing on Thursday looks exactly like a page that is fine.
+
+**Cinema weeks in Mexico start on Thursday**, so a pull made on a Tuesday has the current
+week in full and only advance sales past Wednesday. Refreshing on a Thursday or later gets
+the most out of it. The 8 September pull went from 5,445 showings to 7,825 purely because
+Thursday-to-Sunday had been published in between; Tuesday and Wednesday barely moved.
+
+`CINEMEX-API.md` has the endpoints, the version-in-the-path trap, and why this runs at
+build time rather than in the page.
 
 ## Attribution
 
-Map tiles by Esri — Esri, HERE, Garmin, and OpenStreetMap contributors. Showtimes from
-Cinemex. Venue research is original.
+Map tiles by OpenFreeMap, from OpenMapTiles and OpenStreetMap contributors. Showtimes and
+posters from Cinemex's public web API. The venue audit — screen sizes, projection, sound,
+which claims are verified rather than assumed — is original research.
