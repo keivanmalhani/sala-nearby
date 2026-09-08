@@ -265,10 +265,28 @@ def compact(raw_cinemas, vnames):
     # rewrite every session's day field through the map.
     order = sorted(days.keys())
     remap = {days[d]: i for i, d in enumerate(order)}
+    dropped = 0
     for c in cins:
         for row in c["s"]:
             row[2] = remap[row[2]]
         c["s"].sort(key=lambda x: (x[2], x[3]))
+        # THE API REPEATS A SESSION OCCASIONALLY, and it reaches his eyes as a film listed
+        # at the same minute twice -- San Antonio showed Toy Story 5 at 17:45 twice on
+        # 2026-09-08, which reads as a bug in the app rather than in the source. One
+        # duplicate in 7,853 is small enough that nothing else would ever have flagged it.
+        # Keyed on film, format, day and minute, so two genuinely different screenings of
+        # the same film can still coexist.
+        seen, keep = set(), []
+        for row in c["s"]:
+            k = (row[0], row[1], row[2], row[3])
+            if k in seen:
+                dropped += 1
+                continue
+            seen.add(k)
+            keep.append(row)
+        c["s"] = keep
+    if dropped:
+        print("dropped %d duplicate session(s) the API returned twice" % dropped)
 
     return {"at": datetime.now().astimezone().isoformat()[:16],
             "films": films,
