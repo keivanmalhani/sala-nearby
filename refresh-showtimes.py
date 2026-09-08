@@ -94,6 +94,15 @@ HAND = {
 
 # ------------------------------------------------------------------ small helpers
 
+def salaOf(s):
+    """The room, from whichever field this build of the API is using."""
+    n = s.get("auditorium_number")
+    if n in (None, ""):
+        return ""
+    n = str(n).strip()
+    return n if n.lower().startswith("sala") else "Sala " + n
+
+
 def norm(s):
     s = unicodedata.normalize("NFKD", s or "")
     s = "".join(c for c in s if not unicodedata.combining(c)).lower()
@@ -186,8 +195,18 @@ def fetch():
         for m in movies:
             vers = []
             for v in (m.get("versions") or []):
-                ss = [{"t": s.get("datetime"), "sala": s.get("auditorium_name"),
-                       "avail": s.get("availability"), "url": s.get("url")}
+                # CINEMEX CHANGED THE SESSION SHAPE ON 2026-09-08, some time between the
+                # 11:34 pull and 14:45 the same day. It used to send "url" (a full
+                # checkout link) and "auditorium_name" ("Sala 5"). It now sends neither:
+                # the checkout id is the session's own "id", and the room is
+                # "auditorium_number" ("5"). Both old spellings are still read first, so
+                # this works whichever shape comes back, and check() below refuses a
+                # payload whose sessions have lost their ticket ids -- without that guard
+                # the change ships 8,000 dead time chips and every count still looks right.
+                ss = [{"t": s.get("datetime"),
+                       "sala": s.get("auditorium_name") or salaOf(s),
+                       "avail": s.get("availability"),
+                       "url": s.get("url"), "sid": s.get("id")}
                       for s in (v.get("sessions") or [])]
                 if ss:
                     vers.append({"label": v.get("label"), "type": v.get("type") or [],
@@ -245,6 +264,8 @@ def compact(raw_cinemas, vnames):
                         days[day] = len(days)
                     url = s.get("url") or ""
                     cid = url.rsplit("/", 1)[-1] if "/checkout/" in url else ""
+                    if not cid and s.get("sid") not in (None, ""):
+                        cid = str(s["sid"])
                     sess.append([fid, fi, days[day],
                                  int(clock[:2]) * 60 + int(clock[3:5]),
                                  (s.get("avail") or "high")[0], cid, s.get("sala") or ""])
@@ -297,6 +318,21 @@ def compact(raw_cinemas, vnames):
 
 # ------------------------------------------------------------------ the controls
 
+def cinemex_only(payload):
+    """The published payload with Cineteca Nacional taken out of it.
+
+    This script fetches Cinemex and nothing else, so what it produces is always the
+    Cinemex half. Cineteca is merged in afterwards by refresh-cineteca.py, which strips
+    and re-adds its own rows and is safe to run in either order. Comparing a Cinemex-only
+    pull against a page that already holds both is comparing 40 films to 75 and refusing
+    every honest refresh -- which is what happened the first time this ran after Cineteca
+    went in on 2026-09-08."""
+    cin = [c for c in payload["cin"] if not str(c["id"]).startswith("cineteca-")]
+    keep = {str(s[0]) for c in cin for s in c["s"]}
+    films = {k: v for k, v in payload["films"].items() if str(k) in keep}
+    return dict(payload, cin=cin, films=films)
+
+
 def check(new, old):
     """Refuse a payload that is materially worse than the one already published.
 
@@ -324,6 +360,33 @@ def check(new, old):
     today = date.today().isoformat()
     if new["days"] and new["days"][0] != today:
         problems.append("first day is %s, not today (%s)" % (new["days"][0], today))
+
+    # A TIME CHIP WITH NO TICKET ID LINKS TO "#". Nothing above notices: the cinema is
+    # there, the film is there, the count is right, and every one of the times is dead.
+    # That is exactly what happened when Cinemex stopped sending "url" on 2026-09-08, so
+    # the share of sessions carrying an id is now a control rather than an assumption.
+    def ticketed(p):
+        n = t = 0
+        for c in p["cin"]:
+            for s in c["s"]:
+                t += 1
+                if s[5]:
+                    n += 1
+        return n, t
+
+    n_id, n_tot = ticketed(new)
+    o_id, o_tot = ticketed(old)
+    share_new = n_id / max(n_tot, 1)
+    share_old = o_id / max(o_tot, 1)
+    if share_new < min(0.9, share_old - 0.05):
+        problems.append("only %d of %d showtimes carry a ticket id (%.0f%%, was %.0f%%) "
+                        "-- every time chip without one links nowhere"
+                        % (n_id, n_tot, 100 * share_new, 100 * share_old))
+
+    salas_new = sum(1 for c in new["cin"] for s in c["s"] if len(s) > 6 and s[6])
+    salas_old = sum(1 for c in old["cin"] for s in c["s"] if len(s) > 6 and s[6])
+    if salas_old and salas_new < salas_old * 0.5:
+        problems.append("room names %d -> %d" % (salas_old, salas_new))
 
     empty = [c["n"] for c in new["cin"] if not c["s"]]
     if empty:
@@ -369,7 +432,8 @@ def main():
                    "cinemas": raw, "failed": failed},
                   open(cache, "w", encoding="utf-8"), ensure_ascii=False)
     new, unmatched = compact(raw, vnames)
-    problems, n_new, n_old, linked = check(new, old)
+    had_cineteca = [c["n"] for c in old["cin"] if str(c["id"]).startswith("cineteca-")]
+    problems, n_new, n_old, linked = check(new, cinemex_only(old))
 
     print("\nfilms %d, formats %d, days %d, cinemas %d, showtimes %d"
           % (len(new["films"]), len(new["fmts"]), len(new["days"]),
@@ -377,7 +441,7 @@ def main():
     print("linked to a curated venue: %d of %d" % (linked, len(new["cin"])))
     print("days %s .. %s" % (new["days"][0], new["days"][-1]))
 
-    nd, od = by_day(new), by_day(old)
+    nd, od = by_day(new), by_day(cinemex_only(old))
     print("\n  day          now    was")
     for d in sorted(set(nd) | set(od)):
         a, b = nd.get(d, 0), od.get(d, 0)
@@ -408,8 +472,15 @@ def main():
     out = page[:i] + "const SHOWS=" + blob + ";" + page[j:]
     open(PAGE, "w", encoding="utf-8").write(out)
     print("wrote docs/index.html: %s bytes" % format(len(out), ","))
-    print("\nNEXT: refresh-posters.py for any new films, then bump the sw.js cache name,")
-    print("      or a phone with the old version installed keeps serving it.")
+    if had_cineteca:
+        print("\nCINETECA IS NOT IN THE PAGE RIGHT NOW. This script writes the Cinemex half")
+        print("      and nothing else, so %d sedes just left the page:" % len(had_cineteca))
+        for n in had_cineteca:
+            print("        " + n)
+        print("      Run refresh-cineteca.py before you commit or push anything.")
+    print("\nNEXT: refresh-cineteca.py, then refresh-posters.py for any new films, then bump")
+    print("      the sw.js cache name, or a phone with the old version installed keeps")
+    print("      serving it.")
     return 0
 
 

@@ -155,7 +155,11 @@ def main():
 
     got, failed = 0, []
     manifest = {}
-    for fid in sorted(films, key=int):
+    # SORT BY THE ID AS TEXT, PADDED. Cinemex's film ids are numbers and Cineteca's are
+    # "ct-HO00009798", so int() stopped being a safe key the moment Cineteca went into the
+    # page on 2026-09-08 -- this line raised ValueError and took the whole poster refresh
+    # down with it, after the fetch had already succeeded.
+    for fid in sorted(films, key=lambda f: (0, int(f), "") if str(f).isdigit() else (1, 0, str(f))):
         m = movies.get(fid)
         if not m:
             continue
