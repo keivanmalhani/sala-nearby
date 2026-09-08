@@ -152,7 +152,7 @@ a{color:var(--lamp);text-decoration:none}
 .pane.on{display:block}
 .pane.map{overflow:hidden}
 
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);position:relative;z-index:30}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);position:relative;z-index:30}
 .tabs button{display:grid;place-items:center;gap:3px;padding:8px 4px 7px;min-height:52px;color:var(--ink-3);position:relative}
 .tabs button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tabs button span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
@@ -276,13 +276,13 @@ a{color:var(--lamp);text-decoration:none}
 .mapctl button{width:42px;height:42px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.18)}
 .mapctl button:active{background:var(--tap)}
 .mapctl svg{width:20px;height:20px;fill:none;stroke:var(--ink-2);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.keybtn{position:absolute;left:12px;bottom:12px;z-index:600;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,.18);font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);min-height:38px}
-.keybtn i{width:9px;height:9px;border-radius:50%;display:block}
-.keypanel{position:absolute;left:12px;bottom:12px;z-index:601;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:none;gap:7px;box-shadow:0 4px 24px rgba(0,0,0,.25);max-width:min(78vw,300px)}
-.keypanel.on{display:grid}
-.keypanel .r{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-2)}
-.keypanel .r i{width:11px;height:11px;border-radius:50%;flex:none;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--ink-3)}
-.keypanel .note{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-3);line-height:1.5;border-top:1px solid var(--line-2);padding-top:8px;margin-top:2px}
+
+
+
+
+
+
+
 
 /* ---------- bottom sheet ---------- */
 .scrim{position:fixed;inset:0;background:rgba(10,7,6,.42);opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:900}
@@ -344,7 +344,7 @@ a{color:var(--lamp);text-decoration:none}
   .rail .day{min-height:46px;padding:6px 13px}
   .iconbtn{width:44px;height:44px}
   .tabs button{min-height:56px}
-  .keybtn{min-height:44px}
+  
   /* Measured at 42x42 on a 390px viewport, which misses by two pixels in both directions.
      A short control and a narrow one fail a thumb the same way. */
   .mapctl button{width:44px;height:44px}
@@ -427,8 +427,6 @@ a{color:var(--lamp);text-decoration:none}
         <button id="zin" aria-label="Zoom in"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
         <button id="zout" aria-label="Zoom out"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
       </div>
-      <button class="keybtn chrome" id="keybtn"><i style="background:var(--c-big)"></i>What the dots mean</button>
-      <div class="keypanel chrome" id="keypanel"></div>
     </section>
 
     <!-- FILMS -->
@@ -438,7 +436,6 @@ a{color:var(--lamp);text-decoration:none}
     </section>
 
     <!-- GUIDE -->
-    <section class="pane" id="pane-guide" role="tabpanel" aria-label="Guide"><div class="doc" id="doc-guide"></div></section>
   </div>
 
   <nav class="tabs chrome" role="tablist" aria-label="Sections">
@@ -448,8 +445,6 @@ a{color:var(--lamp);text-decoration:none}
       <svg viewBox="0 0 24 24"><path d="M9 3.5 3 6v14.5l6-2.5 6 2.5 6-2.5V3.5L15 6 9 3.5z"/><path d="M9 3.5V18M15 6v14.5"/></svg><span>Map</span></button>
     <button role="tab" data-tab="films" aria-selected="false">
       <svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M7 5v14M17 5v14M2.5 12h19"/></svg><span>Films</span></button>
-    <button role="tab" data-tab="guide" aria-selected="false">
-      <svg viewBox="0 0 24 24"><path d="M5 3.5h11l3.5 3.5v13.5H5z"/><path d="M8.5 11h7M8.5 15h7M8.5 7.5h4"/></svg><span>Guide</span></button>
   </nav>
 </div>
 
@@ -1012,8 +1007,12 @@ function initMap() {
     fadeDuration: 120,
   });
   map.touchZoomRotate.disableRotation();
+  // COMPACT, since 2026-09-08. Expanded, this wraps to two full-width lines across the
+  // bottom of a 393px phone and it was only ever tolerable because the legend button sat
+  // in front of it. The legend is gone, so the attribution is a tappable (i) instead --
+  // still there, still one tap, no longer a paragraph laid over Roma Sur.
   map.addControl(new maplibregl.AttributionControl({
-    compact: false,
+    compact: true,
     customAttribution: "OpenFreeMap, OpenMapTiles, OpenStreetMap contributors",
   }), "bottom-right");
 
@@ -1062,6 +1061,12 @@ function initMap() {
     tunePaint();
     mapReady = true;
     placeMarkers();
+    // MapLibre renders a compact attribution OPEN and only collapses it on the first
+    // pan, so the map opens with two lines of credits laid over Roma Sur and then tidies
+    // itself once you touch it. Collapse it up front: the (i) is still there and the
+    // credit is still one tap away.
+    document.querySelectorAll(".maplibregl-ctrl-attrib.maplibregl-compact-show")
+      .forEach(el => el.classList.remove("maplibregl-compact-show"));
   });
 
   // The theme can change under a running map -- he flips it with the button in the header,
@@ -1077,14 +1082,6 @@ function initMap() {
   window.addEventListener("sala:theme", themeWatch);
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", themeWatch);
 
-  $("keypanel").innerHTML = [
-    ["var(--c-big)", "Large format: IMAX, CinemeXtremo, 4DX, ScreenX"],
-    ["var(--c-lux)", "Recliners and waiter service: Platino, VIP"],
-    ["var(--c-std)", "Ordinary multiplex"],
-    ["var(--c-art)", "Independent, art house, free cineclub"],
-  ].map(([c, t]) => `<div class="r"><i style="background:${c}"></i>${esc(t)}</div>`).join("") +
-    `<div class="note">A hollow grey dot has live showtimes but was not audited by hand &mdash;
-     it sits outside the original five-kilometre study.</div>`;
 }
 
 // Markers are DOM elements, so the dots keep a real tap target and a focus ring. 74 of them
@@ -1136,6 +1133,13 @@ function renderGuide() {
     ["Best independent", nearest(v => v.name.indexOf("Tonala") >= 0)],
     ["35 mm still runs", nearest(v => (v.f || []).some(f => /35 mm/i.test(f)))],
   ].filter(x => x[1]);
+  // THE GUIDE TAB IS GONE (2026-09-08, his words: "i dont like the guide tab to begin w").
+  // The function stays because the CONTENT is the part no ticketing app has -- what IMAX
+  // with Laser actually means in this city, which room still runs 35 mm, what CDMX does
+  // not have at all -- and it is waiting for a home inside the venue and film sheets
+  // rather than behind a tab nobody opened. #doc-guide no longer exists, so this returns
+  // instead of throwing if anything calls it before that home is built.
+  if (!$("doc-guide")) return;
   $("doc-guide").innerHTML = `
     <p class="lede">Forty-two places within about five kilometres of Parque Mexico, audited one by
     one. Every claim is tagged: <span class="tag v">verified</span> means it was read off the
@@ -1185,11 +1189,10 @@ function setTab(t) {
   S.tab = t;
   document.querySelectorAll(".tabs button").forEach(b =>
     b.setAttribute("aria-selected", String(b.dataset.tab === t)));
-  ["shows", "map", "films", "guide"].forEach(k =>
+  ["shows", "map", "films"].forEach(k =>
     $("pane-" + k).classList.toggle("on", k === t));
   if (t === "map") { initMap(); setTimeout(() => map && map.resize(), 60); }
   if (t === "films") renderFilms();
-  if (t === "guide") renderGuide();
 }
 document.addEventListener("click", e => {
   const tab = e.target.closest(".tabs button"); if (tab) return setTab(tab.dataset.tab);
@@ -1207,8 +1210,6 @@ document.addEventListener("click", e => {
   const film = e.target.closest("[data-film]"); if (film) return filmSheet(film.dataset.film);
   const ven = e.target.closest("[data-venue]"); if (ven) return venueSheet(+ven.dataset.venue);
   if (e.target.closest("#scrim")) return closeSheet();
-  if (e.target.closest("#keybtn")) { $("keypanel").classList.toggle("on"); return; }
-  if (e.target.closest("#keypanel")) { $("keypanel").classList.remove("on"); return; }
   if (e.target.closest("#zin")) return map && map.zoomIn();
   if (e.target.closest("#zout")) return map && map.zoomOut();
   if (e.target.closest("#recenter"))
@@ -1232,7 +1233,7 @@ $("locbtn").addEventListener("click", () => {
     liveLoc = false; origin = { ...HOME };
     $("locbtn").setAttribute("aria-pressed", "false");
     $("fromk").textContent = "Distances from"; $("fromn").textContent = HOME.name;
-    renderShows(); if (S.tab === "films") renderFilms(); if (S.tab === "guide") renderGuide();
+    renderShows(); if (S.tab === "films") renderFilms();
     return;
   }
   if (!navigator.geolocation) { $("fromn").textContent = "Location unavailable"; return; }
@@ -1242,7 +1243,7 @@ $("locbtn").addEventListener("click", () => {
     liveLoc = true;
     $("locbtn").setAttribute("aria-pressed", "true");
     $("fromk").textContent = "Distances from"; $("fromn").textContent = "Where you are standing";
-    renderShows(); if (S.tab === "films") renderFilms(); if (S.tab === "guide") renderGuide();
+    renderShows(); if (S.tab === "films") renderFilms();
   }, () => {
     $("fromk").textContent = "Distances from";
     $("fromn").textContent = HOME.name + " (location refused)";
