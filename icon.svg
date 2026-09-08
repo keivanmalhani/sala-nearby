@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!--
+    A projector throwing a beam at a screen. Three shapes, no type, no gloss: the mark has
+    to survive being 40 pixels wide behind a rounded rectangle mask on a home screen, and
+    anything with more parts than this turns to mud at that size. Colours are the app's
+    own, the warm near black ground and the projector amber that is the single accent
+    running through the whole page.
+  -->
+  <rect width="512" height="512" fill="#14100E"/>
+
+  <!-- Solid, not a gradient. ImageMagick's own SVG renderer drops url(#...) fills and
+       paints the shape black, which on this ground made the beam disappear entirely.
+       A rasteriser that silently substitutes black is exactly the kind of failure that
+       ships, so the mark uses only fills every renderer handles. -->
+  <path d="M150 256 L392 104 L392 408 Z" fill="#8A5A18"/>
+  <path d="M150 256 L392 148 L392 364 Z" fill="#B87A22"/>
+
+  <circle cx="140" cy="256" r="46" fill="#E8A33D"/>
+  <circle cx="140" cy="256" r="46" fill="none" stroke="#14100E" stroke-width="14"/>
+  <circle cx="140" cy="256" r="20" fill="#14100E"/>
+
+  <rect x="386" y="96" width="30" height="320" rx="15" fill="#F4EDE5"/>
+</svg>

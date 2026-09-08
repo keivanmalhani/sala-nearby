@@ -1,0 +1,25 @@
+{
+  "name": "Sala Nearby",
+  "short_name": "Sala",
+  "description": "Every cinema within walking distance of Parque Mexico, with real showtimes.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#14100E",
+  "theme_color": "#14100E",
+  "categories": ["entertainment", "travel", "navigation"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Showtimes", "url": "./?tab=shows" },
+    { "name": "Map", "url": "./?tab=map" },
+    { "name": "Films", "url": "./?tab=films" }
+  ]
+}
