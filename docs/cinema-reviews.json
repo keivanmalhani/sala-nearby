@@ -1,0 +1,3890 @@
+[
+ {
+  "id": "30",
+  "name": "Cinemex Insurgentes",
+  "sala_name": "Cinemex Insurgentes",
+  "place_id": "ChIJtT_KWo7_0YURSJG8vHREjdw",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJtT_KWo7_0YURSJG8vHREjdw&hl=es&gl=mx",
+  "km": 0.3,
+  "rating": 4.4,
+  "review_count": 4277,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 2,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 1.8,
+   "raw_token_counts": {
+    "frio": 1,
+    "aire_acondicionado": 2,
+    "calor": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 4,
+     "when": "Hace 2 meses",
+     "quote": "A veces se les olvida poner el aire acondicionado y se pone insoportable el el calor"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "Disfruta “diablo viste la moda” sin acondicionador de aire 👠🥵🫠…"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 13,
+   "2": 5,
+   "3": 10,
+   "4": 24,
+   "5": 58
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 50,
+    "pct": 45.5
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 42,
+    "pct": 38.2
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 30,
+    "pct": 27.3
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 24,
+    "pct": 21.8
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 24,
+    "pct": 21.8
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 24,
+    "pct": 21.8
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 16,
+    "pct": 14.5
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 14,
+    "pct": 12.7
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 14,
+    "pct": 12.7
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   }
+  ]
+ },
+ {
+  "id": "27",
+  "name": "Cinemex Pabellón Cuauhtémoc",
+  "sala_name": "Cinemex Pabellón Cuauhtémoc",
+  "place_id": "ChIJ729e4CL_0YURnQwO2-ORRsA",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ729e4CL_0YURnQwO2-ORRsA&hl=es&gl=mx",
+  "km": 1.4,
+  "rating": 4.2,
+  "review_count": 7485,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "hot",
+   "cold_mentions": 1,
+   "heat_mentions": 6,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.9,
+   "pct_of_sample_hot": 5.5,
+   "raw_token_counts": {
+    "aire_acondicionado": 7,
+    "calor": 3,
+    "chamarra_o_sueter": 1,
+    "frio": 1
+   },
+   "evidence_cold": [
+    {
+     "stars": 4,
+     "when": null,
+     "quote": "Deben traer chamarra eskimal para sobrevivir"
+    }
+   ],
+   "evidence_hot": [
+    {
+     "stars": 2,
+     "when": "Hace 3 meses",
+     "quote": "Por algún motivo en plena ola de calor, encendieron el aire acondicionado"
+    },
+    {
+     "stars": 1,
+     "when": "Hace un mes",
+     "quote": "Este cine está en su peor momento, salas sin limpieza, aire acondicionado nulo y los baños asquerosos, sin limipeza y llenos de orina, sin contar que h..."
+    },
+    {
+     "stars": 2,
+     "when": "Hace 4 meses",
+     "quote": "No hay aire acondicionado, no hay papel en los baños, están muy sucios y algunos no sirven"
+    },
+    {
+     "stars": 2,
+     "when": "Hace un año",
+     "quote": "Vine por primera vez, la sala olía muy mal, el aire acondicionado estuvo apagado todo el tiempo y el calor era insoportable"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 44,
+   "2": 18,
+   "3": 12,
+   "4": 17,
+   "5": 19
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 55,
+    "pct": 50.0
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 43,
+    "pct": 39.1
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 35,
+    "pct": 31.8
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 30,
+    "pct": 27.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 29,
+    "pct": 26.4
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 27,
+    "pct": 24.5
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 10,
+    "pct": 9.1
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 8,
+    "pct": 7.3
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   }
+  ]
+ },
+ {
+  "id": "32",
+  "name": "Cinemex Parque Delta",
+  "sala_name": "Cinemex Parque Delta",
+  "place_id": "ChIJ_QJvzRv_0YUR-k9zQfY5cLs",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ_QJvzRv_0YUR-k9zQfY5cLs&hl=es&gl=mx",
+  "km": 1.73,
+  "rating": 4.4,
+  "review_count": 11752,
+  "sampled": 40,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine tiene salas cómodas y limpias, con una excelente calidad de sonido y espectaculares pantallas IMAX. Aprecian al personal amable y mencionan que el cine no suele estar lleno, especialmente antes de las 5 PM. Otras personas dicen que el personal puede ser poco servicial.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 1,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 2.5,
+   "raw_token_counts": {
+    "frio": 1,
+    "aire_acondicionado": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 3,
+     "when": null,
+     "quote": "Además el sistema de aire acondicionado parece no funcionar, se eleva la temperatura y hace que la experiencia sea bastante incómod..."
+    }
+   ]
+  },
+  "star_split": {
+   "1": 11,
+   "2": 7,
+   "3": 5,
+   "4": 5,
+   "5": 12
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 18,
+    "pct": 45.0
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 13,
+    "pct": 32.5
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 11,
+    "pct": 27.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 9,
+    "pct": 22.5
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 9,
+    "pct": 22.5
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 8,
+    "pct": 20.0
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 7,
+    "pct": 17.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 6,
+    "pct": 15.0
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 4,
+    "pct": 10.0
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 1,
+    "pct": 2.5
+   }
+  ]
+ },
+ {
+  "id": "324",
+  "name": "Cinemex Parque Delta Platino",
+  "sala_name": "Cinemex Parque Delta Platino",
+  "place_id": "ChIJEYIfmmX_0YURxKSftdvYF30",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJEYIfmmX_0YURxKSftdvYF30&hl=es&gl=mx",
+  "km": 1.73,
+  "rating": 2.5,
+  "review_count": 12,
+  "sampled": 8,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {},
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 5,
+   "2": 1,
+   "3": 1,
+   "4": 1
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 6,
+    "pct": 75.0
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 3,
+    "pct": 37.5
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 2,
+    "pct": 25.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 2,
+    "pct": 25.0
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 2,
+    "pct": 25.0
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 2,
+    "pct": 25.0
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 1,
+    "pct": 12.5
+   }
+  ]
+ },
+ {
+  "id": "35",
+  "name": "Cinemex Reforma Casa de Arte",
+  "sala_name": "Cinemex Reforma Casa de Arte",
+  "place_id": "ChIJYyEdQUr_0YURDfKiuNVuYpQ",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJYyEdQUr_0YURDfKiuNVuYpQ&hl=es&gl=mx",
+  "km": 1.74,
+  "rating": 4.2,
+  "review_count": 5900,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "hot",
+   "cold_mentions": 0,
+   "heat_mentions": 15,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 13.6,
+   "raw_token_counts": {
+    "aire_acondicionado": 16,
+    "calor": 10,
+    "frio": 1,
+    "helado": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 2 meses",
+     "quote": "No hay aire acondicionado, las salas no cuentan con aire acondicionado y si la sala está a más de la mitad es ..."
+    },
+    {
+     "stars": 1,
+     "when": "Hace 3 meses",
+     "quote": "Las condiciones de las instalaciones no es la óptima, focos fundidos, salas sin aire acondicionado, asientos rotos"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "Por cierto estábamos a 21 grados con sensación térmica de 31 y no había aire acondicionado"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "terrible experiencia: el aire acondicionado no servía y el calor era aturdidor, se escuchaba el sonido de la película de acción en la s..."
+    }
+   ]
+  },
+  "star_split": {
+   "1": 33,
+   "2": 12,
+   "3": 20,
+   "4": 19,
+   "5": 26
+  },
+  "themes": [
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 58,
+    "pct": 52.7
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 44,
+    "pct": 40.0
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 35,
+    "pct": 31.8
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 30,
+    "pct": 27.3
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 26,
+    "pct": 23.6
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 24,
+    "pct": 21.8
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 21,
+    "pct": 19.1
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 12,
+    "pct": 10.9
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 12,
+    "pct": 10.9
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 10,
+    "pct": 9.1
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "237",
+  "name": "Cinemex Reforma 222 Market",
+  "sala_name": "Cinemex Reforma 222 Market",
+  "place_id": "ChIJNdMbgDP_0YURVqgjCMCj3rA",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJNdMbgDP_0YURVqgjCMCj3rA&hl=es&gl=mx",
+  "km": 2.05,
+  "rating": 4.3,
+  "review_count": 7858,
+  "sampled": 80,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "hot",
+   "cold_mentions": 0,
+   "heat_mentions": 7,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 8.8,
+   "raw_token_counts": {
+    "aire_acondicionado": 10,
+    "calor": 5,
+    "frio": 1,
+    "caluroso": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "Podrá haber sido una excelente remodelación, pero no vengan en época de calor no encienden el aire acondicionado por más que se le pide al personal que lo prendan"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "Con el calor que está haciendo en CDMX y NO hay aire acondicionado, mínimo una… Más"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "...olmo con Cinemex, una de las películas más esperadas y la arruinan, dejándonos en la sala sin aire acondicionado y estás fechas con más calor y te quejabas y nadie solucionó"
+    },
+    {
+     "stars": 4,
+     "when": null,
+     "quote": "...isite no prendieron el aire acondicionado aunque varias personas lo solicitaron por tanto calor que se sentia a pesar de ser la funcion de las 8 p"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 32,
+   "2": 4,
+   "3": 15,
+   "4": 11,
+   "5": 18
+  },
+  "themes": [
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 29,
+    "pct": 36.2
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 27,
+    "pct": 33.8
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 19,
+    "pct": 23.8
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 18,
+    "pct": 22.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 15,
+    "pct": 18.8
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 11,
+    "pct": 13.8
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 11,
+    "pct": 13.8
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 5,
+    "pct": 6.2
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 4,
+    "pct": 5.0
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 2,
+    "pct": 2.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 2,
+    "pct": 2.5
+   }
+  ]
+ },
+ {
+  "id": "33",
+  "name": "Cinemex Patriotismo",
+  "sala_name": "Cinemex Patriotismo Market",
+  "place_id": "ChIJvySUMWX_0YURo6P7A-wt7WE",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJvySUMWX_0YURo6P7A-wt7WE&hl=es&gl=mx",
+  "km": 2.15,
+  "rating": 4.2,
+  "review_count": 4525,
+  "sampled": 60,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece salas prémium cómodas, amplias y limpias, con buena calidad de sonido y pantalla. Mencionan también la gran variedad de opciones de comida y el personal amable y atento. Otras personas dicen que los precios pueden ser elevados.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 1,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 1.7,
+   "raw_token_counts": {
+    "aire_acondicionado": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "Pésimo servicio, no es humano que te encierren en una sala llena de gente sin aire acondicionado es una falta de respeto"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 15,
+   "2": 11,
+   "3": 10,
+   "4": 8,
+   "5": 16
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 22,
+    "pct": 36.7
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 18,
+    "pct": 30.0
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 17,
+    "pct": 28.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 10,
+    "pct": 16.7
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 9,
+    "pct": 15.0
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 9,
+    "pct": 15.0
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 8,
+    "pct": 13.3
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 7,
+    "pct": 11.7
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 7,
+    "pct": 11.7
+   }
+  ]
+ },
+ {
+  "id": "430",
+  "name": "Cinemex Patriotismo",
+  "sala_name": "Cinemex Patriotismo Platino",
+  "place_id": "ChIJvySUMWX_0YURo6P7A-wt7WE",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJvySUMWX_0YURo6P7A-wt7WE&hl=es&gl=mx",
+  "km": 2.15,
+  "rating": 4.2,
+  "review_count": 4525,
+  "sampled": 60,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece salas prémium cómodas, amplias y limpias, con buena calidad de sonido y pantalla. Mencionan también la gran variedad de opciones de comida y el personal amable y atento. Otras personas dicen que los precios pueden ser elevados.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 1,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 1.7,
+   "raw_token_counts": {
+    "aire_acondicionado": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "Pésimo servicio, no es humano que te encierren en una sala llena de gente sin aire acondicionado es una falta de respeto"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 15,
+   "2": 11,
+   "3": 10,
+   "4": 8,
+   "5": 16
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 22,
+    "pct": 36.7
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 18,
+    "pct": 30.0
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 17,
+    "pct": 28.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 10,
+    "pct": 16.7
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 9,
+    "pct": 15.0
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 9,
+    "pct": 15.0
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 8,
+    "pct": 13.3
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 7,
+    "pct": 11.7
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 7,
+    "pct": 11.7
+   }
+  ]
+ },
+ {
+  "id": "26",
+  "name": "Cinemex",
+  "sala_name": "Cinemex Centro Telmex",
+  "place_id": "ChIJpxkPaS7_0YURwwsrJcTPZK4",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJpxkPaS7_0YURwwsrJcTPZK4&hl=es&gl=mx",
+  "km": 2.15,
+  "rating": 4,
+  "review_count": 4094,
+  "sampled": 40,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece asientos cómodos y un ambiente tranquilo, lo que lo hace ideal para una experiencia cinematográfica relajada. Destacan los precios accesibles de las entradas y los productos de la dulcería, junto con un personal amable y atento. Otras personas dicen que las instalaciones a veces pueden estar mal mantenidas.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 2,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 5.0,
+   "raw_token_counts": {
+    "aire_acondicionado": 3,
+    "calor": 1,
+    "frio": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace un mes",
+     "quote": "La sala 2 no tenía aire acondicionado, hacía demasiado calor y era muy incómodo permanecer ahí"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 2 meses",
+     "quote": "..., asientos incómodos, sonido muy bajito, se escuchaba el ruido de las salas de los lados, no hay o nunca prendieron el aire acondicionado y me dolió la cabeza y el cuello porque la pantalla no queda a..."
+    }
+   ]
+  },
+  "star_split": {
+   "1": 11,
+   "2": 3,
+   "3": 8,
+   "4": 9,
+   "5": 9
+  },
+  "themes": [
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 14,
+    "pct": 35.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 10,
+    "pct": 25.0
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 9,
+    "pct": 22.5
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 9,
+    "pct": 22.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 8,
+    "pct": 20.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 7,
+    "pct": 17.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 7,
+    "pct": 17.5
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 5,
+    "pct": 12.5
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 4,
+    "pct": 10.0
+   }
+  ]
+ },
+ {
+  "id": "29",
+  "name": "Cinemex Galerías Plaza de las Estrellas",
+  "sala_name": "Cinemex Galerías",
+  "place_id": "ChIJRe1fTbT40YURVNMr0VScLG0",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJRe1fTbT40YURVNMr0VScLG0&hl=es&gl=mx",
+  "km": 2.69,
+  "rating": 4.1,
+  "review_count": 7485,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 1,
+   "heat_mentions": 1,
+   "food_cold_excluded": 2,
+   "pct_of_sample_cold": 0.9,
+   "pct_of_sample_hot": 0.9,
+   "raw_token_counts": {
+    "frio": 2,
+    "calor": 1,
+    "congelando": 1
+   },
+   "evidence_cold": [
+    {
+     "stars": 2,
+     "when": "Hace un mes",
+     "quote": "Cine frío, oscuro, solo, sin mucha demanda, pero eso sí combos infladisimos de precios paralos tamalitos que maneja..."
+    }
+   ],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace un mes",
+     "quote": "Horrible cine y más horrible plaza, un calor insoportable dentro de la sala, una plaza vieja, fea y el personal grosero"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 20,
+   "2": 11,
+   "3": 16,
+   "4": 21,
+   "5": 42
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 58,
+    "pct": 52.7
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 33,
+    "pct": 30.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 30,
+    "pct": 27.3
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 23,
+    "pct": 20.9
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 22,
+    "pct": 20.0
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 22,
+    "pct": 20.0
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 12,
+    "pct": 10.9
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 6,
+    "pct": 5.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 6,
+    "pct": 5.5
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "36",
+  "name": "Cinemex San Antonio",
+  "sala_name": "Cinemex San Antonio",
+  "place_id": "ChIJzVcw39UB0oURqBnHm5azW8s",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJzVcw39UB0oURqBnHm5azW8s&hl=es&gl=mx",
+  "km": 3.44,
+  "rating": 4.1,
+  "review_count": 5824,
+  "sampled": 40,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece salas cómodas con buen audio y una variedad de servicios como café y crepas. Destacan también al personal atento y la ubicación conveniente con amplio estacionamiento. Otras personas dicen que las instalaciones a veces pueden estar mal mantenidas.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "chamarra_o_sueter": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 19,
+   "2": 5,
+   "3": 3,
+   "4": 5,
+   "5": 8
+  },
+  "themes": [
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 16,
+    "pct": 40.0
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 15,
+    "pct": 37.5
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 15,
+    "pct": 37.5
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 10,
+    "pct": 25.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 7,
+    "pct": 17.5
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 5,
+    "pct": 12.5
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 3,
+    "pct": 7.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 1,
+    "pct": 2.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 2.5
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 1,
+    "pct": 2.5
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 1,
+    "pct": 2.5
+   }
+  ]
+ },
+ {
+  "id": "34",
+  "name": "Cinemex Real",
+  "sala_name": "Cinemex Real",
+  "place_id": "ChIJXS5Co9X40YURZeHxmsu-ysA",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJXS5Co9X40YURZeHxmsu-ysA&hl=es&gl=mx",
+  "km": 3.68,
+  "rating": 4.2,
+  "review_count": 13789,
+  "sampled": 60,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine es un lugar cómodo para ver películas, ya que generalmente no está abarrotado y ofrece asientos cómodos. Aprecian el personal amable y la ubicación conveniente cerca del transporte público. Otras personas dicen que el servicio a veces puede ser ineficiente.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "hot",
+   "cold_mentions": 0,
+   "heat_mentions": 3,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 5.0,
+   "raw_token_counts": {
+    "calor": 1,
+    "aire_acondicionado": 3
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 2,
+     "when": "Hace 4 meses",
+     "quote": "Audio la película , no parecía tener el aire puesto y había mucho calor en la sala aún con poca gente"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 3 meses",
+     "quote": "No sirve el aire acondicionado"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 2 meses",
+     "quote": "Sin aire acondicionado,baños sucios, un lugar muy descuidado en mantenimiento"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 16,
+   "2": 9,
+   "3": 6,
+   "4": 14,
+   "5": 15
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 31,
+    "pct": 51.7
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 19,
+    "pct": 31.7
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 16,
+    "pct": 26.7
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 15,
+    "pct": 25.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 11,
+    "pct": 18.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 7,
+    "pct": 11.7
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 6,
+    "pct": 10.0
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 4,
+    "pct": 6.7
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 3,
+    "pct": 5.0
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 2,
+    "pct": 3.3
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 2,
+    "pct": 3.3
+   }
+  ]
+ },
+ {
+  "id": "354",
+  "name": "Cinemex",
+  "sala_name": "Cinemex Portal Centro",
+  "place_id": "ChIJAdLlR8T-0YURu-kYJKHUHg0",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJAdLlR8T-0YURu-kYJKHUHg0&hl=es&gl=mx",
+  "km": 4.14,
+  "rating": 4.4,
+  "review_count": 8738,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 2,
+   "food_cold_excluded": 2,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 1.8,
+   "raw_token_counts": {
+    "calor": 2,
+    "helado": 1,
+    "aire_acondicionado": 5,
+    "frio": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "así que si hay mucho calor afuera no pidan de la sala 1 a la 6"
+    },
+    {
+     "stars": 2,
+     "when": "Hace 11 meses",
+     "quote": "... la pasa diciendo albures y groserías subidas de tono cuando aún hay familias, hace mucho calor en los sanitarios y afuera de las salas"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 21,
+   "2": 8,
+   "3": 14,
+   "4": 24,
+   "5": 43
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 69,
+    "pct": 62.7
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 39,
+    "pct": 35.5
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 37,
+    "pct": 33.6
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 35,
+    "pct": 31.8
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 27,
+    "pct": 24.5
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 21,
+    "pct": 19.1
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 13,
+    "pct": 11.8
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 8,
+    "pct": 7.3
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 6,
+    "pct": 5.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 6,
+    "pct": 5.5
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "95",
+  "name": "Cinemex Universidad",
+  "sala_name": "Cinemex Universidad",
+  "place_id": "ChIJv2LDW6P_0YURdSSGCh2QdEw",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJv2LDW6P_0YURdSSGCh2QdEw&hl=es&gl=mx",
+  "km": 4.3,
+  "rating": 4.3,
+  "review_count": 10781,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {},
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 22,
+   "2": 8,
+   "3": 18,
+   "4": 23,
+   "5": 39
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 56,
+    "pct": 50.9
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 38,
+    "pct": 34.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 37,
+    "pct": 33.6
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 32,
+    "pct": 29.1
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 24,
+    "pct": 21.8
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 23,
+    "pct": 20.9
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 10,
+    "pct": 9.1
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 10,
+    "pct": 9.1
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 8,
+    "pct": 7.3
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 4,
+    "pct": 3.6
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 4,
+    "pct": 3.6
+   }
+  ]
+ },
+ {
+  "id": "28",
+  "name": "Cinemex Platino",
+  "sala_name": "Cinemex Félix Cuevas Platino",
+  "place_id": "ChIJl1tz_pn_0YURe5ebOPbE5oo",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJl1tz_pn_0YURe5ebOPbE5oo&hl=es&gl=mx",
+  "km": 4.38,
+  "rating": 4.5,
+  "review_count": 3560,
+  "sampled": 50,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece asientos cómodos, amplios y reclinables, junto con una buena calidad de sonido e imagen. Mencionan también al personal atento y el conveniente sistema para pedir comida desde el asiento. Los clientes destacan la atmósfera tranquila y las deliciosas palomitas de maíz, pizzas y margaritas.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {},
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 6,
+   "2": 3,
+   "3": 1,
+   "4": 10,
+   "5": 30
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 34,
+    "pct": 68.0
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 18,
+    "pct": 36.0
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 14,
+    "pct": 28.0
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 11,
+    "pct": 22.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 9,
+    "pct": 18.0
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 8,
+    "pct": 16.0
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 7,
+    "pct": 14.0
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 4,
+    "pct": 8.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 3,
+    "pct": 6.0
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 3,
+    "pct": 6.0
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 1,
+    "pct": 2.0
+   }
+  ]
+ },
+ {
+  "id": "346",
+  "name": "Cinemex Premium",
+  "sala_name": "Cinemex Manacar",
+  "place_id": "ChIJ89sXUI7_0YURQqaz9FDhLcA",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ89sXUI7_0YURQqaz9FDhLcA&hl=es&gl=mx",
+  "km": 4.54,
+  "rating": 4.5,
+  "review_count": 7082,
+  "sampled": 60,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "hot",
+   "cold_mentions": 0,
+   "heat_mentions": 3,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 5.0,
+   "raw_token_counts": {
+    "aire_acondicionado": 3,
+    "calor": 2,
+    "frio": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 3 meses",
+     "quote": "SIEMPRE QUE VENGO HACE UN CALOR INFERNAL EN LAS SALAS, no prenden el aire acondicionado, te dan largas de que lo van a encender o te dic..."
+    },
+    {
+     "stars": 5,
+     "when": "Hace 4 meses",
+     "quote": "Lugar tranquilo, limpio, ordenado aún que con un poco de calor en la sección de boletos y comida pero dentro de la sala todo de maravilla, la comida sabe bien los baño..."
+    },
+    {
+     "stars": 2,
+     "when": null,
+     "quote": "El bochorno se vuelve incómodo, te distrae de la película, puede provocar… Más"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 16,
+   "2": 1,
+   "3": 6,
+   "4": 4,
+   "5": 33
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 30,
+    "pct": 50.0
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 29,
+    "pct": 48.3
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 17,
+    "pct": 28.3
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 14,
+    "pct": 23.3
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 14,
+    "pct": 23.3
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 13,
+    "pct": 21.7
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 11,
+    "pct": 18.3
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 6,
+    "pct": 10.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 3,
+    "pct": 5.0
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 2,
+    "pct": 3.3
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 1.7
+   }
+  ]
+ },
+ {
+  "id": "412",
+  "name": "Cinemex Premium Galerías Insurgentes Market",
+  "sala_name": "Cinemex Galerías Insurgentes Market",
+  "place_id": "ChIJ6Vm2fML_0YUR9gGvc6rllbg",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ6Vm2fML_0YUR9gGvc6rllbg&hl=es&gl=mx",
+  "km": 4.63,
+  "rating": 4.6,
+  "review_count": 1565,
+  "sampled": 60,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 1,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 1.7,
+   "raw_token_counts": {
+    "calor": 1,
+    "frio": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 3 meses",
+     "quote": "... hace poco que fui a ver la peli de Michael Jackson y queria tomar al refrescante para el calor fui al Cielito Querido andetro de Cinemex Market y le pegunte la chica que me recomiendas y me contesto ..."
+    }
+   ]
+  },
+  "star_split": {
+   "1": 4,
+   "2": 1,
+   "3": 5,
+   "4": 13,
+   "5": 37
+  },
+  "themes": [
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 38,
+    "pct": 63.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 31,
+    "pct": 51.7
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 29,
+    "pct": 48.3
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 17,
+    "pct": 28.3
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 16,
+    "pct": 26.7
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 13,
+    "pct": 21.7
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 8,
+    "pct": 13.3
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 8,
+    "pct": 13.3
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 6,
+    "pct": 10.0
+   }
+  ]
+ },
+ {
+  "id": "75",
+  "name": "Cinemex Market Antara",
+  "sala_name": "Cinemex Antara Market",
+  "place_id": "ChIJA5HvARsC0oURPWgqfv6kyCY",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJA5HvARsC0oURPWgqfv6kyCY&hl=es&gl=mx",
+  "km": 4.69,
+  "rating": 4.5,
+  "review_count": 4878,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 1,
+   "food_cold_excluded": 5,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.9,
+   "raw_token_counts": {
+    "calor": 1,
+    "frio": 4,
+    "helado": 2,
+    "aire_acondicionado": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 3,
+     "when": null,
+     "quote": "Dentro de l sala hacía un buen de calor, parecía que no prendieron el aire, los asistentes se abanicaban como podían"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 22,
+   "2": 11,
+   "3": 11,
+   "4": 20,
+   "5": 46
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 47,
+    "pct": 42.7
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 36,
+    "pct": 32.7
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 35,
+    "pct": 31.8
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 31,
+    "pct": 28.2
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 26,
+    "pct": 23.6
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 22,
+    "pct": 20.0
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 17,
+    "pct": 15.5
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 14,
+    "pct": 12.7
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 9,
+    "pct": 8.2
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "76",
+  "name": "Cinemex Antara Platino",
+  "sala_name": "Cinemex Antara Platino",
+  "place_id": "ChIJIWoOo3_50YUR6XTS1yQN93c",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJIWoOo3_50YUR6XTS1yQN93c&hl=es&gl=mx",
+  "km": 4.69,
+  "rating": 3.7,
+  "review_count": 55,
+  "sampled": 33,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 1,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 3.0,
+   "raw_token_counts": {
+    "frio": 1,
+    "calor": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "Pésimo servicio, insoportable el calor en la sala"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 10,
+   "2": 4,
+   "3": 5,
+   "4": 3,
+   "5": 11
+  },
+  "themes": [
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 13,
+    "pct": 39.4
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 12,
+    "pct": 36.4
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 10,
+    "pct": 30.3
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 8,
+    "pct": 24.2
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 6,
+    "pct": 18.2
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 6,
+    "pct": 18.2
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 6,
+    "pct": 18.2
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 4,
+    "pct": 12.1
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 3,
+    "pct": 9.1
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 1,
+    "pct": 3.0
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 1,
+    "pct": 3.0
+   }
+  ]
+ },
+ {
+  "id": "267",
+  "name": "Cinemex",
+  "sala_name": "Cinemex Clavería",
+  "place_id": "ChIJv565BZv40YURVqQAzMQb-J8",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJv565BZv40YURVqQAzMQb-J8&hl=es&gl=mx",
+  "km": 5.98,
+  "rating": 4.4,
+  "review_count": 5107,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "hot",
+   "cold_mentions": 1,
+   "heat_mentions": 2,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.9,
+   "pct_of_sample_hot": 1.8,
+   "raw_token_counts": {
+    "aire_acondicionado": 2,
+    "calor": 1,
+    "frio": 2,
+    "chamarra_o_sueter": 1
+   },
+   "evidence_cold": [
+    {
+     "stars": 3,
+     "when": "Hace un año",
+     "quote": "se pasan de frio"
+    }
+   ],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "no venga a este cine, terrible no hay aire acondicionado y no son ni para resolver, el calor es terrible"
+    },
+    {
+     "stars": 5,
+     "when": "Hace un año",
+     "quote": "...a vez tuve problemas en este cine y fue porque nunca prendieron el aire y la sala parecía horno, ya no ha vuelto a pasar y las alas están espaciosas, buenas para disfrutar la peli"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 15,
+   "2": 8,
+   "3": 14,
+   "4": 23,
+   "5": 50
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 57,
+    "pct": 51.8
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 39,
+    "pct": 35.5
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 35,
+    "pct": 31.8
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 29,
+    "pct": 26.4
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 25,
+    "pct": 22.7
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 23,
+    "pct": 20.9
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 17,
+    "pct": 15.5
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 9,
+    "pct": 8.2
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 7,
+    "pct": 6.4
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   }
+  ]
+ },
+ {
+  "id": "71",
+  "name": "Cinemex",
+  "sala_name": "Cinemex La Viga",
+  "place_id": "ChIJ1RyzSWf-0YURNRIYnyWGWx4",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ1RyzSWf-0YURNRIYnyWGWx4&hl=es&gl=mx",
+  "km": 6.02,
+  "rating": 4.3,
+  "review_count": 7431,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "hot",
+   "cold_mentions": 0,
+   "heat_mentions": 4,
+   "food_cold_excluded": 2,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 3.6,
+   "raw_token_counts": {
+    "chamarra_o_sueter": 1,
+    "aire_acondicionado": 4,
+    "frio": 2,
+    "calor": 2
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 4 meses",
+     "quote": "El dia de hoy vine al cine y en ninguna sala no hay aire acondicionado"
+    },
+    {
+     "stars": 3,
+     "when": "Hace 2 meses",
+     "quote": "Sin aire acondicionado y de estacionamiento muy caro"
+    },
+    {
+     "stars": 2,
+     "when": "Hace un año",
+     "quote": "Y hace un calor del infierno"
+    },
+    {
+     "stars": 2,
+     "when": "Hace 5 años",
+     "quote": "El calor en la sala fue demasiado y a la salida no existió la sana distancia ni tampoco existió el personal para ..."
+    }
+   ]
+  },
+  "star_split": {
+   "1": 16,
+   "2": 9,
+   "3": 14,
+   "4": 27,
+   "5": 44
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 63,
+    "pct": 57.3
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 33,
+    "pct": 30.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 32,
+    "pct": 29.1
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 31,
+    "pct": 28.2
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 31,
+    "pct": 28.2
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 15,
+    "pct": 13.6
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 15,
+    "pct": 13.6
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 13,
+    "pct": 11.8
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 8,
+    "pct": 7.3
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 8,
+    "pct": 7.3
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   }
+  ]
+ },
+ {
+  "id": "332",
+  "name": "Cinemex",
+  "sala_name": "Cinemex Portal Vallejo",
+  "place_id": "ChIJPUK4sgL50YURYYu70YJU8iQ",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJPUK4sgL50YURYYu70YJU8iQ&hl=es&gl=mx",
+  "km": 6.78,
+  "rating": 4.5,
+  "review_count": 4884,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 1,
+   "heat_mentions": 0,
+   "food_cold_excluded": 2,
+   "pct_of_sample_cold": 0.9,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "aire_acondicionado": 1,
+    "frio": 2
+   },
+   "evidence_cold": [
+    {
+     "stars": 5,
+     "when": "Hace 3 años",
+     "quote": "Lo unico que no me agrada es que siempre tienen el aire muy fuerte, asi que lleven algo de tapar"
+    }
+   ],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 15,
+   "2": 7,
+   "3": 7,
+   "4": 18,
+   "5": 63
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 71,
+    "pct": 64.5
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 38,
+    "pct": 34.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 35,
+    "pct": 31.8
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 34,
+    "pct": 30.9
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 33,
+    "pct": 30.0
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 32,
+    "pct": 29.1
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 10,
+    "pct": 9.1
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 6,
+    "pct": 5.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 4,
+    "pct": 3.6
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   }
+  ]
+ },
+ {
+  "id": "336",
+  "name": "Cinemex Cuatro Caminos",
+  "sala_name": "Cinemex Cuatro Caminos",
+  "place_id": "ChIJo4eBG0EC0oURUmW5DNYaNVU",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJo4eBG0EC0oURUmW5DNYaNVU&hl=es&gl=mx",
+  "km": 7.02,
+  "rating": 4.4,
+  "review_count": 6988,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "mixed",
+   "cold_mentions": 2,
+   "heat_mentions": 2,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 1.8,
+   "pct_of_sample_hot": 1.8,
+   "raw_token_counts": {
+    "aire_acondicionado": 5,
+    "calor": 2,
+    "frio": 2
+   },
+   "evidence_cold": [
+    {
+     "stars": 4,
+     "when": "Hace 8 años",
+     "quote": "El aire acondicionado es exageradamente frío"
+    },
+    {
+     "stars": 5,
+     "when": "Hace 2 años",
+     "quote": "...ención es bueno, lo único malo es el aire acondicionado que particularmente siento que es demasiado frío"
+    }
+   ],
+   "evidence_hot": [
+    {
+     "stars": 3,
+     "when": "Hace 4 meses",
+     "quote": "estamos en sala con mucha gente y se encierra el calor 🥵, y tuve que salirme de la sala varias veces y aparte del calor, es olores y demás"
+    },
+    {
+     "stars": 3,
+     "when": "Hace 4 meses",
+     "quote": "No hay aire acondicionado en la sala y nos estábamos muriendo de calor en la función y los baños sucios"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 10,
+   "2": 6,
+   "3": 20,
+   "4": 19,
+   "5": 55
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 61,
+    "pct": 55.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 49,
+    "pct": 44.5
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 46,
+    "pct": 41.8
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 35,
+    "pct": 31.8
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 31,
+    "pct": 28.2
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 30,
+    "pct": 27.3
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 17,
+    "pct": 15.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 10,
+    "pct": 9.1
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 6,
+    "pct": 5.5
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "86",
+  "name": "Cinemex Altavista",
+  "sala_name": "Cinemex Altavista",
+  "place_id": "ChIJYaSIWB0A0oUR7sDACdDQnc8",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJYaSIWB0A0oUR7sDACdDQnc8&hl=es&gl=mx",
+  "km": 7.31,
+  "rating": 4.3,
+  "review_count": 1784,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "hot",
+   "cold_mentions": 1,
+   "heat_mentions": 3,
+   "food_cold_excluded": 2,
+   "pct_of_sample_cold": 0.9,
+   "pct_of_sample_hot": 2.7,
+   "raw_token_counts": {
+    "aire_acondicionado": 2,
+    "calor": 1,
+    "frio": 2,
+    "helado": 1,
+    "caluroso": 1
+   },
+   "evidence_cold": [
+    {
+     "stars": 1,
+     "when": null,
+     "quote": "Hace frio , la pantalla tiene lo tonos bajos y aparte de todo su precio es mas alto al de otras sucursales"
+    }
+   ],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 2 años",
+     "quote": "...leaños y el cine esta horrible, las butacas ¿PREMIUM¿ rechinan horrible toda la película, no hay aire acondicionado, compre un boleto para la película de LONGLEGS que si tienen la oportunidad de no ve..."
+    },
+    {
+     "stars": 1,
+     "when": "Hace falta que se regule le temperatura. Inicia fresca la sala, pero termina siendo un sauna. Con sensores de temperatura se mantendría confortable. Sobretodo con la sala llena.",
+     "quote": "Inicia fresca la sala, pero termina siendo un sauna"
+    },
+    {
+     "stars": 2,
+     "when": null,
+     "quote": "Las salas no son modernas y a veces son muy calurosas"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 17,
+   "2": 6,
+   "3": 13,
+   "4": 23,
+   "5": 51
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 55,
+    "pct": 50.0
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 43,
+    "pct": 39.1
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 31,
+    "pct": 28.2
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 27,
+    "pct": 24.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 26,
+    "pct": 23.6
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 26,
+    "pct": 23.6
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 14,
+    "pct": 12.7
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 10,
+    "pct": 9.1
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 9,
+    "pct": 8.2
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   }
+  ]
+ },
+ {
+  "id": "358",
+  "name": "Cinemex Platino Plaza Hipódromo",
+  "sala_name": "Cinemex Paseo Hipódromo Platino",
+  "place_id": "ChIJO9KaytUD0oURNBhiOspq0mQ",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJO9KaytUD0oURNBhiOspq0mQ&hl=es&gl=mx",
+  "km": 7.57,
+  "rating": 4.6,
+  "review_count": 1156,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 2,
+   "heat_mentions": 0,
+   "food_cold_excluded": 3,
+   "pct_of_sample_cold": 1.8,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "frio": 4,
+    "congelando": 1
+   },
+   "evidence_cold": [
+    {
+     "stars": 1,
+     "when": "Hace 2 meses",
+     "quote": "La temperatura de la sala muy baja hacia demasiado frío"
+    },
+    {
+     "stars": 5,
+     "when": "Hace 7 años",
+     "quote": "y si tienes frío nunca dudes en pedir una frazada q siempre tienen y además super limpias, siempre tienen un lindo aroma"
+    }
+   ],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 10,
+   "2": 9,
+   "3": 7,
+   "4": 20,
+   "5": 64
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 63,
+    "pct": 57.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 36,
+    "pct": 32.7
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 29,
+    "pct": 26.4
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 28,
+    "pct": 25.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 25,
+    "pct": 22.7
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 25,
+    "pct": 22.7
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 8,
+    "pct": 7.3
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 8,
+    "pct": 7.3
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 4,
+    "pct": 3.6
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "251",
+  "name": "Cinemex Parque Duraznos",
+  "sala_name": "Cinemex Duraznos Platino",
+  "place_id": "ChIJHUMfYOcc0oUR3w0SNR0ULNU",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJHUMfYOcc0oUR3w0SNR0ULNU&hl=es&gl=mx",
+  "km": 7.75,
+  "rating": 4.2,
+  "review_count": 879,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 2,
+   "food_cold_excluded": 7,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 1.8,
+   "raw_token_counts": {
+    "aire_acondicionado": 3,
+    "calor": 2,
+    "frio": 6,
+    "helado": 1,
+    "chamarra_o_sueter": 2
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace 3 meses",
+     "quote": "Mi asiento no reclinaba y hacía demasiado calor en la sala"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 9 años",
+     "quote": "Pésima en esta época de calor uno tiene que estar asándose porque no prenden el aire acondicionado"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 31,
+   "2": 12,
+   "3": 16,
+   "4": 10,
+   "5": 41
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 54,
+    "pct": 49.1
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 39,
+    "pct": 35.5
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 39,
+    "pct": 35.5
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 23,
+    "pct": 20.9
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 18,
+    "pct": 16.4
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 16,
+    "pct": 14.5
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 10,
+    "pct": 9.1
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 4,
+    "pct": 3.6
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   }
+  ]
+ },
+ {
+  "id": "413",
+  "name": "Cinemex",
+  "sala_name": "Cinemex Miguel Ángel de Quevedo",
+  "place_id": "ChIJ3bnElMP_0YUR9QE_62EJmyE",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ3bnElMP_0YUR9QE_62EJmyE&hl=es&gl=mx",
+  "km": 7.98,
+  "rating": 4.4,
+  "review_count": 381,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 1,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.9,
+   "raw_token_counts": {
+    "aire_acondicionado": 3
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 2,
+     "when": "Hace 5 meses",
+     "quote": "...aza, para dirigirse al CINEMEX huele a caño, el cine no usa el aire acondicionado y es un horno"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 12,
+   "2": 5,
+   "3": 9,
+   "4": 19,
+   "5": 65
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 63,
+    "pct": 57.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 58,
+    "pct": 52.7
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 38,
+    "pct": 34.5
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 34,
+    "pct": 30.9
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 31,
+    "pct": 28.2
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 23,
+    "pct": 20.9
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 15,
+    "pct": 13.6
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 12,
+    "pct": 10.9
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   }
+  ]
+ },
+ {
+  "id": "322",
+  "name": "Cinemex Patio Revolución",
+  "sala_name": "Cinemex Patio Revolución Platino",
+  "place_id": "ChIJd11giwEA0oUReQaR4bxHvhA",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJd11giwEA0oUReQaR4bxHvhA&hl=es&gl=mx",
+  "km": 8.14,
+  "rating": 4.4,
+  "review_count": 2704,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 5,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "frio": 4,
+    "helado": 1,
+    "aire_acondicionado": 2
+   },
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 26,
+   "2": 9,
+   "3": 8,
+   "4": 22,
+   "5": 45
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 81,
+    "pct": 73.6
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 44,
+    "pct": 40.0
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 39,
+    "pct": 35.5
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 33,
+    "pct": 30.0
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 27,
+    "pct": 24.5
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 25,
+    "pct": 22.7
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 16,
+    "pct": 14.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 9,
+    "pct": 8.2
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 7,
+    "pct": 6.4
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   }
+  ]
+ },
+ {
+  "id": "410",
+  "name": "Cinemex Encuentro Oceanía",
+  "sala_name": "Cinemex Encuentro Oceanía",
+  "place_id": "ChIJ1bB3MLj70YURLOdvnHbqlts",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ1bB3MLj70YURLOdvnHbqlts&hl=es&gl=mx",
+  "km": 8.38,
+  "rating": 4.4,
+  "review_count": 2227,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 1,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.9,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "chamarra_o_sueter": 1,
+    "aire_acondicionado": 1,
+    "frio": 1
+   },
+   "evidence_cold": [
+    {
+     "stars": 1,
+     "when": "Hace 4 años",
+     "quote": "Ya mejoró la atención , pero hace frío y los baños están mal ubicados"
+    }
+   ],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 19,
+   "2": 8,
+   "3": 11,
+   "4": 19,
+   "5": 53
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 67,
+    "pct": 60.9
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 39,
+    "pct": 35.5
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 38,
+    "pct": 34.5
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 31,
+    "pct": 28.2
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 30,
+    "pct": 27.3
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 25,
+    "pct": 22.7
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 17,
+    "pct": 15.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 7,
+    "pct": 6.4
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "92",
+  "name": "Cinemex Plaza Loreto",
+  "sala_name": "Cinemex Loreto",
+  "place_id": "ChIJw7-bHQEA0oUR8VkdaHMef4s",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJw7-bHQEA0oUR8VkdaHMef4s&hl=es&gl=mx",
+  "km": 8.54,
+  "rating": 4.3,
+  "review_count": 6472,
+  "sampled": 60,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece asientos cómodos y limpios, junto con buena comida y bebidas. Aprecian al personal amable y paciente, y destacan la atmósfera tranquila con menos multitudes. Otras personas dicen que las instalaciones pueden estar descuidadas.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {},
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 24,
+   "2": 5,
+   "3": 5,
+   "4": 10,
+   "5": 16
+  },
+  "themes": [
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 30,
+    "pct": 50.0
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 29,
+    "pct": 48.3
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 18,
+    "pct": 30.0
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 14,
+    "pct": 23.3
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 13,
+    "pct": 21.7
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 10,
+    "pct": 16.7
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 6,
+    "pct": 10.0
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 4,
+    "pct": 6.7
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 3,
+    "pct": 5.0
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 2,
+    "pct": 3.3
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 2,
+    "pct": 3.3
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 1,
+    "pct": 1.7
+   }
+  ]
+ },
+ {
+  "id": "83",
+  "name": "Cinemex San Esteban",
+  "sala_name": "Cinemex San Esteban",
+  "place_id": "ChIJHcdysEwC0oURRkZN_HTiJvY",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJHcdysEwC0oURRkZN_HTiJvY&hl=es&gl=mx",
+  "km": 8.62,
+  "rating": 4.2,
+  "review_count": 5907,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 0,
+   "heat_mentions": 2,
+   "food_cold_excluded": 2,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 1.8,
+   "raw_token_counts": {
+    "aire_acondicionado": 3,
+    "frio": 1,
+    "helado": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": [
+    {
+     "stars": 1,
+     "when": "Hace un mes",
+     "quote": "Baños horribles (viejos y sucios), salas pequeñas y sin aire acondicionado"
+    },
+    {
+     "stars": 1,
+     "when": "Hace 4 años",
+     "quote": "Salas limpias pero sin aire acondicionado"
+    }
+   ]
+  },
+  "star_split": {
+   "1": 21,
+   "2": 7,
+   "3": 22,
+   "4": 24,
+   "5": 36
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 68,
+    "pct": 61.8
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 43,
+    "pct": 39.1
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 40,
+    "pct": 36.4
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 38,
+    "pct": 34.5
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 29,
+    "pct": 26.4
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 18,
+    "pct": 16.4
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 18,
+    "pct": 16.4
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 7,
+    "pct": 6.4
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 7,
+    "pct": 6.4
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "360",
+  "name": "Cinemex Ferrería",
+  "sala_name": "Cinemex Ferrería",
+  "place_id": "ChIJATkIcXr40YURUZHwtsVvH2E",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJATkIcXr40YURUZHwtsVvH2E&hl=es&gl=mx",
+  "km": 8.75,
+  "rating": 4.5,
+  "review_count": 2521,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "frio": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 13,
+   "2": 4,
+   "3": 2,
+   "4": 20,
+   "5": 71
+  },
+  "themes": [
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 76,
+    "pct": 69.1
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 44,
+    "pct": 40.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 31,
+    "pct": 28.2
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 29,
+    "pct": 26.4
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 27,
+    "pct": 24.5
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 22,
+    "pct": 20.0
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 16,
+    "pct": 14.5
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 9,
+    "pct": 8.2
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 4,
+    "pct": 3.6
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 0.9
+   }
+  ]
+ },
+ {
+  "id": "cineteca-003",
+  "name": "Cineteca Nacional de México",
+  "sala_name": "Cineteca Nacional Mexico (Xoco)",
+  "place_id": "ChIJHTPVvcD_0YURgn2tsuuI4ZY",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJHTPVvcD_0YURgn2tsuuI4ZY&hl=es&gl=mx",
+  "km": 5.7,
+  "rating": 4.8,
+  "review_count": 63587,
+  "sampled": 60,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece una amplia variedad de películas, incluyendo selecciones de cine de arte e internacionales, con salas de proyección cómodas, espaciosas y limpias. También destacan los precios accesibles para las entradas y las concesiones, junto con un estacionamiento amplio y asequible. Aprecian la hermosa arquitectura, el ambiente agradable y las numerosas opciones de comida, bebida y actividades culturales en el lugar.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "helado": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "2": 1,
+   "3": 1,
+   "4": 7,
+   "5": 51
+  },
+  "themes": [
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 24,
+    "pct": 40.0
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 16,
+    "pct": 26.7
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 11,
+    "pct": 18.3
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 9,
+    "pct": 15.0
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 9,
+    "pct": 15.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 8,
+    "pct": 13.3
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 5,
+    "pct": 8.3
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 5,
+    "pct": 8.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 5,
+    "pct": 8.3
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 4,
+    "pct": 6.7
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 1,
+    "pct": 1.7
+   }
+  ]
+ },
+ {
+  "id": "cineteca-001",
+  "name": "Cineteca Nacional Chapultepec",
+  "sala_name": "Cineteca Nacional Chapultepec",
+  "place_id": "ChIJM0LzecIB0oURmF6toWEvQJc",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJM0LzecIB0oURmF6toWEvQJc&hl=es&gl=mx",
+  "km": 6.74,
+  "rating": 4.3,
+  "review_count": 1941,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": null,
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 1,
+   "heat_mentions": 0,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.9,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "frio": 2
+   },
+   "evidence_cold": [
+    {
+     "stars": 4,
+     "when": "Hace 6 meses",
+     "quote": "Recomiend revisar el clima puede ser una experiencia fría"
+    }
+   ],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 1,
+   "2": 3,
+   "3": 6,
+   "4": 26,
+   "5": 74
+  },
+  "themes": [
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 46,
+    "pct": 41.8
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 41,
+    "pct": 37.3
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 29,
+    "pct": 26.4
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 29,
+    "pct": 26.4
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 29,
+    "pct": 26.4
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 25,
+    "pct": 22.7
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 23,
+    "pct": 20.9
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 21,
+    "pct": 19.1
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 19,
+    "pct": 17.3
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 16,
+    "pct": 14.5
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   }
+  ]
+ },
+ {
+  "id": "cineteca-002",
+  "name": "Cineteca Nacional de las Artes",
+  "sala_name": "Cineteca Nacional de las Artes",
+  "place_id": "ChIJ_Rc-WG7_0YUR0nwXXvHsNdI",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ_Rc-WG7_0YUR0nwXXvHsNdI&hl=es&gl=mx",
+  "km": 7.14,
+  "rating": 4.5,
+  "review_count": 14989,
+  "sampled": 40,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece una variada selección de películas nacionales e internacionales, incluyendo opciones de cine de arte y comerciales, con asientos cómodos, buen sonido y pantallas grandes. También destacan los precios accesibles de las entradas y las instalaciones limpias y bien mantenidas, incluyendo los baños. Los visitantes aprecian la atmósfera tranquila y el estacionamiento conveniente y asequible.",
+  "map_venue": null,
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "frio": 1
+   },
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "2": 2,
+   "4": 11,
+   "5": 27
+  },
+  "themes": [
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 15,
+    "pct": 37.5
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 11,
+    "pct": 27.5
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 10,
+    "pct": 25.0
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 8,
+    "pct": 20.0
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 7,
+    "pct": 17.5
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 7,
+    "pct": 17.5
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 7,
+    "pct": 17.5
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 4,
+    "pct": 10.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 4,
+    "pct": 10.0
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 3,
+    "pct": 7.5
+   },
+   {
+    "theme": "safety of the area",
+    "reviews_mentioning": 1,
+    "pct": 2.5
+   }
+  ]
+ },
+ {
+  "id": "indie-1",
+  "name": "Cine Tonalá",
+  "sala_name": "Cine Tonalá",
+  "place_id": "ChIJzbWbjj3_0YURrt6mE5VJJLE",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJzbWbjj3_0YURrt6mE5VJJLE&hl=es&gl=mx",
+  "km": null,
+  "rating": 4.5,
+  "review_count": 4778,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine ofrece una experiencia única e íntima, con una amplia variedad de películas, comida deliciosa y un menú diverso de bebidas. Mencionan la atmósfera hermosa, acogedora y tranquila, junto con el excelente servicio del personal. Los clientes destacan los asientos cómodos, la buena calidad del sonido y la atractiva zona de la terraza.",
+  "map_venue": "Cine Tonala",
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {},
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 5,
+   "2": 4,
+   "3": 10,
+   "4": 14,
+   "5": 77
+  },
+  "themes": [
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 47,
+    "pct": 42.7
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 46,
+    "pct": 41.8
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 45,
+    "pct": 40.9
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 25,
+    "pct": 22.7
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 16,
+    "pct": 14.5
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 9,
+    "pct": 8.2
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 6,
+    "pct": 5.5
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 5,
+    "pct": 4.5
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 4,
+    "pct": 3.6
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   }
+  ]
+ },
+ {
+  "id": "indie-2",
+  "name": "Cine Lido",
+  "sala_name": "Cine Lido Bella Época",
+  "place_id": "ChIJG0CiH2j_0YUR7i7HbvFM2v0",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJG0CiH2j_0YUR7i7HbvFM2v0&hl=es&gl=mx",
+  "km": null,
+  "rating": 4.7,
+  "review_count": 186,
+  "sampled": 87,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": "Centro Cultural Bella Epoca, Cine Lido",
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {},
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 1,
+   "3": 5,
+   "4": 13,
+   "5": 68
+  },
+  "themes": [
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 9,
+    "pct": 10.3
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 8,
+    "pct": 9.2
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 8,
+    "pct": 9.2
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 6,
+    "pct": 6.9
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 5,
+    "pct": 5.7
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 4,
+    "pct": 4.6
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 3,
+    "pct": 3.4
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 2,
+    "pct": 2.3
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 2,
+    "pct": 2.3
+   }
+  ]
+ },
+ {
+  "id": "indie-3",
+  "name": "La Casa del Cine Mx",
+  "sala_name": "La Casa del Cine MX",
+  "place_id": "ChIJ-8XGBdP-0YUR62XpJRtipek",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJ-8XGBdP-0YUR62XpJRtipek&hl=es&gl=mx",
+  "km": null,
+  "rating": 4.6,
+  "review_count": 3678,
+  "sampled": 110,
+  "ok": true,
+  "error": null,
+  "google_summary": "La gente dice que este cine independiente ofrece una cuidada selección de películas de autor, mexicanas y clásicas, junto con deliciosos aperitivos y bebidas que se pueden disfrutar dentro de las íntimas salas de proyección. Destacan también los precios accesibles de las entradas y la comida, así como el ambiente acogedor y artístico. Mencionan que el personal es amable y atento.",
+  "map_venue": "La Casa del Cine MX",
+  "temperature": {
+   "verdict": "thin",
+   "cold_mentions": 1,
+   "heat_mentions": 0,
+   "food_cold_excluded": 1,
+   "pct_of_sample_cold": 0.9,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {
+    "frio": 1,
+    "aire_acondicionado": 2,
+    "chamarra_o_sueter": 1
+   },
+   "evidence_cold": [
+    {
+     "stars": 5,
+     "when": "Hace 3 años",
+     "quote": "...s un lugar acogedor con mucho amor, eso si, son muy puntuales con el acceso (lleva alguna cobija si tu función es en la noche y mucha buena vibra), nunca pude comprar los boletos en línea así que siem..."
+    }
+   ],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 5,
+   "2": 2,
+   "3": 6,
+   "4": 19,
+   "5": 78
+  },
+  "themes": [
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 73,
+    "pct": 66.4
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 39,
+    "pct": 35.5
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 33,
+    "pct": 30.0
+   },
+   {
+    "theme": "crowding and queues",
+    "reviews_mentioning": 28,
+    "pct": 25.5
+   },
+   {
+    "theme": "seat comfort",
+    "reviews_mentioning": 26,
+    "pct": 23.6
+   },
+   {
+    "theme": "snack bar",
+    "reviews_mentioning": 21,
+    "pct": 19.1
+   },
+   {
+    "theme": "cleanliness / bathrooms",
+    "reviews_mentioning": 11,
+    "pct": 10.0
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 8,
+    "pct": 7.3
+   },
+   {
+    "theme": "sound",
+    "reviews_mentioning": 6,
+    "pct": 5.5
+   },
+   {
+    "theme": "parking",
+    "reviews_mentioning": 3,
+    "pct": 2.7
+   },
+   {
+    "theme": "access and lifts",
+    "reviews_mentioning": 2,
+    "pct": 1.8
+   }
+  ]
+ },
+ {
+  "id": "indie-4",
+  "name": "Cinematógrafo Del Chopo",
+  "sala_name": "Cinematógrafo del Chopo",
+  "place_id": "ChIJq6oG28_40YUR7ZCiOeXqJ4Y",
+  "maps_url": "https://www.google.com/maps/place/?q=place_id:ChIJq6oG28_40YUR7ZCiOeXqJ4Y&hl=es&gl=mx",
+  "km": null,
+  "rating": 4.4,
+  "review_count": 15,
+  "sampled": 9,
+  "ok": true,
+  "error": null,
+  "google_summary": null,
+  "map_venue": "Cinematografo del Chopo (Filmoteca UNAM)",
+  "temperature": {
+   "verdict": "no signal",
+   "cold_mentions": 0,
+   "heat_mentions": 0,
+   "food_cold_excluded": 0,
+   "pct_of_sample_cold": 0.0,
+   "pct_of_sample_hot": 0.0,
+   "raw_token_counts": {},
+   "evidence_cold": [],
+   "evidence_hot": []
+  },
+  "star_split": {
+   "1": 1,
+   "3": 1,
+   "4": 1,
+   "5": 6
+  },
+  "themes": [
+   {
+    "theme": "sound",
+    "reviews_mentioning": 3,
+    "pct": 33.3
+   },
+   {
+    "theme": "price",
+    "reviews_mentioning": 3,
+    "pct": 33.3
+   },
+   {
+    "theme": "what is showing",
+    "reviews_mentioning": 3,
+    "pct": 33.3
+   },
+   {
+    "theme": "staff and service",
+    "reviews_mentioning": 2,
+    "pct": 22.2
+   },
+   {
+    "theme": "picture and screen",
+    "reviews_mentioning": 2,
+    "pct": 22.2
+   }
+  ]
+ }
+]

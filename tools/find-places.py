@@ -1,9 +1,13 @@
 #!/opt/homebrew/bin/python3
 """Resolve each Sala Nearby cinema to its Google Maps place id and rating.
 
-Uses the tbm=map endpoint the Maps frontend itself calls. It answers 200 to homebrew
-python; macOS curl and /usr/bin/python3 get 403 off the same URL, which is a fact about
-their TLS stack and not about Google. See probe_the_real_operation.
+Uses the tbm=map endpoint the Maps frontend itself calls.
+
+Run with homebrew python by habit, but measured 2026-09-09 this endpoint does NOT care:
+/opt/homebrew/bin/python3 (OpenSSL 3.6.3), /usr/bin/python3 (LibreSSL 2.8.3) and macOS
+curl all answer 200 with an identical 32,715-byte body. The TLS-fingerprint wall that
+bites on some careers sites is not present here, and assuming it is would send the next
+person hunting a client problem that does not exist.
 """
 import json, re, sys, time, urllib.parse, urllib.request
 
@@ -35,6 +39,15 @@ def place_nodes(d):
             yield row[14]
 
 
+FORMATS = {"market", "platino", "premium", "vip", "imax", "casa", "arte"}
+
+
+def strip_accents(t):
+    import unicodedata
+    return "".join(ch for ch in unicodedata.normalize("NFD", t)
+                   if unicodedata.category(ch) != "Mn")
+
+
 def field(node, i):
     return node[i] if len(node) > i else None
 
@@ -58,17 +71,25 @@ def main():
             print("FAIL %-34s %s" % (c["n"], e))
             out.append(dict(c, http=str(e), place_id=None))
             continue
-        best, bestkm = None, 9e9
+        # Distance alone cannot separate a Market from a Platino: Cinemex puts both in
+        # the same mall at the same coordinate. So score on distance AND on the name,
+        # and let the format word (Market / Platino / Premium) break the tie.
+        want = set(re.findall(r"\w+", strip_accents(label.lower())))
+        best, bestscore, bestkm = None, -9e9, 9e9
         for n in place_nodes(d):
             gp = field(n, 9)
             if not (isinstance(gp, list) and len(gp) > 3):
                 continue
             km = haversine(c["lat"], c["lng"], gp[2], gp[3])
-            if km < bestkm:
-                bestkm, best = km, n
-        if best is None or bestkm > 1.2:
-            print("MISS %-34s nearest %.2f km" % (c["n"], bestkm))
-            out.append(dict(c, http=st, place_id=None, km_off=round(bestkm, 3)))
+            if km > 1.2:
+                continue
+            have = set(re.findall(r"\w+", strip_accents(str(field(n, 11) or "").lower())))
+            score = 3.0 * len(want & have) - 1.5 * len(FORMATS & (want ^ have)) - 4.0 * km
+            if score > bestscore:
+                bestscore, bestkm, best = score, km, n
+        if best is None:
+            print("MISS %-34s no candidate within 1.2 km" % c["n"])
+            out.append(dict(c, http=st, place_id=None))
             continue
         rat = field(best, 4) or []
         out.append(dict(
