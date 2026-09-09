@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-09T14:10:35+00:00",
+ "generated_at": "2026-09-09T14:27:14+00:00",
  "generated_by": "build-cinema-extras.py",
  "about": "Loyalty, projection formats in plain words, ticket price bands, and food and alcohol, for the 35 venues docs/index.html actually carries. Every value names where it came from in `sources` and carries a `confidence`. A field that could not be sourced is null with a note saying why, never a plausible-looking number.",
  "app_venues": {
@@ -45,6 +45,38 @@
   ],
   "note": "read out of the SHOWS blob in docs/index.html at build time. The validator refuses any venue id in this file that the page does not carry."
  },
+ "infinity_vision": {
+  "what_it_is": "A Disney certification for premium large-format screens, not a projection technology and not a Cinemex product.",
+  "established": "2026-04-16, by The Walt Disney Company",
+  "applies_to": "Marvel Studios releases, starting with the September 2026 Avengers: Endgame re-release and Avengers: Doomsday on 18 December 2026",
+  "confidence": "third_party",
+  "source": "telediario_infinity_vision",
+  "second_source": "avpasion_infinity_vision",
+  "corroborated_locally": {
+   "confidence": "measured",
+   "source": "app_page",
+   "detail": "All 150 Infinity Vision showtimes in this app are one film, 'Avengers Endgame: Bonus', across six venues: Universidad Sala 1, San Antonio Sala 1, Patriotismo Market Sala 2, Antara Market Sala 1, Antara Platino Sala 6 and Parque Delta Sala 10. A badge that appears on exactly one studio's release and nothing else is a certification riding on the film, not a description of the room. This was checked before either article was believed."
+  },
+  "published_requirements": {
+   "confidence": "third_party",
+   "source": "avpasion_infinity_vision",
+   "second_source": "telediario_infinity_vision",
+   "screen_width_min_m": 13.7,
+   "screen_width_note": "reported as 'ancho minimo de 14 metros (45 pies aproximadamente)' and elsewhere as 13.7 m -- the same 45-foot figure rounded two ways",
+   "brightness_2d_foot_lamberts": 14,
+   "brightness_3d_foot_lamberts": 6,
+   "projector": "any reasonably modern laser projector; no specific model required",
+   "sound_requirement_is_disputed": {
+    "confidence": "unknown",
+    "note": "The two sources disagree and this app's own data does not settle it in their favour. One says object-based immersive sound, Dolby Atmos or DTS:X; the other says 7.1 or better. Only 70 of the 150 Infinity Vision showtimes here also carry the `dolby_atmos` flag, so an Atmos requirement is not visible in Cinemex's own labelling. Do not state a sound requirement."
+   },
+   "not_verifiable_here": "Nothing Cinemex publishes gives a screen width, a brightness figure or a projector model, so this build cannot confirm that any of the six rooms actually meets the published bar. Antara Market Sala 1 is a 107-seat, 7-row room, which is small for a 13.7-metre screen -- worth a human look before the app tells anyone these are certified giant screens."
+  },
+  "how_to_say_it_to_a_person": "Safe: 'Disney's quality badge for big screens -- it means Disney checked this screen for its Marvel releases.' Not safe: any screen size, brightness or sound claim about a specific Cinemex room, and the word 'format', which is what the badge is designed to look like and is not."
+ },
+ "see_also": {
+  "docs/rooms.json": "One record per auditorium: name, screen number, seat count broken out into ordinary seats, wheelchair spaces and companion spaces, row count, and which formats that specific room runs. Built by build-rooms.py, one call per distinct room rather than one per showing. Kept separate because auditorium geometry does not change week to week and prices do."
+ },
  "sources": {
   "wikipedia_es_dolby_atmos": {
    "url": "https://es.wikipedia.org/wiki/Dolby_Atmos",
@@ -60,6 +92,18 @@
    "url": "https://es.wikipedia.org/wiki/4DX",
    "http_status": 200,
    "note": "read through the MediaWiki extracts API"
+  },
+  "app_page": {
+   "url": "docs/index.html",
+   "http_status": 200,
+   "from_cached_pull": true,
+   "note": "served from .raw-extras/ on this run; url recorded for reference"
+  },
+  "avpasion_infinity_vision": {
+   "url": "https://www.avpasion.com/infinity-vision-disney-doomsday/",
+   "http_status": 200,
+   "from_cached_pull": true,
+   "note": "served from .raw-extras/ on this run; url recorded for reference"
   },
   "cinemex_app_settings": {
    "url": "https://api.cinemex.com/rest/v2.38/app/settings",
@@ -87,6 +131,12 @@
   },
   "cinemex_landing_casa_de_arte": {
    "url": "https://api.cinemex.com/rest/v2.38/landings/casa-de-arte",
+   "http_status": 200,
+   "from_cached_pull": true,
+   "note": "served from .raw-extras/ on this run; url recorded for reference"
+  },
+  "cinemex_landing_imax": {
+   "url": "https://api.cinemex.com/rest/v2.38/landings/imax",
    "http_status": 200,
    "from_cached_pull": true,
    "note": "served from .raw-extras/ on this run; url recorded for reference"
@@ -159,6 +209,12 @@
   },
   "cineteca_menu_terraza": {
    "url": "https://www.cinetecanacional.net/docs/espacios_812/CNMX/terraza/menuTerraza.pdf",
+   "http_status": 200,
+   "from_cached_pull": true,
+   "note": "served from .raw-extras/ on this run; url recorded for reference"
+  },
+  "telediario_infinity_vision": {
+   "url": "https://www.telediario.mx/espectaculos/que-es-infinity-vision-y-como-funciona-el-nuevo-formato-disney",
    "http_status": 200,
    "from_cached_pull": true,
    "note": "served from .raw-extras/ on this run; url recorded for reference"
@@ -897,14 +953,15 @@
    "infinity-vision": {
     "display_name_es": "Infinity Vision",
     "scope": "session",
-    "plain_en": null,
-    "plain_es": null,
-    "confidence": "unknown",
-    "source": null,
+    "plain_en": "Not a Cinemex room type at all -- a Disney quality badge. Disney inspects a cinema's big screen and certifies it good enough to show Marvel films the way they were finished, and the badge rides on the film rather than the room. No new technology is involved; it is a promise about brightness, screen size and sound, aimed at IMAX.",
+    "plain_es": "No es una sala de Cinemex: es un sello de calidad de Disney. Disney revisa la pantalla grande de un cine y la certifica apta para proyectar las peliculas de Marvel como se terminaron, y el sello va con la pelicula, no con la sala. No hay tecnologia nueva; es una promesa de brillo, tamano de pantalla y sonido, hecha para competir con IMAX.",
+    "confidence": "third_party",
+    "source": "telediario_infinity_vision",
     "app_showtimes_using_it": 150,
     "in_use_in_app": true,
-    "why": "This is the awkward one: 150 showtimes in this app carry it, and the words 'Infinity Vision' appear ZERO times in the 8.4 MB of Cinemex's CMS. They sell it and describe it nowhere. Do not fill this in by analogy with anything.",
-    "cinemex_publishes_a_description": false
+    "why": "RESOLVED, and the reason Cinemex describes it nowhere is that it is not theirs to describe. Corroborated from this app's own data before either article was trusted: all 150 Infinity Vision showtimes here are ONE film, 'Avengers Endgame: Bonus', spread across six venues -- which is exactly the shape of a studio certification attached to a release, and not the shape of a room's permanent equipment. Disney established it on 16 April 2026 for Marvel titles beginning with the September 2026 Endgame re-release and Avengers: Doomsday in December.",
+    "cinemex_publishes_a_description": false,
+    "second_source": "avpasion_infinity_vision"
    },
    "preview": {
     "display_name_es": "Pre-estreno",
@@ -1084,13 +1141,15 @@
    "imax": {
     "display_name_es": "IMAX",
     "scope": "auditorium",
-    "plain_en": "A very large, tall screen with stadium seating, shot or remastered for the format. Cinemex's most expensive non-Platino ticket.",
-    "plain_es": "Pantalla enorme y muy alta con asientos tipo estadio, con la pelicula filmada o remasterizada para el formato. El boleto mas caro de Cinemex fuera de Platino.",
-    "confidence": "third_party",
-    "source": "wikipedia_es_imax",
+    "plain_en": "A very large, brighter screen with stadium seating, and a print remastered for the format -- up to 26% more picture on selected titles. Cinemex's most expensive ticket outside Platino.",
+    "plain_es": "Pantalla enorme y mas brillante con asientos tipo estadio, y una copia remasterizada para el formato, con hasta 26% mas de imagen en titulos selectos. El boleto mas caro de Cinemex fuera de Platino.",
+    "confidence": "operator_published",
+    "source": "cinemex_landing_imax",
     "app_showtimes_using_it": 230,
     "in_use_in_app": true,
-    "why": "Cinemex's own IMAX landing page says only 'la experiencia cinematografica premium numero 1 del mundo', which is marketing and not a description. The mechanism comes from Spanish Wikipedia; the price claim is measured."
+    "quote_es": "PELICULAS DESARROLLADAS PARA IMAX. CAMARAS DE ALTA RESOLUCION: Alcance y claridad incomparables. IMAGENES REMASTERIZADAS DIGITALMENTE: Mejora de imagen (DMR) en todas las peliculas. HASTA UN 26% MAS DE IMAGEN: Titulos seleccionados. DISENO INMERSIVO. SALAS DE CINE A MEDIDA: Asientos estilo estadio para vistas unicas y claras desde donde sea. BRILLO INIGUALABLE: Pantallas personalizadas para las imagenes mas brillantes.",
+    "why": "CORRECTED. An earlier pass of this file said Cinemex publishes only marketing for IMAX and sourced the mechanism from Wikipedia. They publish a full description -- it is inside image `alt` attributes on their conoce-imax page, so a CMS reader that strips tags before searching finds nothing and concludes they say nothing. Spanish Wikipedia is kept as a second source for the screen geometry, which Cinemex does not give.",
+    "second_source": "wikipedia_es_imax"
    },
    "imax_3d": {
     "display_name_es": "IMAX 3D",
@@ -1316,6 +1375,40 @@
     "source": null,
     "why": "Zero mentions in the entire CMS. See the format note."
    }
+  },
+  "imax_rooms": {
+   "venues_with_imax_in_this_app": [
+    "32",
+    "76",
+    "410"
+   ],
+   "venue_names": {
+    "32": "Parque Delta",
+    "76": "Antara Platino",
+    "410": "Encuentro Oceanía"
+   },
+   "source": "cinemex_landing_imax",
+   "confidence": "operator_published",
+   "laser": {
+    "venues_in_this_app": [
+     "32",
+     "76"
+    ],
+    "venue_names": {
+     "32": "Parque Delta",
+     "76": "Antara Platino"
+    },
+    "quote_es": "IMAX with Laser. LA EXPERIENCIA CINEMATOGRÁFICA PREMIUM NÚMERO 1 DEL MUNDO. Ven a conocer nuestras nuevas pantallas IMAX Láser en Antara, Santa Fe, Parque Delta y Parque Tezontle y vive las emociones del cine al MAXIMO.",
+    "source": "cinemex_landing_imax",
+    "confidence": "operator_published",
+    "note": "Cinemex names four complexes as IMAX Laser -- Antara, Santa Fe, Parque Delta and Parque Tezontle -- and only Antara and Parque Delta are in this app. So an app venue can have IMAX without having the laser projector: Encuentro Oceania is on their IMAX venue list and is NOT in the laser sentence. Do not label every IMAX room 'IMAX with Laser'."
+   },
+   "spec_claims_not_sourced": {
+    "claim": "4K laser, 12-channel, 1.90:1",
+    "confidence": "unknown",
+    "source": null,
+    "note": "This spec line appears in docs/IDEAS-2026-09-09.md as the subtitle for Parque Delta Sala 3. The phrase 'IMAX with Laser' IS Cinemex's own, but '12-channel' returns zero hits in their entire CMS and no aspect ratio or channel count is published anywhere. Ship the phrase, not the spec."
+   }
   }
  },
  "ticket_pricing": {
@@ -1380,7 +1473,8 @@
    "traps": [
     "The promo is a ticket PRODUCT, not a discount field. Reading only 'ADULTO' and looking for a lower number finds nothing on a promo day, because 'ADULTO' is simply absent.",
     "Which film is in the slot matters, and it is not a per-venue property. Miguel Angel de Quevedo priced Premium Espanol at $39 and Premium Subtitulada at $116 on the SAME day, 10 September -- sessions 65622752 and 65569681. The Mania terms exclude premieres, preventa and funciones especiales, so the film in the slot decides it. Treat the rule as the rule and these rows as observations; never show a venue-and-format promo price as though it applied to every film.",
-    "A 200 can carry an empty `tickets` array. One of the 140 sessions swept did."
+    "A 200 can carry an empty `tickets` array. One of the 140 sessions swept did.",
+    "The `auditorium`, `seats` and `wheelchair_spaces` on these rows are incidental -- they came free with the price read and describe whichever session happened to be sampled. For room data use docs/rooms.json, which covers all 287 auditoriums rather than the 140 sampled here."
    ],
    "venues": {
     "30": {

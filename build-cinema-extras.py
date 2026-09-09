@@ -67,6 +67,7 @@ SOURCES = OrderedDict()
 # ids would be referenced by the data and absent from `sources`, which is exactly the
 # dangling reference the validator refuses.
 SOURCE_URLS = {
+    "app_page": "docs/index.html",
     "cinemex_app_settings": CX_BASE + "app/settings",
     "cinemex_ie_benefits": CX_BASE + "ie/benefits",
     "cinemex_loyalty_signup": CX_BASE + "loyalty/getSignUpOptions/cinema/<id>",
@@ -91,6 +92,9 @@ SOURCE_URLS = {
     "wikipedia_es_dolby_atmos": "https://es.wikipedia.org/wiki/Dolby_Atmos",
     "wikipedia_es_imax": "https://es.wikipedia.org/wiki/IMAX",
     "wikipedia_es_4dx": "https://es.wikipedia.org/wiki/4DX",
+    "telediario_infinity_vision": ("https://www.telediario.mx/espectaculos/"
+                                   "que-es-infinity-vision-y-como-funciona-el-nuevo-formato-disney"),
+    "avpasion_infinity_vision": "https://www.avpasion.com/infinity-vision-disney-doomsday/",
 }
 
 
@@ -511,10 +515,27 @@ FORMAT_WORDS = {
         es="Funcion IMAX en 3D. Nada en esta app lo usa.",
         confidence="label_translation", source="cinemex_app_settings"),
     "infinity-vision": dict(
-        en=None, es=None, confidence="unknown", source=None,
-        why="This is the awkward one: 150 showtimes in this app carry it, and the words "
-            "'Infinity Vision' appear ZERO times in the 8.4 MB of Cinemex's CMS. They sell "
-            "it and describe it nowhere. Do not fill this in by analogy with anything.",
+        en="Not a Cinemex room type at all -- a Disney quality badge. Disney inspects a "
+           "cinema's big screen and certifies it good enough to show Marvel films the way "
+           "they were finished, and the badge rides on the film rather than the room. No "
+           "new technology is involved; it is a promise about brightness, screen size and "
+           "sound, aimed at IMAX.",
+        es="No es una sala de Cinemex: es un sello de calidad de Disney. Disney revisa la "
+           "pantalla grande de un cine y la certifica apta para proyectar las peliculas de "
+           "Marvel como se terminaron, y el sello va con la pelicula, no con la sala. No "
+           "hay tecnologia nueva; es una promesa de brillo, tamano de pantalla y sonido, "
+           "hecha para competir con IMAX.",
+        confidence="third_party",
+        source="telediario_infinity_vision",
+        second_source="avpasion_infinity_vision",
+        why="RESOLVED, and the reason Cinemex describes it nowhere is that it is not "
+            "theirs to describe. Corroborated from this app's own data before either "
+            "article was trusted: all 150 Infinity Vision showtimes here are ONE film, "
+            "'Avengers Endgame: Bonus', spread across six venues -- which is exactly the "
+            "shape of a studio certification attached to a release, and not the shape of a "
+            "room's permanent equipment. Disney established it on 16 April 2026 for Marvel "
+            "titles beginning with the September 2026 Endgame re-release and Avengers: "
+            "Doomsday in December.",
         cinemex_publishes_a_description=False),
     "confort": dict(
         en=None, es=None, confidence="unknown", source=None,
@@ -745,6 +766,74 @@ CINEMA_ATTR_WORDS = {
 }
 
 
+def imax_rooms(venue_ids, names):
+    """Which app venues have IMAX at all, and which have the laser projector.
+
+    Two different Cinemex statements, so two different fields. The venue list comes from
+    the landing's own `cinemas` array; the laser list comes from a sentence inside an image
+    `alt` attribute and names four complexes by short name, which have to be matched back
+    to venue ids by hand because the sentence is prose.
+    """
+    landing = cached("landing_imax.json", lambda: cx("landings/imax",
+                                                     "cinemex_landing_imax"))
+    pages = landing if isinstance(landing, list) else [landing]
+    listed, alts = set(), []
+    for p in pages:
+        for pg in (p.get("pages") or []):
+            content = pg.get("content") or {}
+            for c in (content.get("cinemas") or []):
+                listed.add(str(c["id"]))
+            for m in re.finditer(r'alt="([^"]{25,700})"', content.get("html") or ""):
+                alts.append(re.sub(r"\s+", " ", strip_html(m.group(1))).strip())
+
+    laser_sentence = next((a for a in alts if "Laser" in a or "Láser" in a), None)
+    # The sentence names complexes in prose -- "Antara, Santa Fe, Parque Delta y Parque
+    # Tezontle" -- so the mapping to venue ids is by name against the page's own venue
+    # list, and a name the app does not carry simply does not appear.
+    # "Antara" and "Parque Delta" are each the name of TWO app venues -- the Market or
+    # ordinary complex and the Platino one next door -- so a name match alone puts the
+    # laser screen in the wrong building. Intersect with the venues Cinemex's own IMAX
+    # list names: a laser IMAX room has to be in a cinema that has IMAX.
+    LASER_NAMES = {"Antara": ["75", "76"], "Santa Fe": [], "Parque Delta": ["32", "324"],
+                   "Parque Tezontle": []}
+    imax_here = listed & set(venue_ids)
+    laser_ids = []
+    if laser_sentence:
+        for nm, ids in LASER_NAMES.items():
+            if nm.lower() in laser_sentence.lower():
+                laser_ids += [i for i in ids if i in imax_here]
+
+    return {
+        "venues_with_imax_in_this_app": sorted(imax_here, key=int),
+        "venue_names": {i: names.get(i) for i in sorted(imax_here, key=int)},
+        "source": "cinemex_landing_imax",
+        "confidence": "operator_published",
+        "laser": {
+            "venues_in_this_app": sorted(set(laser_ids), key=int),
+            "venue_names": {i: names.get(i) for i in sorted(set(laser_ids), key=int)},
+            "quote_es": laser_sentence,
+            "source": "cinemex_landing_imax",
+            "confidence": "operator_published",
+            "note": ("Cinemex names four complexes as IMAX Laser -- Antara, Santa Fe, "
+                     "Parque Delta and Parque Tezontle -- and only Antara and Parque Delta "
+                     "are in this app. So an app venue can have IMAX without having the "
+                     "laser projector: Encuentro Oceania is on their IMAX venue list and "
+                     "is NOT in the laser sentence. Do not label every IMAX room 'IMAX "
+                     "with Laser'."),
+        },
+        "spec_claims_not_sourced": {
+            "claim": "4K laser, 12-channel, 1.90:1",
+            "confidence": "unknown",
+            "source": None,
+            "note": ("This spec line appears in docs/IDEAS-2026-09-09.md as the subtitle "
+                     "for Parque Delta Sala 3. The phrase 'IMAX with Laser' IS Cinemex's "
+                     "own, but '12-channel' returns zero hits in their entire CMS and no "
+                     "aspect ratio or channel count is published anywhere. Ship the phrase, "
+                     "not the spec."),
+        },
+    }
+
+
 def build_formats(blob):
     settings = cached("settings.json", lambda: cx("app/settings", "cinemex_app_settings"))
     movie = settings["attributes"]["movies"]
@@ -797,7 +886,7 @@ def build_formats(blob):
             "app_showtimes_using_it": use.get(key, 0),
             "in_use_in_app": use.get(key, 0) > 0,
         }
-        for extra in ("quote_es", "why", "cinemex_publishes_a_description"):
+        for extra in ("quote_es", "why", "cinemex_publishes_a_description", "second_source"):
             if extra in w:
                 rec[extra] = w[extra]
         if key not in FORMAT_WORDS:
@@ -815,7 +904,7 @@ def build_formats(blob):
             "confidence": w.get("confidence", "unknown"),
             "source": w.get("source"),
         }
-        for extra in ("quote_es", "why", "cinemex_publishes_a_description"):
+        for extra in ("quote_es", "why", "cinemex_publishes_a_description", "second_source"):
             if extra in w:
                 rec[extra] = w[extra]
         out["complex_attributes"][key] = rec
@@ -953,6 +1042,10 @@ def build_pricing(blob):
                  "price as though it applied to every film."),
                 ("A 200 can carry an empty `tickets` array. One of the 140 sessions swept "
                  "did."),
+                ("The `auditorium`, `seats` and `wheelchair_spaces` on these rows are "
+                 "incidental -- they came free with the price read and describe whichever "
+                 "session happened to be sampled. For room data use docs/rooms.json, which "
+                 "covers all 287 auditoriums rather than the 140 sampled here."),
             ],
             "venues": {k: v for k, v in venues.items()},
         },
@@ -1493,6 +1586,7 @@ def main():
 
     loyalty = build_loyalty(cinemex_ids)
     formats = build_formats(blob)
+    formats["imax_rooms"] = imax_rooms(cinemex_ids, {str(c["id"]): c["n"] for c in blob["cin"]})
     pricing = build_pricing(blob)
     food = build_food(blob, cinemex_ids)
     split = attribute_split()
@@ -1518,6 +1612,68 @@ def main():
         "note": ("read out of the SHOWS blob in docs/index.html at build time. The "
                  "validator refuses any venue id in this file that the page does not "
                  "carry."),
+    }
+    doc["infinity_vision"] = {
+        "what_it_is": "A Disney certification for premium large-format screens, not a "
+                      "projection technology and not a Cinemex product.",
+        "established": "2026-04-16, by The Walt Disney Company",
+        "applies_to": "Marvel Studios releases, starting with the September 2026 Avengers: "
+                      "Endgame re-release and Avengers: Doomsday on 18 December 2026",
+        "confidence": "third_party",
+        "source": "telediario_infinity_vision",
+        "second_source": "avpasion_infinity_vision",
+        "corroborated_locally": {
+            "confidence": "measured",
+            "source": "app_page",
+            "detail": ("All 150 Infinity Vision showtimes in this app are one film, "
+                       "'Avengers Endgame: Bonus', across six venues: Universidad Sala 1, "
+                       "San Antonio Sala 1, Patriotismo Market Sala 2, Antara Market "
+                       "Sala 1, Antara Platino Sala 6 and Parque Delta Sala 10. A badge "
+                       "that appears on exactly one studio's release and nothing else is a "
+                       "certification riding on the film, not a description of the room. "
+                       "This was checked before either article was believed."),
+        },
+        "published_requirements": {
+            "confidence": "third_party",
+            "source": "avpasion_infinity_vision",
+            "second_source": "telediario_infinity_vision",
+            "screen_width_min_m": 13.7,
+            "screen_width_note": ("reported as 'ancho minimo de 14 metros (45 pies "
+                                  "aproximadamente)' and elsewhere as 13.7 m -- the same "
+                                  "45-foot figure rounded two ways"),
+            "brightness_2d_foot_lamberts": 14,
+            "brightness_3d_foot_lamberts": 6,
+            "projector": "any reasonably modern laser projector; no specific model required",
+            "sound_requirement_is_disputed": {
+                "confidence": "unknown",
+                "note": ("The two sources disagree and this app's own data does not settle "
+                         "it in their favour. One says object-based immersive sound, Dolby "
+                         "Atmos or DTS:X; the other says 7.1 or better. Only 70 of the 150 "
+                         "Infinity Vision showtimes here also carry the `dolby_atmos` flag, "
+                         "so an Atmos requirement is not visible in Cinemex's own "
+                         "labelling. Do not state a sound requirement."),
+            },
+            "not_verifiable_here": ("Nothing Cinemex publishes gives a screen width, a "
+                                    "brightness figure or a projector model, so this build "
+                                    "cannot confirm that any of the six rooms actually "
+                                    "meets the published bar. Antara Market Sala 1 is a "
+                                    "107-seat, 7-row room, which is small for a "
+                                    "13.7-metre screen -- worth a human look before the "
+                                    "app tells anyone these are certified giant screens."),
+        },
+        "how_to_say_it_to_a_person": (
+            "Safe: 'Disney's quality badge for big screens -- it means Disney checked this "
+            "screen for its Marvel releases.' Not safe: any screen size, brightness or "
+            "sound claim about a specific Cinemex room, and the word 'format', which is "
+            "what the badge is designed to look like and is not."),
+    }
+    doc["see_also"] = {
+        "docs/rooms.json": (
+            "One record per auditorium: name, screen number, seat count broken out into "
+            "ordinary seats, wheelchair spaces and companion spaces, row count, and which "
+            "formats that specific room runs. Built by build-rooms.py, one call per "
+            "distinct room rather than one per showing. Kept separate because auditorium "
+            "geometry does not change week to week and prices do."),
     }
     doc["sources"] = SOURCES
     doc["loyalty"] = loyalty

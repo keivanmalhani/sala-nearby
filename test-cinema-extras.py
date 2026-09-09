@@ -27,6 +27,7 @@ import argparse, copy, json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "docs", "cinema-extras.json")
+ROOMS = os.path.join(HERE, "docs", "rooms.json")
 PAGE = os.path.join(HERE, "docs", "index.html")
 
 # A dict holding any of these is asserting something about the world, so a `confidence`
@@ -98,7 +99,7 @@ def check(doc, venues):
                                  % (where, conf))
                 covered_by = where
 
-            for k in ("source", "rules_source"):
+            for k in ("source", "rules_source", "second_source"):
                 v = node.get(k)
                 if isinstance(v, str) and v not in sources:
                     fails.append("%s.%s: names source %r, which is not in `sources`"
@@ -155,6 +156,76 @@ def check(doc, venues):
     if declared != venues:
         fails.append("app_venues does not match the page: %s in the file only, %s in the "
                      "page only" % (sorted(declared - venues), sorted(venues - declared)))
+    return fails
+
+
+def check_rooms(doc, venues):
+    """docs/rooms.json, on the same terms plus the arithmetic it can check itself.
+
+    A seat count is the number this file exists to carry, so the parts have to add up to
+    the total. Getting that wrong is the shape the earlier menu parser had -- a plausible
+    number in the right field -- and a total that disagrees with its own breakdown is the
+    one version of it a machine can catch.
+    """
+    fails = []
+    sources = set((doc.get("sources") or {}).keys())
+    ALLOWED = {"measured", "unknown", "operator_published", "third_party"}
+
+    block = doc.get("venues")
+    if not isinstance(block, dict):
+        return ["rooms.json: `venues` is missing or not an object"]
+
+    for vid, v in block.items():
+        if vid not in venues:
+            fails.append("rooms.json: venue id %r is not one docs/index.html carries" % vid)
+        rooms = v.get("rooms")
+        if not isinstance(rooms, list) or not rooms:
+            fails.append("rooms.json %s: no rooms" % vid)
+            continue
+        if v.get("room_count") != len(rooms):
+            fails.append("rooms.json %s: room_count %r but %d rooms listed"
+                         % (vid, v.get("room_count"), len(rooms)))
+        seen = set()
+        for r in rooms:
+            where = "rooms.json %s %s" % (vid, r.get("room"))
+            if r.get("room") in seen:
+                fails.append("%s: duplicate room -- the sweep did not deduplicate" % where)
+            seen.add(r.get("room"))
+            if r.get("confidence") not in ALLOWED:
+                fails.append("%s: confidence %r not allowed here" % (where, r.get("confidence")))
+            if isinstance(r.get("source"), str) and r["source"] not in sources:
+                fails.append("%s: names source %r, not in `sources`" % (where, r["source"]))
+            for k in ("seats_total", "seats_regular", "wheelchair_spaces",
+                      "companion_spaces", "blank_cells", "rows"):
+                x = r.get(k)
+                if x is None:
+                    continue
+                if isinstance(x, bool) or not isinstance(x, int):
+                    fails.append("%s.%s: %r is not an integer" % (where, k, x))
+                elif x < 0:
+                    fails.append("%s.%s: negative (%r)" % (where, k, x))
+            parts = [r.get("seats_regular"), r.get("wheelchair_spaces"),
+                     r.get("companion_spaces")]
+            if r.get("seats_total") is not None and all(isinstance(p, int) for p in parts):
+                if sum(parts) != r["seats_total"]:
+                    fails.append("%s: seats_total %r but regular+wheelchair+companion is %d"
+                                 % (where, r["seats_total"], sum(parts)))
+            if r.get("seats_total") in (0, None) and not (r.get("note") or r.get("why")):
+                fails.append("%s: no seat count and no note saying why" % where)
+            if isinstance(r.get("row_names"), list) and isinstance(r.get("rows"), int):
+                if len(r["row_names"]) != r["rows"]:
+                    fails.append("%s: rows %d but %d row names"
+                                 % (where, r["rows"], len(r["row_names"])))
+            if not r.get("formats_run_here"):
+                fails.append("%s: no formats recorded, so nothing put a showing in it"
+                             % where)
+
+    lf = doc.get("layout_field") or {}
+    if lf.get("answer") is None or lf.get("confidence") not in ALLOWED:
+        fails.append("rooms.json: layout_field must answer the assigned-seating question "
+                     "and carry a confidence")
+    if not doc.get("room_claims_cross_checked"):
+        fails.append("rooms.json: the room-claim cross-check is missing")
     return fails
 
 
@@ -217,6 +288,59 @@ def selftest(doc, venues):
     return all(results)
 
 
+def selftest_rooms(doc, venues):
+    def plant(label, mutate, expect):
+        bad = copy.deepcopy(doc)
+        mutate(bad)
+        hit = [f for f in check_rooms(bad, venues) if expect in f]
+        print("  %-46s %s" % (label, "caught" if hit else "*** NOT CAUGHT ***"))
+        return bool(hit)
+
+    first = sorted(doc["venues"])[0]
+
+    def r0(d):
+        return d["venues"][first]["rooms"][0]
+
+    def s_sum(d):
+        r0(d)["seats_regular"] = r0(d)["seats_regular"] + 7
+
+    def s_str(d):
+        r0(d)["seats_total"] = "142"
+
+    def s_venue(d):
+        d["venues"]["999999"] = copy.deepcopy(d["venues"][first])
+
+    def s_dupe(d):
+        rs = d["venues"][first]["rooms"]
+        rs.append(copy.deepcopy(rs[0]))
+        d["venues"][first]["room_count"] = len(rs)
+
+    def s_rows(d):
+        r0(d)["row_names"] = (r0(d)["row_names"] or [])[:-1]
+
+    def s_zero(d):
+        r0(d)["seats_total"] = 0
+        r0(d).pop("note", None)
+        r0(d).pop("why", None)
+
+    def s_layout(d):
+        d["layout_field"]["answer"] = None
+
+    def s_claims(d):
+        d["room_claims_cross_checked"] = []
+
+    return all([
+        plant("a seat breakdown that does not add up", s_sum, "regular+wheelchair+companion"),
+        plant("a seat count given as a string", s_str, "is not an integer"),
+        plant("a venue id the app does not carry", s_venue, "not one docs/index.html"),
+        plant("the same room listed twice", s_dupe, "duplicate room"),
+        plant("a row count that disagrees with row_names", s_rows, "row names"),
+        plant("a zero seat count with no note", s_zero, "no seat count and no note"),
+        plant("layout_field not answering the question", s_layout, "assigned-seating"),
+        plant("the room-claim cross-check removed", s_claims, "cross-check is missing"),
+    ])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--selftest", action="store_true",
@@ -232,12 +356,26 @@ def main():
 
     good = report("docs/cinema-extras.json", check(doc, venues))
 
+    rooms = None
+    if os.path.exists(ROOMS):
+        rooms = json.load(open(ROOMS, encoding="utf-8"))
+        n = sum(v.get("room_count", 0) for v in (rooms.get("venues") or {}).values())
+        good = report("docs/rooms.json (%d rooms)" % n, check_rooms(rooms, venues)) and good
+    else:
+        print("skip  docs/rooms.json is not built yet")
+
     if args.selftest:
         print("\nself-test -- every check must go red on a planted record:")
         if not selftest(doc, venues):
             print("\nFAIL  a check could not be made to fire, so it proves nothing")
             sys.exit(1)
         print("  all checks fired")
+        if rooms is not None:
+            print("\nself-test on rooms.json:")
+            if not selftest_rooms(rooms, venues):
+                print("\nFAIL  a rooms check could not be made to fire")
+                sys.exit(1)
+            print("  all rooms checks fired")
 
     sys.exit(0 if good else 1)
 

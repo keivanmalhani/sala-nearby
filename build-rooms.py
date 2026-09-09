@@ -62,9 +62,23 @@ ROOM_CLAIMS = [
      "expect_format_substring": "IMAX",
      "claimed_in": "docs/IDEAS-2026-09-09.md lines 164 and 533"},
     {"venue": "32", "venue_name": "Parque Delta", "room": "Sala 10",
-     "claim": "the CinemeXtremo room with Dolby Atmos, also the Infinity Vision room",
+     "claim": "the Dolby Atmos room, also the Infinity Vision room",
      "expect_format_substring": "Dolby Atmos",
      "claimed_in": "docs/IDEAS-2026-09-09.md lines 159-160 and 534"},
+    {"venue": "32", "venue_name": "Parque Delta", "room": "Sala 10",
+     "claim": "the CinemeXtremo room",
+     "expect_type_key": "cx",
+     "claimed_in": "docs/IDEAS-2026-09-09.md lines 159-160 and 534",
+     "resolution": (
+         "Not wrong so much as unsupported by the listings. No screening anywhere in this "
+         "app carries the `cx` key -- CinemeXtremo has zero showtimes across all 32 "
+         "venues. What connects the room to the name is two other things: Parque Delta "
+         "carries `cx` in its complex attribute list, and the ticket products this room "
+         "returns are prefixed CX -- 'CX ADULTO EST1', 'CX MIERCOLES EST1'. So calling it "
+         "the CinemeXtremo room is an inference from a ticket product code and a "
+         "building-level flag, not something the format data says. Safe to show as "
+         "'Dolby Atmos'; not safe to show as 'CinemeXtremo' with a straight face."),
+     },
 ]
 
 
@@ -205,6 +219,11 @@ def main():
                 "formats_run_here": formats,
                 "read_from_session": src.get("session_id"),
                 "read_for_day": src.get("session_day"),
+                # The page's room string comes from `auditorium_name or Sala <number>`
+                # depending on which shape the listings call returned that day, so it is
+                # worth asking whether the two agree rather than assuming they do.
+                "name_agrees_with_page": (src.get("auditorium_name") == name
+                                          if src.get("status") == 200 else None),
                 "source": "cinemex_sessions_rooms",
                 "confidence": "measured",
             }
@@ -232,17 +251,24 @@ def main():
                                formats_actually_run=None))
             continue
         labels = [f["label"] for f in rec["formats_run_here"]]
-        hit = [l for l in labels if c["expect_format_substring"].lower() in l.lower()]
         total = sum(f["showtimes_in_this_room"] for f in rec["formats_run_here"])
-        matched = sum(f["showtimes_in_this_room"] for f in rec["formats_run_here"]
-                      if c["expect_format_substring"].lower() in f["label"].lower())
+        if "expect_type_key" in c:
+            # Checked against the format's own type array, not its display label. A claim
+            # about a Cinemex product name has to be answered by the key they file it
+            # under, because a label can carry a marketing word the vocabulary does not.
+            key = c["expect_type_key"]
+            matched = sum(f["showtimes_in_this_room"] for f in rec["formats_run_here"]
+                          if key in (f["type"] or []))
+        else:
+            matched = sum(f["showtimes_in_this_room"] for f in rec["formats_run_here"]
+                          if c["expect_format_substring"].lower() in f["label"].lower())
         checks.append(dict(
             c,
-            verdict="agrees" if hit else "DISAGREES",
+            verdict="agrees" if matched else "DISAGREES",
             formats_actually_run=labels,
             showtimes_matching_the_claim=matched,
             showtimes_in_the_room=total,
-            exclusive="yes" if matched == total else "no",
+            exclusive=("yes" if matched == total else "no") if matched else None,
         ))
 
     doc = OrderedDict()
@@ -298,6 +324,68 @@ def main():
             ("`type: blank` and `status: \"E\"` are the same fact said twice -- aisles and "
              "gaps. Counting cells instead of seats inflates every room by roughly half."),
         ],
+    }
+    usable = [r for v in venues.values() for r in v["rooms"]
+              if isinstance(r["seats_total"], int) and r["seats_total"] > 0]
+    doc["totals"] = {
+        "rooms": sum(v["room_count"] for v in venues.values()),
+        "rooms_with_a_seat_map": len(usable),
+        "seats": sum(r["seats_total"] for r in usable),
+        "wheelchair_spaces": sum(r["wheelchair_spaces"] for r in usable),
+        "companion_spaces": sum(r["companion_spaces"] for r in usable),
+        "rooms_with_no_wheelchair_space": sum(1 for r in usable
+                                              if r["wheelchair_spaces"] == 0),
+        "smallest_room": min((r["seats_total"] for r in usable), default=None),
+        "largest_room": max((r["seats_total"] for r in usable), default=None),
+        "confidence": "measured",
+        "source": "cinemex_sessions_rooms",
+        "note": ("Rooms with no wheelchair space is the number worth surfacing: it is a "
+                 "count of auditoriums whose seat map contains no wheelchair seat type at "
+                 "all, which is a different statement from the building being "
+                 "inaccessible."),
+    }
+
+    disagree = [(cid, r["room"], r["auditorium_name"])
+                for cid, v in venues.items() for r in v["rooms"]
+                if r["name_agrees_with_page"] is False]
+    doc["room_name_agreement"] = {
+        "rooms_where_the_api_name_matches_the_page": sum(
+            1 for v in venues.values() for r in v["rooms"]
+            if r["name_agrees_with_page"] is True),
+        "rooms_where_it_does_not": len(disagree),
+        "disagreements": [{"venue": c, "page_says": p, "api_says": a}
+                          for c, p, a in disagree],
+        "confidence": "measured",
+        "source": "cinemex_sessions_rooms",
+        "note": ("The page derives its room string from `auditorium_name` when the "
+                 "listings call sends one and from `Sala <auditorium_number>` when it does "
+                 "not -- Cinemex changed that shape mid-day on 8 September. Any "
+                 "disagreement here means the room label the app shows is not the room "
+                 "name Cinemex uses at checkout."),
+    }
+    seen_types = Counter()
+    for r in raw:
+        seen_types.update(r.get("seat_types") or {})
+    doc["seat_types_in_use"] = {
+        "types_seen": dict(seen_types),
+        "confidence": "measured",
+        "source": "cinemex_sessions_rooms",
+        "companion_spaces": {
+            "count": seen_types.get("wheelchair-companion", 0),
+            "note": ("ZERO, in all %d rooms, and this is a real measurement rather than a "
+                     "key this build failed to spell. Every session declares "
+                     "`wheelchair-companion_0`, `_1` and `_selected` in its own "
+                     "`seat_types_override`, and Cinemex's app/settings dictionary declares "
+                     "them too with the label 'Acompanante' -- so the type exists and is "
+                     "applied to no seat in any auditorium in this app. A wheelchair user "
+                     "gets a wheelchair space with no adjacent seat marked as a "
+                     "companion's. Do not render a companion count; render that there "
+                     "isn't one." % len(raw)),
+        },
+        "also_declared_and_unused": ["safe-space_1"],
+        "note": ("Three seat type strings appear across every room read: regular, "
+                 "wheelchair and blank. Cinemex's dictionary declares two more that "
+                 "nothing uses."),
     }
     doc["room_claims_cross_checked"] = checks
     doc["venues"] = venues
