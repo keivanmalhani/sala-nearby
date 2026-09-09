@@ -96,3 +96,81 @@ One request per cinema, 0.35 s between them, and only the cinemas inside the rad
 32 of the 58 in the CDMX box. A full refresh is about 35 requests and takes under a minute.
 `refresh-showtimes.py --cached` re-uses the last raw pull so repeated analysis costs them
 nothing.
+
+## 4. The version in this file still works, and it is not the current one
+
+Measured 2026-09-09, same minute, same consumer key:
+
+```
+GET /rest/v2.37.2/cinemas/   -> 200
+GET /rest/v2.38/cinemas/     -> 200
+```
+
+`v2.38` is what their own web client calls today. **`v2.37.2` has not been retired**, so
+nothing in this app is broken by being a version behind, and there is no urgency here.
+Worth knowing rather than acting on: a version that stops answering will do it without
+warning, and the failure mode is `400 app-update-required`, which section 1 explains reads
+like a wall and is really a wrong URL.
+
+## 5. One session id carries the price table, the seat map and the room
+
+Undocumented until now, and it is the highest-value endpoint on this API:
+
+```
+GET https://api.cinemex.com/rest/v2.38/sessions/<session id>    -> 200, ~14 KB
+```
+
+Verified against session `65504509` at Galerías Insurgentes Market. Top-level keys include
+`auditorium_name`, `layout`, `cinema`, `movie`, `availability`, `payment_methods`,
+`candybar`, `extreme`, `adults_only`, `alerts`. The response carries seat typing
+(`regular`, `wheelchair` and companion spaces), the ticket price table, and the auditorium
+name and screen number — four separate things this app currently has no way to show.
+
+Session ids come from the per-cinema movies call, inside the `sessions` arrays. Those
+entries are thin on purpose and carry only:
+
+```
+id · auditorium_number · availability · date · datetime · timestamp · tz_offset
+```
+
+So the room's NAME and its seat map are one extra request per session, not something the
+listing call gives you. A full price sweep of Mexico City is roughly 214 calls; a full
+seat-map pass is roughly 635 and is a one-off.
+
+**One claim not reproduced.** A report on 9 September said this response says whether
+seating is assigned. The string `assigned` does not appear in it. `layout` is presumably
+the answer to that question, but it has not been read, so do not build on it yet.
+
+## 6. THE FORMAT TRAP: IMAX is in `primary`, Dolby Atmos is only in `secondary`
+
+This is the one that will silently produce a wrong app. Measured across six premium CDMX
+venues (Antara Market and Platino, Manacar, Parque Delta and Delta Platino, Patriotismo
+Market) on 2026-09-09:
+
+```
+attributes.primary     lang_sub 87 · premium 85 · lang_es 74 · platinum 31 ·
+                       traditional 20 · imax 14 · infinity-vision 4 · v3d 1
+attributes.secondary   dolby_atmos 11        <- and nothing else, anywhere
+type                   no format strings at this level
+```
+
+So a reader built on `attributes.primary` alone gets IMAX, Platino, Premium, 3D and the
+subtitled/dubbed flag all correct, and reports **zero Dolby Atmos rooms in Mexico City**.
+It looks healthy precisely because the formats it does read work. Read both arrays.
+
+**A warning about how to check this.** A first probe of one cinema, Galerías Insurgentes
+Market, found zero Atmos in every field and zero in `secondary` too — because that venue
+has no Atmos room. A negative result there could not have distinguished "the field is
+empty" from "this cinema has none", so it was not evidence either way. Any future check of
+which field carries a format has to be run against a venue that actually has that format.
+
+## 7. Snacks are switched off nationally, and that is a measured finding
+
+`candybar` reads `false` on all 70 CDMX cinemas, `candybar/catalog` answers 200 for all
+278 cinemas and returns an empty catalog for every one, and `cinemex.com/dulceria` is a
+404. Two independent passes on 2026-09-09 reached this separately.
+
+The API is not broken and the request is not wrong: there is no machine-readable Cinemex
+menu to have. Do not spend another afternoon looking for one. Cineteca is the opposite —
+its menus are real PDFs with real prices, though its dulcería PDF is image-only and needs
+OCR, and the cafetería menu its own page links is a 404.
