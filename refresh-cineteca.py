@@ -55,6 +55,7 @@ map centre). Nothing here is geocoded and nothing is guessed.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import math
 import os
@@ -71,6 +72,17 @@ from datetime import date, datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PAGE = os.path.join(ROOT, "docs", "index.html")
+
+# merge-films.py folds the entries the two chains publish for the same film into one, and
+# it has to run AFTER this script rather than before: refresh-showtimes.py rewrites the
+# whole payload from the Cinemex side and drops Cineteca, so this is the last writer in
+# the chain and the only point at which both halves are on the page together. Called
+# below rather than left as a line in the README, because the defect it fixes is
+# invisible on the page -- a film listed twice looks like two films.
+_spec = importlib.util.spec_from_file_location(
+    "merge_films", os.path.join(ROOT, "merge-films.py"))
+MERGE = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(MERGE)
 
 HOST = "www.cinetecanacional.net"
 FALLBACK_IP = "201.98.21.38"          # 1.1.1.1's answer on 2026-09-08; used only if the
@@ -481,6 +493,27 @@ def main():
         sys.exit(1)
     print("controls pass: every one of the %d showings already on the page kept its "
           "exact date and time, and the page gained %d" % (len(before), n_after - n_before))
+
+    # ---- one film, one entry -----------------------------------------------
+    # Both chains are on the page now, so this is where "La Odisea" stops being two
+    # films. It moves showings between film ids and never adds or drops one; if it
+    # cannot do that it raises, and nothing is written.
+    n_films = len(shows["films"])
+    try:
+        merged = MERGE.merge(shows)
+    except ValueError as e:
+        print("  REFUSING: the film merge: %s" % e)
+        sys.exit(1)
+    tagged = MERGE.tag_languages(shows)
+    for base, rest, total in merged:
+        print("  one film, one entry: %-34s %s, %d showings"
+              % (shows["films"][base]["n"][:34],
+                 " + ".join([str(base)] + [str(r) for r in rest]), total))
+    if merged:
+        print("  %d films folded into %d, showings unchanged at %d"
+              % (n_films, len(shows["films"]), sum(len(c["s"]) for c in shows["cin"])))
+    if tagged:
+        print("  %d Cineteca language formats can now be filtered on" % tagged)
 
     if a.dry_run:
         print("--dry-run: nothing written")

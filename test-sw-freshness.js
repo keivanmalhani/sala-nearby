@@ -19,7 +19,7 @@
  *   marker in cached copy  true
  */
 (async () => {
-  const MARKER = "matchesQuery";        // change to something the newest build introduced
+  const MARKER = "passesOne";        // change to something the newest build introduced
   const say = (k, v) => console.log(("  " + k).padEnd(26) + v);
 
   const regs = await navigator.serviceWorker.getRegistrations();

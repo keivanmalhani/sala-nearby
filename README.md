@@ -10,9 +10,13 @@ screen with no browser bars, and works with no signal after the first launch.
 
 ## What it does
 
-- **Showtimes** for 32 Cinemex screens within 9 km, filterable by day, by "starting soon",
-  by subtitled-not-dubbed, and by IMAX. Every time links straight to Cinemex checkout,
-  which is always current even when the listing here is not.
+- **Showtimes** for 35 venues within 9 km, filterable by day and by any combination of
+  "starting soon", subtitled-not-dubbed, IMAX, Atmos and Platino. The chips stack, so
+  "subtitled IMAX" is a thing you can ask for, and the combination is remembered between
+  launches -- across the payload it is 7,762 dubbed showings against 3,335 subtitled, so
+  the default in this city is against you and re-tapping it every time was the wrong
+  shape. "Starting soon" is deliberately not remembered. Every time links straight to the
+  cinema's own checkout, which is always current even when the listing here is not.
 - **Map** of 42 venues, coloured by what kind of room they are, with walking distance from
   wherever you are. Tapping one opens its full write-up and a walking-directions link.
 - **Films** index, and a **Guide** with the venue audit: screen sizes, projection, sound,
@@ -69,9 +73,43 @@ listing is a few days old.
 To refresh them:
 
     /opt/homebrew/bin/python3 refresh-showtimes.py --dry-run   # fetch and check only
-    /opt/homebrew/bin/python3 refresh-showtimes.py             # write into the page
+    /opt/homebrew/bin/python3 refresh-showtimes.py             # write the Cinemex half
+    /opt/homebrew/bin/python3 refresh-cineteca.py              # add the three sedes
     /opt/homebrew/bin/python3 refresh-posters.py               # posters for any new films
     # then bump the cache name in docs/sw.js, or an installed phone keeps the old build
+
+`refresh-cineteca.py` runs the film merge itself as its last step, because it is the only
+point in the chain where both chains are on the page at once -- `refresh-showtimes.py`
+rewrites the whole payload from the Cinemex side and drops Cineteca. `merge-films.py` can
+also be run on its own against a page that is already written, and does nothing if there
+is nothing to fold.
+
+## One film, one entry
+
+Both chains publish the same film under their own ids, so the payload carried "La Odisea"
+twice -- 264 Cinemex showings under `71948` with the director recorded as "Christopher
+Nola", and 12 Cineteca showings under `ct-HO00009759` with it spelled correctly. The Films
+tab listed it twice and the film sheet that says "N cinemas, nearest first" left the
+Cineteca screenings out of both copies. Eight titles were in that state on the 9 September
+payload, one of them duplicated inside Cineteca alone, which publishes its dubbed and
+subtitled runs as separate ids.
+
+**The join key is two signals, not one, and the obvious single key is wrong in both
+directions.** Keying on the original title alone misses three of the eight -- Cineteca
+writes "Coyote vs Acme", "Coyote vs. Acme" and "Coyote VS Acme" for one film, and
+transliterates Arabic differently from Cinemex -- and invents one that is not there,
+because five films carry an empty original title and would all fold together. So a
+candidate comes from either the folded original title or the folded display title, and is
+then corroborated by runtime within five minutes and by director as a prefix test, because
+Cinemex truncates that field. Both corroborators can only refuse a merge, never create
+one.
+
+    /opt/homebrew/bin/python3 test-merge-films.py
+
+The controls take the live payload, pull a merged film back into the two entries the chains
+published, and require every check to go red on it before requiring them to go green after
+the merge. That red half is the point: it was run against the unfixed page first, where it
+found 12 duplicated title keys across 8 films and not one film reachable in both chains.
 
 The refresh refuses to write a payload that is materially worse than the published one --
 fewer cinemas, a big drop in showtimes, fewer films, or a first day that is not today. An
