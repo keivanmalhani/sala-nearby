@@ -41,6 +41,42 @@ screen with no browser bars, and works with no signal after the first launch.
   sends you out of the door late. Against the billed time the worst it can do is make you
   early.
 
+## Working with no signal, and how that was nearly not true
+
+The map used to run offline out of the **browser's** own HTTP cache, and
+`maplibre-gl.min.js` was in no cache this app controls. Reading `sw.js` does not show
+that. Opening the caches does:
+
+    sala-v23-shell    8
+    sala-v23-posters  37
+    sala-v23-tiles    11
+    sala-v23-lib      5    <- five font files from fonts.gstatic.com, and nothing else
+
+A plain cross-origin `<script>` or `<link>` is a **no-cors** request, so `fetch` inside the
+worker resolves to an opaque response with status 0 and `ok` false, and every branch in
+`sw.js` correctly refuses to store one -- the tiles branch says so in its own comment. So
+the guard that protects the tiles was quietly refusing the one script the map cannot start
+without. The font *files* were cached because `@font-face` fetches them in CORS mode by
+spec; the stylesheet that names them was not, for the same reason as the script.
+
+`crossorigin="anonymous"` on the three tags fixes it -- both hosts already send
+`access-control-allow-origin: *`, checked before changing anything. `sw.js` warms those
+three URLs during install, because a `<script>` in the head is fetched while the worker is
+still installing and has not claimed the page, so the runtime branch would only catch them
+on the second launch. The warm is deliberately not part of `addAll(PRECACHE)`: that call is
+atomic on purpose, and a hiccup at cdnjs must not stop the app caching its own page.
+
+    /opt/homebrew/bin/python3 test-offline-lib.py
+
+That runs the static guard -- the three warmed URLs have to appear in the page verbatim, or
+a version bump in one and not the other leaves the app caching a library it no longer
+loads -- and then measures it: `tools/offline-check.mjs` loads the app once with a signal,
+**clears the browser's own HTTP cache**, cuts the network and reloads. That clear is what
+makes it a test rather than a restatement; without it an offline reload can be served
+entirely out of the disk cache and every assertion passes on an app that would fail on the
+Metro. After the fix, one visit is enough: 1,318 showings, 454 prices, 407 posters, 33
+typefaces and the map, with the network off and the browser cache empty.
+
 ## How it is built
 
 One self-contained HTML file, no framework, no build step for the page itself. MapLibre GL

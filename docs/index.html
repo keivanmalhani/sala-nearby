@@ -31,9 +31,16 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js"></script>
+<!-- crossorigin ON ALL THREE, and it is what makes the app work with no signal.
+     A plain cross-origin <link> or <script> is a no-cors request, so the service
+     worker sees an OPAQUE response -- status 0, ok false -- and every branch in
+     sw.js correctly refuses to cache one. The result was that the map ran offline
+     purely on the browser's own HTTP cache, which is evictable. Both hosts send
+     access-control-allow-origin: *, checked, so asking in CORS mode costs nothing
+     and gives the worker a response it is allowed to keep. -->
+<link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.css">
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js"></script>
 
 <style>
 :root{color-scheme:light dark}
@@ -319,7 +326,8 @@ button.pw:active{opacity:.72}
    the distance in the same mono face the rest of the app measures distance in. */
 .frow .at{display:block;margin-top:3px;font-size:12px;color:var(--ink-2);line-height:1.35}
 .frow .at b{font-weight:600;color:var(--ink)}
-.frow .at span{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);letter-spacing:.02em}
+.frow .at span{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);letter-spacing:.02em;
+  white-space:nowrap}
 .frow .cnt{text-align:right;font-family:"IBM Plex Mono",monospace}
 .frow .cnt b{display:block;font-size:16px;font-weight:600;color:var(--lamp)}
 /* COMING UP. Separated from the day's films by a rule and a mono heading, the same
@@ -483,6 +491,9 @@ button.pw:active{opacity:.72}
   /* Measured at 42x42 on a 390px viewport, which misses by two pixels in both directions.
      A short control and a narrow one fail a thumb the same way. */
   .mapctl button{width:44px;height:44px}
+  /* Same rule, same reason: this went in at 38 and is the only control in the app that
+     was under the line. */
+  .mapfree{min-height:44px}
   .frow,.cin .hdr{min-height:52px}
   .badge{font-size:10.5px}
   /* .vgrp .vl, not .vl -- the base rule is two classes deep and a media query adds no

@@ -18,7 +18,7 @@
 // from the cached shell first and he sees the previous build for one more launch -- which
 // is exactly what happened while this change was being tested: the page on screen was two
 // edits behind the file on disk.
-const V = "sala-v23";
+const V = "sala-v24";
 const SHELL = V + "-shell";
 const LIB = V + "-lib";
 const TILES = V + "-tiles";
@@ -33,6 +33,28 @@ const PRECACHE = [
   "./icons/icon-180.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
+];
+
+// THE THREE THINGS THE PAGE LOADS FROM SOMEBODY ELSE, warmed at install so that ONE
+// launch with a signal is enough -- which is what the README promises and what was not
+// true. They cannot be picked up by the fetch handler on a first visit: a <script> and a
+// <link> in the head are requested while this worker is still installing and has not
+// claimed the page, so the runtime branch below only ever caught them on the SECOND
+// launch. Until 2026-09-09 it never caught the script at all, because a plain
+// cross-origin tag is a no-cors request and `fetch` returns an opaque response that
+// `r.ok` correctly refuses; index.html now asks for all three with crossorigin.
+//
+// Measured before this existed: the lib cache held five font FILES and neither
+// maplibre-gl.min.js nor the stylesheet that names the fonts. The map still drew, out of
+// the browser's own HTTP cache, which is evictable and is not a promise this app can make.
+//
+// KEEP IN STEP WITH index.html. test-offline-lib.py fails if any of these three URLs is
+// not in the page verbatim, because a version bump in the page and not here would leave
+// the app caching a library it no longer loads.
+const LIB_WARM = [
+  "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.css",
+  "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
 ];
 
 self.addEventListener("install", (e) => {
@@ -50,6 +72,17 @@ self.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(SHELL)
       .then((c) => c.addAll(PRECACHE.map((u) => new Request(u, { cache: "reload" }))))
+      // The library warm is DELIBERATELY NOT PART OF THAT addAll. addAll is atomic on
+      // purpose so a half-populated shell is impossible, and that is the right shape for
+      // our own files -- but it would also mean a hiccup at cdnjs stops the app from
+      // caching its own page. So each of these is fetched on its own and a failure is
+      // dropped: the worst case is the map needing a signal once more, which is where it
+      // already was.
+      .then(() => caches.open(LIB).then((c) => Promise.all(
+        LIB_WARM.map((u) => fetch(u, { mode: "cors" })
+          .then((r) => (r && r.ok ? c.put(u, r) : null))
+          .catch(() => null))
+      )))
       .then(() => self.skipWaiting())
   );
 });
