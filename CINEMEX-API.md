@@ -137,9 +137,37 @@ So the room's NAME and its seat map are one extra request per session, not somet
 listing call gives you. A full price sweep of Mexico City is roughly 214 calls; a full
 seat-map pass is roughly 635 and is a one-off.
 
-**One claim not reproduced.** A report on 9 September said this response says whether
-seating is assigned. The string `assigned` does not appear in it. `layout` is presumably
-the answer to that question, but it has not been read, so do not build on it yet.
+**The assigned-seating question is CLOSED, and `layout` was not the answer.** All 287
+auditoriums were fetched on 9 September. `layout` is a list of rows, each `{name, seats}`,
+each seat `{id, label, status, type}` -- geometry plus live availability and nothing else.
+The string `assigned` appears in none of the 287 responses. The field that answers it is
+the top-level boolean **`seatallocation`, which is `true` on all 287 rooms**, so assigned
+seating is universal at Cinemex rather than a Platino or Premium feature. Do not present it
+as a premium perk.
+
+**Three traps in `layout`, each of which yields a plausible wrong number:**
+
+- `len(layout)` is NOT the row count. Entries with an empty `name` are spacers. Antara
+  Platino Sala 5 returns 15 entries for 8 lettered rows.
+- A seat count must include `status: "1"`. Taken seats stay in the layout, so counting only
+  the free ones turns a busy screening into a small room.
+- `type: blank` and `status: "E"` are the same fact twice -- aisles and gaps. Counting cells
+  rather than seats inflates every room by roughly half.
+
+**Two numbers worth stating carefully.** 111 of the 287 rooms carry no wheelchair seat type
+in the map at all; that is a fact about the seat map, not a claim that the building is
+inaccessible. And companion spaces are zero in every room -- a measurement, not a missing
+key, because each session's own `seat_types_override` declares
+`wheelchair-companion_0/_1/_selected` and `app/settings` labels it "Acompanante", so the
+type exists and is applied to no seat anywhere.
+
+**Format belongs to the SHOWTIME, not to the room.** Parque Delta Sala 3 is the IMAX
+exclusively, 75 of 75. Sala 10 is Atmos on only 72 of 76 -- the other four are plain
+Espanol Tradicional -- so a hardcoded per-room format label mislabels real screenings. And
+CinemeXtremo has ZERO showtimes across all 32 venues: no screening anywhere carries the
+`cx` key, and the association of that name with a room comes only from the venue's building
+attributes and from ticket products prefixed `CX`. That is an inference from a product code,
+not a statement by the format data.
 
 ## 6. THE FORMAT TRAP: IMAX is in `primary`, Dolby Atmos is only in `secondary`
 
