@@ -166,7 +166,66 @@ check("a third-party description is tagged as one rather than as fact",
 tp = [k for k, f in D["fmt"].items() if f.get("conf") == "third_party"]
 print("  (third-party sourced: %s)" % (", ".join(tp) or "none"))
 
-print("\nsection 7 -- the service worker will actually keep it")
+print("\nsection 7 -- a confidence label the page has never seen still gets a tag")
+# cinema-data's warning, and it was right: this vocabulary is prose in a research file and
+# it GREW from eight members to ten while the feature was being built. The two that
+# arrived, format_level_inference and third_party_expired_page, are among the ones most in
+# need of a hedge. A lookup that returns "" for an unrecognised label renders the
+# strongest possible version of a claim: a bare sentence with nothing beside it.
+ex = json.load(open(os.path.join(DOCS, "cinema-extras.json"), encoding="utf-8"))
+vocab = set(ex["formats"]["vocabulary"])
+mapped = set(re.findall(r"^\s{2}([a-z_]+):\s*\[\"[vlu]\"", SRC, re.M))
+print("  (vocabulary has %d labels, the page maps %d)" % (len(vocab), len(mapped)))
+unmapped = sorted(vocab - mapped)
+check("every label in the vocabulary is mapped" + (": %s" % unmapped if unmapped else ""),
+      not unmapped)
+check("and the two that arrived late are among them",
+      {"format_level_inference", "third_party_expired_page"} <= mapped)
+# The red half: the fallback has to be reachable and has to produce a tag.
+m = re.search(r"function srcTag\(conf\) \{(.*?)\n\}", SRC, re.S)
+body = m.group(1) if m else ""
+check("srcTag has a fallback branch at all", 'return `<span class="tag' in body.split("if (t)")[-1])
+check("and the fallback renders the label rather than an empty string",
+      "replace(/_/g" in body)
+check("an absent confidence is the only case that renders nothing",
+      body.strip().startswith("if (!conf) return \"\";"))
+used = set(f.get("conf") for f in D["fmt"].values() if f.get("conf"))
+check("every confidence in the live data is one the page maps: %s" % sorted(used),
+      used <= mapped)
+
+print("\nsection 8 -- the room table claims nothing about format")
+# The ideas report proposed a per-sala format table. The fetched data disproves that
+# shape: Parque Delta Sala 10 runs Atmos on 72 of 76 showtimes and plain Espanol
+# Tradicional on the other four, so a room labelled by format mislabels real screenings.
+# Format belongs to the showtime. This asserts the room data carries no format at all.
+for vid, v in D["ven"].items():
+    for name, r in (v.get("rooms") or {}).items():
+        assert len(r) == 4, (vid, name, r)
+check("a room record is exactly screen, seats, wheelchair, rows -- no format field",
+      all(len(r) == 4 for v in D["ven"].values() for r in (v.get("rooms") or {}).values()))
+check("no format-per-room list survived into the page's data",
+      "formats_run_here" not in json.dumps(D))
+rooms_src = json.load(open(os.path.join(DOCS, "rooms.json"), encoding="utf-8")) \
+    if os.path.exists(os.path.join(DOCS, "rooms.json")) else None
+if rooms_src:
+    # rows must be the LETTERED row count, not len(layout): spacer entries inflate that,
+    # and Antara Platino Sala 5 has 7 spacers against 8 real rows.
+    bad = [(v["name"], rm["room"]) for v in rooms_src["venues"].values() for rm in v["rooms"]
+           if rm.get("rows") != len(rm.get("row_names") or [])]
+    check("the row count is the lettered rows, not the layout length" +
+          (": %s" % bad[:3] if bad else ""), not bad)
+    comp = {rm.get("companion_spaces") for v in rooms_src["venues"].values() for rm in v["rooms"]}
+    check("companion spaces are zero everywhere, so the page states there are none rather "
+          "than printing a column of zeros",
+          comp == {0} and "companion seat" in SRC and "Companion" not in
+          (re.search(r"<thead>.*?</thead>", SRC, re.S).group(0) if re.search(r"<thead>", SRC) else ""))
+    alloc = {rm.get("assigned_seating") for v in rooms_src["venues"].values() for rm in v["rooms"]}
+    check("assigned seating is universal, and the page says so without calling it a perk",
+          alloc == {True} and "not something Platino or Premium buys you" in SRC)
+check("the wheelchair line is about the seat map, not about the building",
+      "fact about the seat map" in SRC and "cannot be got into" in SRC)
+
+print("\nsection 9 -- the service worker will actually keep it")
 sw = open(os.path.join(DOCS, "sw.js"), encoding="utf-8").read()
 check("detail.json has its own caching branch, not the read-only fall-through",
       "detail\\.json" in sw or "/detail.json" in sw)

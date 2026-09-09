@@ -1241,15 +1241,28 @@ const SRC_TAG = {
   operator_published: ["v", "Cinemex says"],
   measured: ["v", "measured"],
   ocr_vision_verified_visually: ["v", "read off their menu"],
+  pdf_text_layer_two_extractors_agree: ["v", "read off their menu"],
+  audit: ["v", "checked by hand"],
   third_party: ["l", "third party"],
+  third_party_expired_page: ["l", "their words, expired page"],
+  format_level_inference: ["l", "about the format, not this venue"],
   label_translation: ["l", "name only"],
   term_definition: ["l", "standard term"],
-  audit: ["v", "checked by hand"],
   unknown: ["u", "unknown"],
 };
+/* THE DEFAULT IS A VISIBLE HEDGE, NEVER NOTHING, and that is the whole point of this
+   function. The vocabulary behind these labels is prose in a research file and it grows:
+   it was eight members when this was written and is ten now, and the two that arrived --
+   `format_level_inference` ("the operator publishes this about the FORMAT and does not
+   name this venue") and `third_party_expired_page` -- are exactly the ones that need a
+   hedge most. A lookup that returns "" for an unrecognised label renders the strongest
+   possible version of a claim, which is a bare sentence with nothing beside it. So an
+   unmapped label shows itself instead, hedged, and is impossible to miss. */
 function srcTag(conf) {
+  if (!conf) return "";
   const t = SRC_TAG[conf];
-  return t ? `<span class="tag ${t[0]}">${esc(t[1])}</span>` : "";
+  if (t) return `<span class="tag ${t[0]}">${esc(t[1])}</span>`;
+  return `<span class="tag l">${esc(String(conf).replace(/_/g, " "))}</span>`;
 }
 
 /* ---------- the sheet sections that read detail.json ---------- */
@@ -1328,10 +1341,18 @@ function roomSection(cid, highlight) {
       <thead><tr><th>Room</th><th>Seats</th><th>Rows</th><th>Wheelchair</th></tr></thead>
       <tbody>${rows}</tbody></table></div>
     <p class="note">${names.length} rooms, ${Math.min(...seats)} to ${Math.max(...seats)}
-    seats${noWheel ? `. ${noWheel} of them ${noWheel === 1 ? "has" : "have"} no wheelchair
-    space in the seat map at all, which is a statement about those rooms rather than about
-    the building` : ", every one with at least one wheelchair space"}. Read from the seat
-    map Cinemex draws at checkout, one read per room.</p></div>`;
+    seats. Read from the seat map Cinemex draws at checkout, one read per room, and seats
+    that are already sold are counted &mdash; this is how big the room is, not how much of
+    it is left.</p>
+    ${noWheel ? `<p class="note">${noWheel} of these ${noWheel === 1 ? "rooms has" : "rooms have"}
+      no wheelchair seat in the seat map at all. That is a fact about the seat map rather
+      than a claim the building cannot be got into, and the two are not the same thing
+      &mdash; ask the cinema.</p>`
+      : `<p class="note">Every room here has at least one wheelchair seat in its map.</p>`}
+    <p class="note">No room anywhere at Cinemex has a companion seat beside the wheelchair
+    spaces. The seat type exists in their own data and is applied to nothing, in all 287
+    rooms. Seats are assigned in every room, in every format &mdash; that is how Cinemex
+    works everywhere and it is not something Platino or Premium buys you.</p></div>`;
 }
 
 /** What reviewers keep coming back to. A star average for a multiplex is mostly a rating
