@@ -246,16 +246,29 @@ def merge(shows):
 # actively wrong the moment subtitled becomes a saved default, because the default would
 # hide the screenings most likely to BE subtitled.
 #
-# "CINETECA" is deliberately not in this table. It is the label for a screening whose
-# title carried no language suffix, so the language is genuinely unknown, and guessing
-# subtitled because it is a repertory house is exactly the kind of assumption this app
-# says "unknown" instead of making.
-CINETECA_LANG = {"SUBTITULADA": "lang_sub", "ESPANOL": "lang_es"}
+# "CINETECA" is the label for a screening whose title carried no language suffix, so the
+# language is genuinely unknown. It gets `lang_unknown` -- an explicit "we do not know"
+# rather than an empty list, which is the same fact but says so.
+#
+# THAT DISTINCTION IS THE WHOLE POINT, and the first version of this file got it wrong by
+# leaving those formats untyped. An empty list and `lang_unknown` filter identically until
+# subtitled becomes a saved default, and then they diverge badly: 167 of Cineteca's 185
+# showings disappeared, and 36 films vanished from the three sedes entirely. That is
+# arthouse and repertory programming -- the reason Cineteca is in this app at all -- being
+# hidden by a preference he set to see MORE of it. A defect that only appears once a
+# feature ships is still the feature's defect.
+#
+# It stays a separate type from lang_sub rather than being folded into it, because the
+# honest claim is "not dubbed", not "subtitled". The page shows these under the Subtitled
+# chip and badges each one Language unknown, so nothing on screen says a thing that is
+# not known.
+CINETECA_LANG = {"SUBTITULADA": "lang_sub", "ESPANOL": "lang_es",
+                 "CINETECA": "lang_unknown"}
 
 
 def tag_languages(shows):
-    """Give Cineteca's language formats the type the page filters on. Returns the number
-    of formats changed."""
+    """Give Cineteca's language formats the type the page filters on, including the
+    explicit unknown. Returns the number of formats changed."""
     n = 0
     for f in shows["fmts"]:
         want = CINETECA_LANG.get(str(f.get("l", "")).strip().upper())

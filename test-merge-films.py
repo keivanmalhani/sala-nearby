@@ -187,10 +187,38 @@ def main():
     check("tagging it recovers exactly those", M.tag_languages(stripped) > 0
           and n_typed(stripped, "lang_sub") == sub_after)
     check("the published page is already tagged", M.tag_languages(copy.deepcopy(live)) == 0)
-    check("a screening whose title carried no language suffix stays unknown rather than "
-          "being guessed at",
-          all(not (f.get("t") or []) for f in live["fmts"]
-              if str(f.get("l", "")).strip().upper() == "CINETECA"))
+    # An empty type list and lang_unknown are the same fact, and they behave identically
+    # right up to the moment subtitled is a saved default -- at which point the empty one
+    # hides 167 of Cineteca's 185 screenings. So the control is that the unknown is
+    # EXPLICIT, not that it is absent.
+    unk = [f for f in live["fmts"]
+           if str(f.get("l", "")).strip().upper() == "CINETECA"]
+    check("a screening whose title carried no language suffix is marked unknown, not "
+          "left untyped", bool(unk) and all(f.get("t") == ["lang_unknown"] for f in unk))
+    check("and it is not quietly recorded as subtitled",
+          all("lang_sub" not in (f.get("t") or []) for f in unk))
+    # The rule the page filters on is `lang_unknown`, not "no language recorded". Those
+    # differ the day a Cinemex format arrives untagged, and then the second one would put
+    # dubbed showings under the Subtitled chip.
+    def cinemex_untyped(sh):
+        n = 0
+        for c in sh["cin"]:
+            if str(c["id"]).startswith("cineteca-"):
+                continue
+            for s in c["s"]:
+                if not (set(sh["fmts"][s[1]].get("t") or []) & {"lang_sub", "lang_es"}):
+                    n += 1
+        return n
+    check("no Cinemex showing carries an unknown language, so widening the Subtitled "
+          "chip cannot let a dubbed one in", cinemex_untyped(live) == 0)
+    check("lang_unknown is only ever on a Cineteca format",
+          all(str(f.get("l", "")).strip().upper() in M.CINETECA_LANG
+              for f in live["fmts"] if "lang_unknown" in (f.get("t") or [])))
+    n_unk = sum(1 for c in live["cin"] for s in c["s"]
+                if "lang_unknown" in (live["fmts"][s[1]].get("t") or []))
+    print("  (%d showings say 'language unknown' rather than nothing)" % n_unk)
+    check("there are some, or this whole section is about a case that does not occur",
+          n_unk > 0)
 
     print()
     if fails:
