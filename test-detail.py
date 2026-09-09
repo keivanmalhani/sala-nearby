@@ -307,6 +307,34 @@ check("detail.json has its own caching branch, not the read-only fall-through",
       "detail\\.json" in sw or "/detail.json" in sw)
 check("and that branch puts it in a cache", re.search(r"detail\\?\.json.*?c\.put", sw, re.S) is not None)
 
+print("\nsection 12 -- the page cannot claim a price was read in the future")
+# It did. "One adult ticket, read from Cinemex's own checkout on 2026-09-11" on a page
+# built on the 9th. The upstream field is `day_read` and it is the day of the SESSION
+# whose checkout was opened -- the keys beside it are a session_id, an auditorium and a
+# seat count -- so the sentence had the wrong subject, not the data the wrong value.
+built = D.get("at", "")[:10]
+days = sorted({d for v in D["ven"].values() for d in v.get("priced_session_day", [])})
+print("  (detail.json built %s; sessions priced against %s)" % (built, ", ".join(days) or "none"))
+check("the build date is there to compare against", len(built) == 10)
+check("some venue carries a priced-session day", bool(days))
+check("the field is no longer named as though it were the day of the reading",
+      not any("price_read" in v for v in D["ven"].values()))
+# The whole point: a session day AFTER the build date is normal and expected, because you
+# price a screening that has seats left. It is only wrong when the page calls it a reading.
+future = [d for d in days if d > built]
+print("  (%d of %d priced sessions are later than the build, which is fine)"
+      % (len(future), len(days)))
+check("the page states the build date as the day of the reading",
+      'DETAIL && DETAIL.at ? " on " + esc(DETAIL.at.slice(0, 10))' in SRC)
+check("and names the session day as a session rather than a reading",
+      "against a session on" in SRC)
+check("the old sentence is gone",
+      "read from Cinemex's own checkout on\n" not in SRC
+      and "(d.price_read || [])" not in SRC)
+# The red half: the sentence this replaced would put a future date after the word "on".
+check("that sentence would have been the impossible claim, so this can fail",
+      bool(future) or built in days)
+
 print()
 if fails:
     print("%d FAILED" % len(fails))

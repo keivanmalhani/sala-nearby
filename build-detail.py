@@ -164,7 +164,12 @@ def build():
                 read.add(b["day_read"])
         if pr:
             v["price"] = pr
-            v["price_read"] = sorted(read)
+            # NAMED FOR WHAT IT IS. `day_read` upstream is the day of the SESSION whose
+            # checkout was opened to read the price, not the day of the reading -- the
+            # fields beside it are a session_id, an auditorium and a seat count. Called
+            # price_read, it rendered as "read from the checkout on 2026-09-11" on a page
+            # built on the 9th, which is a reading taken in the future.
+            v["priced_session_day"] = sorted(read)
 
         # rooms: name -> screen, seats, wheelchair spaces, rows. The room name is the
         # exact string the page already prints on a chip -- all 11,067 sessions that

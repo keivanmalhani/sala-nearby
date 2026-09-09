@@ -1539,8 +1539,19 @@ function priceSection(cid) {
   const promo = DETAIL && DETAIL.promo;
   return `<div class="sec"><h3>What a ticket costs</h3>
     <div class="pricetab">${rows}</div>
-    <p class="note">One adult ticket, read from Cinemex's own checkout on
-    ${esc((d.price_read || []).join(" and ") || "the build date")}. Cinemex publishes no
+    <p class="note">One adult ticket, read from Cinemex's own checkout${
+      DETAIL && DETAIL.at ? " on " + esc(DETAIL.at.slice(0, 10)) : ""}${
+      /* THE DATE IN price_read IS THE SESSION SAMPLED, NOT THE DAY OF THE READING, and
+         this sentence used to print it as the latter. It said "read from Cinemex's own
+         checkout on 2026-09-11" on a page built on the 9th -- a reading taken two days in
+         the future, which is impossible and reads as a bug in the data rather than as a
+         sentence with the wrong subject. The field beside it in the source is a
+         session_id, an auditorium and a seat count, so it is unambiguously a description
+         of one screening. Both dates are true and saying both is what makes the future
+         one make sense. */
+      (d.priced_session_day || []).length
+        ? `, against a session on ${esc(d.priced_session_day.join(" and "))}` : ""
+    }. Cinemex publishes no
     price list, so there is no other way to get these. Which film is in the slot changes
     them &mdash; a premiere or a special screening is dearer, and the number beside a time
     in the list is this same reading, not that showing's price.</p>
