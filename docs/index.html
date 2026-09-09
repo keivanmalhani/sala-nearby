@@ -1265,6 +1265,53 @@ function srcTag(conf) {
   return `<span class="tag l">${esc(String(conf).replace(/_/g, " "))}</span>`;
 }
 
+/* INFINITY VISION FOLLOWS THE FILM, NOT THE ROOM, and this works that out from the
+   payload rather than being told it.
+
+   The glossary entry for it is a third-party claim -- a newspaper saying it is a Disney
+   certification rather than a Cinemex room type -- and a sourced sentence about a badge
+   nobody publishes is worth having. But the thing that changes what he does with it is
+   not in that sentence: seeing "Infinity Vision" on a time means the FILM was certified,
+   so there is no point going to that room for a different film expecting the same thing.
+
+   That is checkable here: 150 showings, exactly one film, and all six rooms that run it
+   also run films without it. So this computes it and says it as a measurement.
+
+   IT WITHDRAWS ITSELF IF THE DATA STOPS SUPPORTING IT. If a later refresh puts the flag
+   on more than one film, or on a room that runs nothing else, the shape is no longer
+   film-shaped and this returns nothing rather than repeating a claim that has expired.
+   That is the whole reason it is derived instead of written down. */
+function ivFact() {
+  const idx = [];
+  SHOWS.fmts.forEach((f, i) => { if ((f.t || []).includes("infinity-vision")) idx.push(i); });
+  if (!idx.length) return "";
+  const films = new Set(), rooms = new Map();
+  let n = 0;
+  for (const c of SHOWS.cin) {
+    for (const s of c.s) {
+      if (!idx.includes(s[1])) continue;
+      n++; films.add(String(s[0]));
+      rooms.set(c.n + "|" + (s[6] || ""), [c.n, s[6] || ""]);
+    }
+  }
+  if (!n || films.size !== 1) return "";
+  // Every room carrying it must also run something without it, or it looks like a room
+  // property after all and this must not claim otherwise.
+  for (const [cn, room] of rooms.values()) {
+    let other = 0;
+    for (const c of SHOWS.cin) {
+      if (c.n !== cn) continue;
+      for (const s of c.s) if ((s[6] || "") === room && !idx.includes(s[1])) other++;
+    }
+    if (!other) return "";
+  }
+  const f = SHOWS.films[[...films][0]];
+  return ` Checked against the ${n} showings of it in this app: they are all one film, `
+    + `${f ? f.n : "one title"}, and every one of the ${rooms.size} rooms that runs it also `
+    + `runs films without it. So it travels with the film, not with the room — the same `
+    + `room showing something else is just that room.`;
+}
+
 /* ---------- the sheet sections that read detail.json ---------- */
 
 /** What a ticket costs here. Cineteca publishes a flat price; Cinemex does not publish
@@ -1603,7 +1650,11 @@ function filmSheet(fid) {
     if (FORMAT_NOTE[t]) return [FORMAT_NOTE[t][0], FORMAT_NOTE[t][1], "audit"];
     const f = DETAIL && DETAIL.fmt && DETAIL.fmt[t];
     if (!f) return null;
-    if (f.en) return [f.es || t, f.en, f.conf];
+    // The third-party sentence, plus what the payload itself can prove about it. The
+    // measured half is appended rather than replacing the source's words, so the reader
+    // gets the claim and the corroboration and can see which is which.
+    if (f.en) return [f.es || t,
+      f.en + (t === "infinity-vision" ? ivFact() : ""), f.conf];
     return [f.es || t, "Cinemex names this format and describes it nowhere in its own "
       + "site, app or API, so there is nothing honest to put here. It is a real room you "
       + "can buy a seat in; what makes it different is not published.", "unknown"];

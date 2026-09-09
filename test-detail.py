@@ -225,7 +225,39 @@ if rooms_src:
 check("the wheelchair line is about the seat map, not about the building",
       "fact about the seat map" in SRC and "cannot be got into" in SRC)
 
-print("\nsection 9 -- the service worker will actually keep it")
+print("\nsection 9 -- Infinity Vision follows the film, measured from the payload")
+# A newspaper says this is a Disney film certification rather than a Cinemex room type.
+# The payload the page ships can check it, so the page states the measurement beside the
+# claim instead of resting on the claim alone.
+iv = [i for i, f in enumerate(S["fmts"]) if "infinity-vision" in (f.get("t") or [])]
+sess = [(c, x) for c in S["cin"] for x in c["s"] if x[1] in iv]
+films = {str(x[0]) for _, x in sess}
+rooms = {(c["n"], str(x[6] or "")) for c, x in sess}
+print("  (%d showings, %d film, %d rooms)" % (len(sess), len(films), len(rooms)))
+check("it is on exactly one film, which is what makes it a film badge", len(films) == 1)
+check("and on more than one room, or the question would not arise", len(rooms) > 1)
+unflagged_everywhere = True
+for cn, room in rooms:
+    other = sum(1 for c in S["cin"] if c["n"] == cn
+                for x in c["s"] if str(x[6] or "") == room and x[1] not in iv)
+    if not other:
+        unflagged_everywhere = False
+check("every room carrying it also runs films without it -- so it is not the room",
+      unflagged_everywhere)
+check("the page derives that sentence rather than hardcoding it", "function ivFact()" in SRC)
+check("and it withdraws the sentence if more than one film ever carries it",
+      "films.size !== 1) return \"\"" in SRC)
+check("and if a room ever runs nothing else", "if (!other) return \"\";" in SRC)
+# The complex-level key is a dead entry in Cinemex's own dictionary -- applied to zero
+# cinemas nationally -- so the page must never render it in place of the screening key.
+comp = ex["formats"]["complex_attributes"].get("Infinity Vision")
+check("the source still carries the dead complex-level entry", comp is not None)
+check("but the page's dictionary uses the screening key, which is the one in the payload",
+      "infinity-vision" in D["fmt"] and "Infinity Vision" not in D["fmt"])
+check("and the screening key is the one carrying the description",
+      bool(D["fmt"]["infinity-vision"].get("en")))
+
+print("\nsection 10 -- the service worker will actually keep it")
 sw = open(os.path.join(DOCS, "sw.js"), encoding="utf-8").read()
 check("detail.json has its own caching branch, not the read-only fall-through",
       "detail\\.json" in sw or "/detail.json" in sw)
