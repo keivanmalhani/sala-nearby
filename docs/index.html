@@ -235,6 +235,9 @@ button.pw:active{opacity:.72}
 .rooms td{padding:4px 8px 4px 0;border-top:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
 .rooms td:first-child{color:var(--ink);font-weight:500}
 .rooms .no{color:var(--ink-3)}
+/* A correction appended to an audit row. Set apart from his sentence rather than run into
+   it, so it reads as the showtimes answering back and not as part of the original note. */
+.spec .qual{display:block;margin-top:4px;color:var(--ink-3);font-size:12.5px;line-height:1.45}
 .rmwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 /* One theme reviewers keep returning to, as a bar rather than a number: 45% reads faster
    as a length than as two digits. */
@@ -1249,6 +1252,12 @@ const SRC_TAG = {
   label_translation: ["l", "name only"],
   term_definition: ["l", "standard term"],
   unknown: ["u", "unknown"],
+  // Added rather than reaching for the nearest fit, because no existing label described
+  // this shape: the audit names a room as a format, the room exists, and the operator's
+  // own showtimes never carry that format anywhere. It is not unknown -- CX-prefixed
+  // ticket products exist and the building carries the cx attribute -- and it is not
+  // verified either.
+  named_not_in_times: ["l", "not in the showtimes"],
 };
 /* THE DEFAULT IS A VISIBLE HEDGE, NEVER NOTHING, and that is the whole point of this
    function. The vocabulary behind these labels is prose in a research file and it grows:
@@ -1310,6 +1319,103 @@ function ivFact() {
     + `${f ? f.n : "one title"}, and every one of the ${rooms.size} rooms that runs it also `
     + `runs films without it. So it travels with the film, not with the room — the same `
     + `room showing something else is just that room.`;
+}
+
+/* WHERE THE AUDIT NAMES A ROOM AS A FORMAT, CHECK IT AGAINST THE SHOWTIMES.
+   A `verified` badge is a promise about how something was established, and one was
+   sitting on "Sala 10 CinemeXtremo" while no showtime anywhere in the operator's own data
+   carries that format. A verified tag on a contradicted claim is worse than no tag,
+   because the tag is what stops the next reader checking.
+
+   The rule matches the CLAIM'S SHAPE rather than a word: a specific sala named as a
+   specific format. That distinction is the whole safety of it. A rule that merely looked
+   for a format name with no showtimes flagged twelve rows, and nine were fine -- "No
+   Atmos, CX or IMAX sala" is a denial, and one row is titled "What it is not". Matching
+   "Sala 4 = CinemeXtremo" and "Atmos in sala 10" hits the five real assertions and no
+   denial.
+
+   Two guards beyond that. A venue with no showtimes here cannot be contradicted by them:
+   Cinepolis publishes nothing this page can read, so every format reads zero at its
+   venues and that is a fact about our data, not theirs. And a partial match is reported
+   as a ratio rather than as a contradiction -- Parque Delta Sala 10 is Atmos on 72 of its
+   76 showings, and the other four are plain Tradicional, which is worth saying rather
+   than smoothing over. */
+const AUDIT_FMT = { "CinemeXtremo": "cx", "IMAX": "imax", "Dolby Atmos": "dolby_atmos",
+  "Atmos": "dolby_atmos", "Infinity Vision": "infinity-vision", "Platino": "platinum",
+  "Premium": "premium" };
+const AUDIT_NAMES = Object.keys(AUDIT_FMT).sort((a, b) => b.length - a.length)
+  .map(x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+const SALA_IS = new RegExp("[Ss]ala\\s*(\\d+)\\s*=?\\s*(?:with\\s+)?(" + AUDIT_NAMES + ")", "g");
+const IS_IN_SALA = new RegExp("(" + AUDIT_NAMES + ")\\s+in\\s+sala\\s*(\\d+)", "gi");
+
+/** Every cinema row in the payload that belongs to this audit venue. It is many-to-one:
+ *  Parque Delta and Parque Delta Platino are two rows under one audited building. */
+function roomsOfVenue(vi) { return SHOWS.cin.filter(c => c.v === vi); }
+
+/** For a claim "Sala N is FORMAT", how many of that room's showings actually carry it.
+ *  Returns null when the venue has no showtimes at all, because then nothing here can
+ *  speak to the claim either way. */
+function salaClaims(vi, text) {
+  const cins = roomsOfVenue(vi);
+  if (!cins.length || !cins.some(c => c.s.length)) return null;
+  const found = [];
+  let m;
+  SALA_IS.lastIndex = 0;
+  while ((m = SALA_IS.exec(text))) found.push([m[1], m[2]]);
+  IS_IN_SALA.lastIndex = 0;
+  while ((m = IS_IN_SALA.exec(text))) found.push([m[2], m[1]]);
+  const out = [];
+  for (const [num, name] of found) {
+    const key = AUDIT_FMT[Object.keys(AUDIT_FMT).find(k => k.toLowerCase() === name.toLowerCase())];
+    if (!key) continue;
+    // ONE CINEMA ROW AT A TIME, NEVER POOLED, and this is not a refinement -- pooling
+    // produced a wrong number on the first venue tried. An audited building can be two
+    // cinema rows in the payload, and their sala names collide completely: Parque Delta
+    // has Sala 1-10 and Parque Delta Platino has Sala 1-5, so a bare "Sala 3" names two
+    // different rooms in two different parts of the building. Summing them reported
+    // Sala 3 as IMAX on "75 of its 156 showings" when it is 75 of 75 in the room the
+    // audit is talking about and 0 of 81 in an unrelated recliner room next door.
+    const per = cins.map(c => {
+      let hit = 0, tot = 0;
+      for (const x of c.s) {
+        if (String(x[6] || "").replace(/[^0-9]/g, "") !== String(num)) continue;
+        tot++;
+        if ((SHOWS.fmts[x[1]].t || []).includes(key)) hit++;
+      }
+      return { c, hit, tot };
+    }).filter(r => r.tot);
+    if (!per.length) continue;
+    // The room the audit means is the one that actually runs the format. Where none does,
+    // the claim is unsupported everywhere and any of them will do to say so.
+    const best = per.reduce((a, b) => (b.hit > a.hit ? b : a));
+    out.push({ num, name, key, hit: best.hit, tot: best.tot, where: best.c.n,
+               split: per.length > 1 });
+  }
+  return out.length ? out : null;
+}
+
+/** Render one audit row, with its badge corrected where the showtimes disagree. */
+function auditRow(vi, k, txt, conf) {
+  const claims = salaClaims(vi, txt);
+  let note = "", tag = conf;
+  if (claims) {
+    const zero = claims.filter(c => c.hit === 0);
+    const part = claims.filter(c => c.hit > 0 && c.hit < c.tot);
+    if (zero.length) {
+      // The badge comes off THIS row, not off the whole audit, and only the clause the
+      // data contradicts is what the new label describes.
+      tag = "named_not_in_times";
+      note = " " + zero.map(c => `No showing anywhere in this app is a ${c.name}
+        screening, so nothing in the times backs Sala ${c.num} being one — the name is on
+        the ticket products and on the building, not on the format.`).join(" ");
+    }
+    if (part.length) {
+      note += " " + part.map(c => `Sala ${c.num} runs ${c.name} on ${c.hit} of its ${c.tot}
+        showings here; the rest are ordinary screenings in the same room.`).join(" ");
+    }
+  }
+  return `<dt>${esc(k)}</dt><dd>${esc(txt)}${note ? `<span class="qual">${esc(note)}</span>` : ""}
+    ${srcTag(tag === "v" ? "audit" : tag === "l" ? "third_party" : tag === "u" ? "unknown" : tag)}</dd>`;
 }
 
 /* ---------- the sheet sections that read detail.json ---------- */
@@ -1396,6 +1502,10 @@ function roomSection(cid, highlight) {
       than a claim the building cannot be got into, and the two are not the same thing
       &mdash; ask the cinema.</p>`
       : `<p class="note">Every room here has at least one wheelchair seat in its map.</p>`}
+    <p class="note">There is no format column here on purpose. The room is where the
+    equipment is and the showtime is where the format is, and the two disagree: Parque
+    Delta Sala 10 is Dolby Atmos on 72 of its 76 showings and an ordinary screening on the
+    other four. So the format is on the time, and this table is what the room is.</p>
     <p class="note">No room anywhere at Cinemex has a companion seat beside the wheelchair
     spaces. The seat type exists in their own data and is applied to nothing, in all 287
     rooms. Seats are assigned in every room, in every format &mdash; that is how Cinemex
@@ -1519,10 +1629,8 @@ function cinemaSheet(cid) {
   body += roomSection(c.id);
   body += reviewSection(c.id);
   if (v && v.spec) {
-    body += `<div class="sec"><h3>The audit</h3><dl class="spec">` + v.spec.map(([k, txt, conf]) =>
-      `<dt>${esc(k)}</dt><dd>${esc(txt)} <span class="tag ${esc(conf)}">${
-        conf === "v" ? "verified" : conf === "l" ? "likely" : "unknown"}</span></dd>`).join("") +
-      `</dl></div>`;
+    body += `<div class="sec"><h3>The audit</h3><dl class="spec">`
+      + v.spec.map(([k, txt, conf]) => auditRow(c.v, k, txt, conf)).join("") + `</dl></div>`;
   } else {
     body += `<div class="sec"><h3>The audit</h3><p style="margin:0;font-size:13.5px;color:var(--ink-2)">
       This one is outside the original five-kilometre study, so its screens and prices have not been
@@ -1687,9 +1795,8 @@ function venueSheet(i) {
     ${v.proj ? `<dt>Projection</dt><dd>${esc(v.proj)}</dd>` : ""}
   </dl></div>`;
   if (v.spec) {
-    body += `<div class="sec"><h3>The audit</h3><dl class="spec">` + v.spec.map(([k, txt, conf]) =>
-      `<dt>${esc(k)}</dt><dd>${esc(txt)} <span class="tag ${esc(conf)}">${
-        conf === "v" ? "verified" : conf === "l" ? "likely" : "unknown"}</span></dd>`).join("") + `</dl></div>`;
+    body += `<div class="sec"><h3>The audit</h3><dl class="spec">`
+      + v.spec.map(([k, txt, conf]) => auditRow(i, k, txt, conf)).join("") + `</dl></div>`;
   }
   // THE FOUR INDEPENDENTS ARE ON THE MAP AND CARRY NO SHOWTIMES, so this sheet is the
   // only place anything can be said about them. They join by the map's own spelling of

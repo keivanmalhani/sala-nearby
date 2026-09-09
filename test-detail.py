@@ -9,6 +9,7 @@ renders exactly as it did before the feature existed. Nothing throws, nothing lo
 the page looks finished. So every check here is a join, and each one is required to fail
 when the key is wrong -- the red half is section 5.
 """
+import collections
 import copy
 import importlib.util
 import json
@@ -257,7 +258,50 @@ check("but the page's dictionary uses the screening key, which is the one in the
 check("and the screening key is the one carrying the description",
       bool(D["fmt"]["infinity-vision"].get("en")))
 
-print("\nsection 10 -- the service worker will actually keep it")
+print("\nsection 10 -- an audit claim about a room is checked against the showtimes")
+# A `verified` badge is a promise about how a fact was established, and one was sitting on
+# "Sala 10 CinemeXtremo" while no showtime in the operator's own data carries that format.
+V_BLOCK = SRC[SRC.index("const V=["):SRC.index("const PLAIN=")]
+spec_rows = re.findall(r'\["([^"]+)","((?:[^"\\]|\\.)*)","([vlu])"\]', V_BLOCK)
+print("  (%d audit rows across the venues)" % len(spec_rows))
+# The rule must match the CLAIM'S SHAPE, not a format name. A rule that flagged any row
+# naming a zero-showtime format hit 12 rows and 9 were fine -- "No Atmos, CX or IMAX sala"
+# is a denial, and one row is titled "What it is not".
+sala_is = re.compile(r"[Ss]ala\s*(\d+)\s*=?\s*(?:with\s+)?(CinemeXtremo|Infinity Vision|Dolby Atmos|IMAX|Platino|Premium|Atmos)")
+asserts = [r for r in spec_rows if sala_is.search(r[1])]
+denials = [r for r in spec_rows if re.search(r"\bNo (Atmos|VIP|IMAX)", r[1])]
+print("  (%d rows assert a sala is a format, %d rows deny a format)"
+      % (len(asserts), len(denials)))
+check("some rows assert a sala is a format, or there is nothing to check", len(asserts) >= 3)
+check("no denial is caught by the assertion rule",
+      not [r for r in denials if sala_is.search(r[1])])
+check("the page matches the claim shape rather than the format name",
+      "SALA_IS" in SRC and "IS_IN_SALA" in SRC)
+check("a new label was added for it rather than reusing the nearest fit",
+      'named_not_in_times: ["l", "not in the showtimes"]' in SRC)
+check("a venue with no showtimes here cannot be contradicted by them",
+      "!cins.some(c => c.s.length)) return null" in SRC)
+# THE POOLING BUG, which this had on its first run: an audited building can be two cinema
+# rows whose sala names collide completely, and summing them reported Sala 3 as IMAX on
+# 75 of 156 showings when it is 75 of 75 in the room the audit means.
+check("the room check is per cinema row, never pooled across an audited building",
+      "const per = cins.map(c =>" in SRC and "per.length > 1" in SRC)
+byv = collections.defaultdict(list)
+for c in S["cin"]:
+    if c.get("v") is not None:
+        byv[c["v"]].append(c)
+shared = {vi: rows for vi, rows in byv.items() if len(rows) > 1}
+print("  (%d audited buildings are two cinema rows each)" % len(shared))
+check("such buildings exist, so the pooling bug was reachable", len(shared) >= 1)
+collide = 0
+for vi, rows in shared.items():
+    names = [{str(x[6]).strip() for x in c["s"] if len(x) > 6 and str(x[6]).strip()} for c in rows]
+    if names[0] & names[1]:
+        collide += 1
+check("and their sala names collide, which is what made it wrong (%d of %d)"
+      % (collide, len(shared)), collide == len(shared))
+
+print("\nsection 11 -- the service worker will actually keep it")
 sw = open(os.path.join(DOCS, "sw.js"), encoding="utf-8").read()
 check("detail.json has its own caching branch, not the read-only fall-through",
       "detail\\.json" in sw or "/detail.json" in sw)
