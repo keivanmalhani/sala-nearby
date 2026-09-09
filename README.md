@@ -19,8 +19,17 @@ screen with no browser bars, and works with no signal after the first launch.
   cinema's own checkout, which is always current even when the listing here is not.
 - **Map** of 42 venues, coloured by what kind of room they are, with walking distance from
   wherever you are. Tapping one opens its full write-up and a walking-directions link.
-- **Films** index, and a **Guide** with the venue audit: screen sizes, projection, sound,
-  and which claims are verified rather than assumed.
+- **Films** index. There was a fourth tab, a Guide carrying the venue audit, and it was
+  removed on 8 September on his own instruction -- "i dont like the guide tab to begin w".
+  The audit did not go with it: the screen sizes, the projection, the sound and the note
+  saying which of those was verified rather than assumed all live on each cinema's own
+  sheet now, which is where somebody is actually asking the question.
+- **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
+  travel time already on the row. There is deliberately no allowance for the ad reel in
+  that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has
+  measured it and the error would be the dangerous way round -- too generous an allowance
+  sends you out of the door late. Against the billed time the worst it can do is make you
+  early.
 
 ## How it is built
 

@@ -21,10 +21,20 @@ import sys
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PAGE = os.path.join(ROOT, "docs", "index.html")
 
+# THE BASELINE IS A FIXED COMMIT, NOT `HEAD`. The first version of this read HEAD, which
+# worked for exactly as long as the change was uncommitted: the moment it landed, HEAD
+# contained it and every "and it was not true before" check went red. A red half has to
+# point at the state the change was made FROM and stay pointing there.
+BASELINE = "2b5dcb7"   # the commit immediately before the UI pass
 NOW = open(PAGE, encoding="utf-8").read()
-BEFORE = subprocess.run(
-    ["git", "-C", ROOT, "show", "HEAD:docs/index.html"],
-    capture_output=True, text=True, check=True).stdout
+
+
+def at(rev, path):
+    return subprocess.run(["git", "-C", ROOT, "show", "%s:%s" % (rev, path)],
+                          capture_output=True, text=True, check=True).stdout
+
+
+BEFORE = at(BASELINE, "docs/index.html")
 
 fails = []
 
@@ -115,8 +125,7 @@ def swv(path_src):
 
 
 sw_now = open(os.path.join(ROOT, "docs", "sw.js"), encoding="utf-8").read()
-sw_before = subprocess.run(["git", "-C", ROOT, "show", "HEAD:docs/sw.js"],
-                           capture_output=True, text=True, check=True).stdout
+sw_before = at(BASELINE, "docs/sw.js")
 print("  (cache version %s, was %s)" % (swv(sw_now), swv(sw_before)))
 check("the cache version moved with the page", swv(sw_now) != swv(sw_before))
 
