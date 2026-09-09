@@ -93,6 +93,12 @@ const profile = await mkdtemp(join(tmpdir(), "sala-shot-"));
 const chrome = spawn(CHROME, [
   "--headless=new",
   "--disable-gpu",
+  // WITHOUT THIS THE MAP PANE CANNOT BE PHOTOGRAPHED AT ALL. MapLibre needs a WebGL
+  // context, headless Chrome with --disable-gpu has none, and `new t.Map(...)` throws
+  // "Failed to initialize WebGL" out of setTab("map") -- so a screenshot of that pane
+  // came back as whatever was on screen before, with no error in the picture. This turns
+  // on the software rasteriser, which is slow and correct.
+  "--enable-unsafe-swiftshader",
   "--no-first-run",
   "--no-default-browser-check",
   "--disable-extensions",

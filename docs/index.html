@@ -397,6 +397,19 @@ button.pw:active{opacity:.72}
 .mapctl{position:absolute;right:12px;top:12px;z-index:600;display:grid;gap:8px}
 .mapctl button{width:42px;height:42px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.18)}
 .mapctl button:active{background:var(--tap)}
+/* THE MAP'S ONLY WORDS. Bottom left, opposite the attribution, in the colour this palette
+   has carried for free venues since the first build and never used. It is a caption as
+   much as a control: the legend came off on his say-so and the map has said nothing about
+   itself since. */
+.mapfree{position:absolute;left:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);
+  z-index:600;min-height:38px;padding:0 14px;border-radius:19px;background:var(--surface);
+  border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.18);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--c-free);font-weight:600}
+.mapfree:active{background:var(--tap)}
+/* An empty action bar is 25 pixels of padding and a rule under a heading. A sheet that
+   has no single action -- fifteen venues have fifteen -- should not draw one. */
+.sheet .go:empty{display:none}
 .mapctl svg{width:20px;height:20px;fill:none;stroke:var(--ink-2);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
 
@@ -546,6 +559,7 @@ button.pw:active{opacity:.72}
     <!-- MAP -->
     <section class="pane map" id="pane-map" role="tabpanel" aria-label="Map">
       <div id="map"></div>
+      <button class="mapfree chrome" id="freebtn" aria-haspopup="dialog"></button>
       <div class="mapctl chrome">
         <button id="recenter" aria-label="Back to the centre"><svg viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg></button>
         <button id="zin" aria-label="Zoom in"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -2085,9 +2099,63 @@ function venueSheet(i) {
   openSheet(head, go, body, v.grp === "indie" ? "var(--c-art)" : "var(--c-std)");
 }
 
+/* ---------- the rooms that cost nothing ----------
+
+   WHAT COUNTS AS FREE IS THE AUDIT'S OWN `price` FIELD, split on whether it says only
+   "free" or merely mentions it. Nothing is listed here by name: a venue that starts
+   charging leaves this list by having its audit edited, which is the only place that
+   fact should live. Both groups are empty on a payload where nobody is free, and then
+   the button does not render at all rather than opening an empty sheet. */
+const FREE = V.map((v, i) => ({ v, i }))
+  .filter(x => /free/i.test(String(x.v.price || "")));
+const isFreeAlways = v => String(v.price || "").trim().toLowerCase() === "free";
+
+function freeRows(list) {
+  return list.map(({ v, i }) => {
+    const F = far(km(origin, { lat: v.lat, lng: v.lng }));
+    // The operator and what kind of room it is, which between them are the whole reason
+    // to pick one of these over another: a Filmoteca satellite and a bar cineclub are
+    // not the same evening.
+    const what = [v.op, ...(v.f || [])].filter(Boolean).join(" \u00b7 ");
+    return `<button class="frow" data-venue="${i}">
+      <span><span class="n">${esc(v.name)}</span>
+        <span class="s">${esc(what)}</span>
+        ${isFreeAlways(v) ? "" : `<span class="at"><b>${esc(v.price)}</b></span>`}</span>
+      <span class="cnt"><b>${F.d}</b><em>${esc(F.w)}</em></span></button>`;
+  }).join("");
+}
+
+function freeSheet() {
+  const rows = FREE.map(x => ({ ...x, d: km(origin, { lat: x.v.lat, lng: x.v.lng }) }))
+    .sort((a, b) => a.d - b.d);
+  if (!rows.length) return;
+  const always = rows.filter(x => isFreeAlways(x.v)), sometimes = rows.filter(x => !isFreeAlways(x.v));
+  const near = far(rows[0].d);
+  const head = `<div><h2>Free screens</h2><div class="addr">${always.length} rooms near
+      here show films for nothing${sometimes.length
+        ? `, and ${sometimes.length} more sometimes do` : ""}.</div></div>
+    <div class="far"><b>${near.d}</b><em>nearest</em></div>`;
+  // THE HONEST SENTENCE, and it is the reason this is not called "free tonight". These
+  // venues are in the app because somebody audited them by hand; not one of them
+  // publishes a machine-readable programme, which is exactly why they have no showtimes
+  // anywhere else in the app either.
+  const body = `<p class="plain">None of these publishes a programme this app can read,
+      so it cannot tell you what is on tonight at any of them. What it can tell you is
+      that they exist, how far they are, and what each one is &mdash; which is more than
+      any ticketing app will.</p>
+    <div class="sec"><h3>Free</h3></div>${freeRows(always)}
+    ${sometimes.length ? `<div class="sec"><h3>Sometimes free</h3></div>${freeRows(sometimes)}` : ""}
+    <div class="sec"><p class="note" style="margin:0">Tap any of them for the full
+      write-up: how often it runs, what it programmes, and how well each of those is
+      known. ${always.length + sometimes.length} of the ${V.length} audited venues are on
+      this list.</p></div>`;
+  openSheet(head, "", body, "var(--c-free)");
+}
+
 /* ===================== MAP ===================== */
 let map, layer;
-const CAT = v => v.grp === "indie" ? "var(--c-art)"
+const CAT = v => /free/i.test(String(v.price || "")) ? "var(--c-free)"
+  : v.grp === "indie" ? "var(--c-art)"
   : (v.f || []).some(x => /IMAX|CinemeXtremo|4DX|ScreenX/i.test(x)) ? "var(--c-big)"
   : (v.f || []).some(x => /Platino|VIP/i.test(x)) ? "var(--c-lux)" : "var(--c-std)";
 
@@ -2337,6 +2405,9 @@ document.addEventListener("click", e => {
     return filmSheet(film.dataset.film);
   }
   const ven = e.target.closest("[data-venue]"); if (ven) return venueSheet(+ven.dataset.venue);
+  // After [data-venue], never before: the rows inside this sheet carry one, and a row tap
+  // has to open that venue rather than redraw the list it was tapped from.
+  if (e.target.closest("#freebtn")) return freeSheet();
   if (e.target.closest("#scrim")) return closeSheet();
   if (e.target.closest("#zin")) return map && map.zoomIn();
   if (e.target.closest("#zout")) return map && map.zoomOut();
@@ -2405,6 +2476,10 @@ $("locbtn").addEventListener("click", () => {
 const todayIdx = DAYS.findIndex(isToday);
 S.day = todayIdx >= 0 ? todayIdx : 0;
 renderDates(); renderFilters(); renderShows();
+// The button says how many, and the number is counted rather than written down. No free
+// venues means no button, which is the only honest empty state for a caption.
+if (FREE.length) $("freebtn").textContent = `${FREE.length} free screens`;
+else $("freebtn").remove();
 
 </script>
 

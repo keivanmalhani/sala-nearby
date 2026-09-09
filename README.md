@@ -19,6 +19,9 @@ screen with no browser bars, and works with no signal after the first launch.
   cinema's own checkout, which is always current even when the listing here is not.
 - **Map** of 42 venues, coloured by what kind of room they are, with walking distance from
   wherever you are. Tapping one opens its full write-up and a walking-directions link.
+  Fifteen of them cost nothing, and the map says so: those dots are gold, and the pill in
+  the corner opens the list of them, nearest first. It is also the only caption the map
+  has had since the legend came off -- it explains one colour rather than four.
 - **Coming up.** Twenty of the eighty films in the current payload are not on today at
   all, and the only way to find them was to tap along thirty date chips. The Films tab
   now ends with them, in date order, with their dates spelled out where there are one or
@@ -156,6 +159,16 @@ none of the three published weeks after it.
 The controls run the real functions against the real payload with the clock stubbed, and
 section 4 runs the rejected count rule beside the week rule and requires them to disagree.
 A rule is only worth its complexity if the simpler one it replaced actually fails.
+
+The free-screens list has the matching restraint. Idea 17 called it "free tonight" and it
+cannot be: none of the fifteen publishes a programme this page can read, which is why they
+have no showtimes anywhere else in the app either. It says so on the sheet. Several of the
+audits do carry a rhythm -- "Thursdays 17:00", "Tue and Fri 16:30" -- and none of it is
+lifted onto a row, because two of those are worded "e.g." and three sit beside "2026
+continuation not confirmed". The sentences stay on each venue's own sheet with the tag
+that says how well they are known.
+
+    /opt/homebrew/bin/python3 test-free-rooms.py
 
 The refresh refuses to write a payload that is materially worse than the published one --
 fewer cinemas, a big drop in showtimes, fewer films, or a first day that is not today. An
