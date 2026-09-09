@@ -226,6 +226,30 @@ button.pw:active{opacity:.72}
 .vgrp{margin-top:6px}
 .vgrp .vl:empty{display:none}
 .vgrp .vl{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+/* The observed adult price, on the version line. Brighter than the format label beside it
+   because it is the value and the label is the caption, and monospace so a column of them
+   down the list lines up. */
+.vgrp .vl .pri{color:var(--ink-2);font-weight:600;letter-spacing:.04em;font-size:10.5px}
+.rooms{width:100%;border-collapse:collapse;font-size:12.5px;margin:0}
+.rooms th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding:0 8px 5px 0;white-space:nowrap}
+.rooms td{padding:4px 8px 4px 0;border-top:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
+.rooms td:first-child{color:var(--ink);font-weight:500}
+.rooms .no{color:var(--ink-3)}
+.rmwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* One theme reviewers keep returning to, as a bar rather than a number: 45% reads faster
+   as a length than as two digits. */
+.thm{display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:12.5px;margin:0}
+.thm b{font-weight:500;color:var(--ink-2)}
+.thm em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-3)}
+.thm i{grid-column:1/3;height:3px;border-radius:2px;background:var(--sunk2);display:block;margin-bottom:4px}
+.thm i span{display:block;height:100%;border-radius:2px;background:var(--lamp)}
+.warm{background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+.warm b{color:var(--ink);display:block;font-size:13px;margin-bottom:3px}
+.warm .q{color:var(--ink-3);font-style:italic}
+.pricetab{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:13px;align-items:baseline}
+.pricetab b{font-weight:500;color:var(--ink-2)}
+.pricetab em{font-style:normal;font-family:"IBM Plex Mono",monospace;color:var(--ink);font-weight:600}
+.note{font-size:12px;line-height:1.5;color:var(--ink-3);margin:7px 0 0}
 .times{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .t{
   min-height:38px;min-width:62px;padding:6px 11px;border-radius:9px;border:1px solid var(--line);
@@ -1049,7 +1073,20 @@ function renderShows() {
               aria-label="${esc(hhmm(s[3]))} ${esc(f.n)} ${esc(s[6] || "")}">${hhmm(s[3])}${
               low ? "<em>few</em>" : mid ? "<em>filling</em>" : ""}</a>`;
           }).join("");
-          return `<div class="vgrp"><div class="vl">${versionLabel(fmt)}</div>
+          // THE PRICE, ON THE VERSION GROUP RATHER THAN ON EVERY CHIP. It is a
+          // per-cinema, per-format number, which is exactly this line's granularity, and
+          // putting it on each chip would add a second row to every time and double the
+          // height of the list -- the same problem the badge `cap` exists to solve.
+          //
+          // 93% of showings sit behind a cinema-and-format pair that has an observed
+          // price. Where there is none, nothing is drawn rather than a placeholder.
+          const price = isCineteca(c.id)
+            ? (DETAIL && DETAIL.cineteca_price ? DETAIL.cineteca_price.general : null)
+            : priceOf(c.id, fmt.l);
+          const ptag = price != null
+            ? `<span class="pri" title="Adult ticket, read from the cinema's own checkout. A premiere or a promo day can differ.">${pesos(price)}</span>`
+            : "";
+          return `<div class="vgrp"><div class="vl">${versionLabel(fmt)}${ptag}</div>
             <div class="times">${chips}</div></div>`;
         }).join("");
         return `<div class="film">${posterCard(fid, f.n, "", true)}
@@ -1059,7 +1096,8 @@ function renderShows() {
     return `<div class="cin">
       <button class="hdr" data-cin="${c.id}">
         <span><span class="n">${esc(c.n)}</span>
-          <span class="s">${esc((v ? v.op : chainOf(c)) + (c.p ? " · Platino" : ""))}${v ? "" : " · no audit yet"}</span></span>
+          <span class="s">${esc((v ? v.op : chainOf(c)) + (c.p ? " · Platino" : ""))}${
+            v ? "" : " · no audit yet"}${cinBits(c)}</span></span>
         <span class="far"><b>${F.d}</b><em>${F.w}</em></span>
       </button>${films}</div>`;
   }).join("");
@@ -1132,6 +1170,243 @@ let POSTERS = {};
 fetch("posters/index.json").then(r => r.ok ? r.json() : {}).then(j => { POSTERS = j || {}; })
   .catch(() => {});
 
+/* THE CINEMA DETAIL -- prices, rooms, seats, ratings, loyalty, menus.
+   Fetched rather than baked in, for the same reason the synopses are. The three research
+   files behind it are 577 KB because every value in them carries its source, its
+   confidence and the quote it came from; `build-detail.py` reduces that to the 30 KB that
+   actually reaches the screen. None of it is needed for the first paint -- the first
+   paint is a list of times -- and the service worker caches it, so from the second launch
+   it is there with no signal.
+
+   Starting as null rather than {} is deliberate: a section can then tell "not loaded yet"
+   apart from "this cinema has no price", and say the right thing in each case instead of
+   claiming a cinema has no rooms because a fetch is in flight. */
+let DETAIL = null;
+fetch("detail.json").then(r => r.ok ? r.json() : null).then(j => {
+  if (!j) return;
+  DETAIL = j;
+  // The list is already on screen by now and has no prices on it, so redraw. Cheap
+  // enough: it is the same work the day chips already do on every tap.
+  renderShows();
+  if (S.tab === "films") renderFilms();
+}).catch(() => {});
+
+/** Everything known about one cinema, by the id the payload already uses. */
+function det(cid) { return (DETAIL && DETAIL.ven[String(cid)]) || null; }
+const pesos = v => "$" + Number(v).toLocaleString("en-US");
+
+/** The observed adult price for a cinema and one of the format labels the page prints,
+ *  or null. `plain` band only -- never the promo, because which film is in the slot
+ *  decides whether the promo applies and a number beside a time cannot say that. */
+function priceOf(cid, label) {
+  const d = det(cid);
+  const row = d && d.price && d.price[label];
+  return row ? row[0] : null;
+}
+/** Cheapest adult price observed anywhere in a cinema, for the row header. */
+function fromPrice(cid) {
+  const d = det(cid);
+  if (!d || !d.price) return null;
+  const all = Object.values(d.price).map(r => r[1] != null ? r[1] : r[0]).filter(v => v != null);
+  return all.length ? Math.min(...all) : null;
+}
+function isCineteca(cid) { return /^cineteca-/.test(String(cid)); }
+
+/* The two things worth putting on a cinema's own row in the list, and nothing else: what
+   the cheapest ticket in the building costs, and what people score it. Both are one
+   glance, both are why you would pick this cinema over the next one, and neither is
+   available anywhere else without opening two more tabs. A room count and a theme list
+   are detail and belong in the sheet. */
+function cinBits(c) {
+  const d = det(c.id);
+  const bits = [];
+  const from = isCineteca(c.id)
+    ? (DETAIL && DETAIL.cineteca_price ? DETAIL.cineteca_price.reduced : null)
+    : fromPrice(c.id);
+  if (from != null) bits.push("from " + pesos(from));
+  if (d && d.rating != null) bits.push(d.rating.toFixed(1) + "★");
+  return bits.length ? " · " + esc(bits.join(" · ")) : "";
+}
+
+/* WHERE A SENTENCE CAME FROM, said out loud, because they are not equally strong and the
+   difference matters here. "Cinemex says" is the operator's own words. "Measured" is
+   computed from their data by the build. "Third party" is Wikipedia or a news site --
+   which is what the Infinity Vision entry is, and presenting a Disney claim from a
+   newspaper as flat fact is exactly the move this app does not make. "Name only" means
+   the words translate the label and claim no mechanism.
+
+   Same vocabulary as the venue audit's verified / likely / unknown tags, so the reader
+   only learns one convention. */
+const SRC_TAG = {
+  operator_published: ["v", "Cinemex says"],
+  measured: ["v", "measured"],
+  ocr_vision_verified_visually: ["v", "read off their menu"],
+  third_party: ["l", "third party"],
+  label_translation: ["l", "name only"],
+  term_definition: ["l", "standard term"],
+  audit: ["v", "checked by hand"],
+  unknown: ["u", "unknown"],
+};
+function srcTag(conf) {
+  const t = SRC_TAG[conf];
+  return t ? `<span class="tag ${t[0]}">${esc(t[1])}</span>` : "";
+}
+
+/* ---------- the sheet sections that read detail.json ---------- */
+
+/** What a ticket costs here. Cineteca publishes a flat price; Cinemex does not publish
+ *  prices at all, so these were read from its own checkout one session at a time and the
+ *  section says which day each came from. */
+function priceSection(cid) {
+  const d = det(cid);
+  if (isCineteca(cid)) {
+    const p = DETAIL && DETAIL.cineteca_price;
+    if (!p) return "";
+    const days = (p.cheap_days || []).join(" and ");
+    return `<div class="sec"><h3>What a ticket costs</h3>
+      <div class="pricetab">
+        <b>General</b><em>${pesos(p.general)}</em>
+        <b>Under 25, students, over 60</b><em>${pesos(p.reduced)}</em>
+        ${days ? `<b>${esc(days)}, any screening</b><em>${pesos(p.cheap_price)}</em>` : ""}
+      </div>
+      <p class="note">Cineteca publishes these, so they are the actual prices rather than
+      a reading.${(p.cheap_not || []).length
+        ? ` The ${esc(days)} price does not apply to ${esc((p.cheap_not || []).join(", "))}.`
+        : ""}${p.max_tickets ? ` ${p.max_tickets} tickets a session at most.` : ""}</p></div>`;
+  }
+  if (!d || !d.price) {
+    return DETAIL ? `<div class="sec"><h3>What a ticket costs</h3>
+      <p class="note">Not read at this cinema. Cinemex publishes no price list anywhere, so
+      every price in this app came from opening one of its own checkout pages, and this one
+      was not among them. Tap a time to see it.</p></div>` : "";
+  }
+  const rows = Object.entries(d.price).sort((a, b) => a[1][0] - b[1][0]).map(([lab, v]) =>
+    `<b>${esc(lab)}</b><em>${pesos(v[0])}</em>`).join("");
+  const promo = DETAIL && DETAIL.promo;
+  return `<div class="sec"><h3>What a ticket costs</h3>
+    <div class="pricetab">${rows}</div>
+    <p class="note">One adult ticket, read from Cinemex's own checkout on
+    ${esc((d.price_read || []).join(" and ") || "the build date")}. Cinemex publishes no
+    price list, so there is no other way to get these. Which film is in the slot changes
+    them &mdash; a premiere or a special screening is dearer, and the number beside a time
+    in the list is this same reading, not that showing's price.</p>
+    ${promo ? `<p class="note"><b>${esc(promo.name)}.</b> ${pesos(promo.price)} on
+      ${esc(String(promo.days).toLowerCase())}${promo.window ? ", " + esc(promo.window) : ""},
+      for ${esc((promo.yes || []).join(" and ").toLowerCase())} rooms. Not
+      ${esc((promo.no || []).join(", "))}, and not
+      ${esc((promo.also_no || []).join(", "))}. It arrives as a different ticket at the
+      till rather than as a discount, which is why it cannot be shown against a time.</p>` : ""}
+    </div>`;
+}
+
+/** The rooms, which is the part no ticketing site will tell you. Wheelchair spaces are
+ *  the reason this section exists: a seat count is nice to know and an accessible space
+ *  is the difference between going and not. */
+function roomSection(cid, highlight) {
+  const d = det(cid);
+  if (isCineteca(cid)) {
+    return `<div class="sec"><h3>The rooms</h3>
+      <p class="note">Cineteca publishes no seat map, so there is no seat count here. Its
+      own FAQ says every room is wheelchair accessible and that seats are assigned, up to
+      eight a session.</p></div>`;
+  }
+  if (!d || !d.rooms) return "";
+  const names = Object.keys(d.rooms).sort((a, b) =>
+    (d.rooms[a][0] || 0) - (d.rooms[b][0] || 0));
+  const noWheel = names.filter(k => !d.rooms[k][2]).length;
+  const seats = names.map(k => d.rooms[k][1]).filter(v => v != null);
+  const rows = names.map(k => {
+    const [screen, seat, wheel, rows_] = d.rooms[k];
+    const on = highlight && String(highlight) === String(k);
+    return `<tr${on ? ' style="background:var(--sunk)"' : ""}><td>${esc(k)}</td>
+      <td>${seat != null ? seat : "&mdash;"}</td>
+      <td>${rows_ != null ? rows_ : "&mdash;"}</td>
+      <td${wheel ? "" : ' class="no"'}>${wheel ? wheel : "none"}</td></tr>`;
+  }).join("");
+  return `<div class="sec"><h3>The rooms</h3>
+    <div class="rmwrap"><table class="rooms">
+      <thead><tr><th>Room</th><th>Seats</th><th>Rows</th><th>Wheelchair</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+    <p class="note">${names.length} rooms, ${Math.min(...seats)} to ${Math.max(...seats)}
+    seats${noWheel ? `. ${noWheel} of them ${noWheel === 1 ? "has" : "have"} no wheelchair
+    space in the seat map at all, which is a statement about those rooms rather than about
+    the building` : ", every one with at least one wheelchair space"}. Read from the seat
+    map Cinemex draws at checkout, one read per room.</p></div>`;
+}
+
+/** What reviewers keep coming back to. A star average for a multiplex is mostly a rating
+ *  of the queue and the bathrooms, so the themes are the useful half and they are what
+ *  gets the space. */
+function reviewSection(cid) {
+  const d = det(cid);
+  if (!d || d.rating == null) return "";
+  const th = (d.themes || []).map(([name, pct]) =>
+    `<b>${esc(name)}</b><em>${pct}%</em><i><span style="width:${Math.min(100, pct)}%"></span></i>`
+  ).join("");
+  return `<div class="sec"><h3>What reviewers say</h3>
+    <div class="pricetab" style="margin-bottom:9px">
+      <b>${d.n ? d.n.toLocaleString("en-US") + " Google reviews" : "Google rating"}</b>
+      <em>${d.rating.toFixed(1)} ★</em></div>
+    ${th ? `<div class="thm">${th}</div>` : ""}
+    ${d.sampled ? `<p class="note">Themes are from the ${d.sampled} most recent reviews,
+      counted rather than summarised.</p>` : ""}
+    ${d.hot ? `<div class="warm" style="margin-top:10px"><b>People say it gets hot</b>
+      ${d.hot.n} of the reviews read complain about the heat or the air conditioning.
+      <span class="q">&ldquo;${esc(d.hot.quote)}&rdquo;</span>${
+        d.hot.when ? " &mdash; " + esc(d.hot.when) : ""}</div>` : ""}
+    </div>`;
+}
+
+/** Cinemex Loop, and the membership packages, whose prices genuinely differ by cinema --
+ *  Cinemex's own terms say the package is priced by the cinema you sign up at and that the
+ *  tickets are only good there. */
+function loyaltySection(cid) {
+  const L = DETAIL && DETAIL.loyalty;
+  if (!L || isCineteca(cid)) return "";
+  const d = det(cid);
+  const tiers = (L.tiers || []).map(([name, pct]) =>
+    `<b>${esc(name)}</b><em>${pct}%</em>`).join("");
+  const pk = (d && d.packages || []).map(([name, price]) =>
+    `<b>${esc(name)}</b><em>${pesos(price)}</em>`).join("");
+  return `<div class="sec"><h3>${esc(L.name || "Loyalty")}</h3>
+    ${tiers ? `<div class="pricetab">${tiers}</div>
+      <p class="note">Points back on what you spend, by card tier. Cinemex says the points
+      are spendable as payment and never says anywhere what one is worth in pesos, so this
+      does not guess.</p>` : ""}
+    ${pk ? `<p class="note" style="margin-top:9px"><b>Prepaid packages at this cinema</b></p>
+      <div class="pricetab">${pk}</div>
+      <p class="note">Priced per cinema, and the tickets are only good at the one you sign
+      up at &mdash; Cinemex's own terms say so.</p>` : ""}</div>`;
+}
+
+/** The bar, and Cineteca's menu. Cinemex has no snack menu to show: all 32 venues answer
+ *  with an empty catalogue and the endpoint returns an error when the parameter is
+ *  missing, so the empty answer is real rather than a wrong request. */
+function foodSection(cid) {
+  const d = det(cid);
+  if (!d) return "";
+  let out = "";
+  if (d.bar) {
+    const items = (d.bar.items || []).map(([name, price]) =>
+      `<b>${esc(name)}</b><em>${pesos(price)}</em>`).join("");
+    out += `<div class="sec"><h3>${esc(d.bar.outlet || "The bar")}</h3>
+      ${d.bar.detail ? `<p class="note" style="margin-top:0">${esc(d.bar.detail)}</p>` : ""}
+      ${items ? `<div class="pricetab">${items}</div>` : ""}</div>`;
+  }
+  if (d.menu) {
+    const combos = (d.menu.combos || []).map(c => {
+      const p = (c.p || []).map(([variant, price]) =>
+        variant ? `${pesos(price)} ${esc(variant)}` : pesos(price)).join(" &middot; ");
+      return `<b>${esc(c.name)}${c.what ? " — " + esc(c.what) : ""}</b><em>${p}</em>`;
+    }).join("");
+    out += `<div class="sec"><h3>The snack counter</h3>
+      ${combos ? `<div class="pricetab">${combos}</div>` : ""}
+      <p class="note">From Cineteca's own dulceria list. Cinemex has none to show: every
+      one of its cinemas here answers with an empty menu.</p></div>`;
+  }
+  return out;
+}
+
 /* ===================== SHEETS ===================== */
 function gmaps(lat, lng, name) {
   return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
@@ -1168,6 +1443,13 @@ function cinemaSheet(cid) {
   body += `<div class="sec"><h3>On that day</h3>
     <p style="margin:0;font-size:13.5px;line-height:1.5">${today} showings.
     ${[...types].filter(t => FT[t]).map(t => FT[t][0]).join(", ") || "Standard rooms"}.</p></div>`;
+  // Price first, because it is the question nobody else answers before checkout, then
+  // the rooms, then what people say about the place. The hand audit stays last: it is the
+  // deepest writing here but it is also the part he already knows, and a stranger reading
+  // this wants the number.
+  body += priceSection(c.id);
+  body += roomSection(c.id);
+  body += reviewSection(c.id);
   if (v && v.spec) {
     body += `<div class="sec"><h3>The audit</h3><dl class="spec">` + v.spec.map(([k, txt, conf]) =>
       `<dt>${esc(k)}</dt><dd>${esc(txt)} <span class="tag ${esc(conf)}">${
@@ -1178,6 +1460,8 @@ function cinemaSheet(cid) {
       This one is outside the original five-kilometre study, so its screens and prices have not been
       checked by hand. The showtimes above are real.</p></div>`;
   }
+  body += foodSection(c.id);
+  body += loyaltySection(c.id);
   openSheet(head, go, body, "var(--c-std)");
 }
 
@@ -1250,8 +1534,28 @@ function filmSheet(fid) {
         return `<a class="${cls}" href="${href}" target="_blank" rel="noopener"
           >${hhmm(s[3])}${room ? `<i>${esc(room)}</i>` : ""}</a>`;
       }).join("");
-      return `<div class="vgrp"><div class="vl">${versionLabel(fmt)}</div>
-        <div class="times">${chips}</div></div>`;
+      // THE ROOM, SPELLED OUT, at the moment he is choosing between two times. The chip
+      // already says "SALA 2"; this says how big Sala 2 is and whether it has a
+      // wheelchair space, which is the thing that decides it and which no ticketing site
+      // puts in front of you.
+      const dd = det(c.id);
+      const seen = [];
+      if (dd && dd.rooms) {
+        for (const x of l) {
+          const k = (x[6] || "").trim();
+          if (k && dd.rooms[k] && !seen.some(r => r[0] === k)) seen.push([k, dd.rooms[k]]);
+        }
+      }
+      const rline = seen.map(([k, r]) =>
+        `${esc(k)}: ${r[1]} seats, ${r[2] ? r[2] + " wheelchair" : "no wheelchair space"}`
+      ).join(" &middot; ");
+      const price = isCineteca(c.id)
+        ? (DETAIL && DETAIL.cineteca_price ? DETAIL.cineteca_price.general : null)
+        : priceOf(c.id, fmt.l);
+      return `<div class="vgrp"><div class="vl">${versionLabel(fmt)}${
+        price != null ? `<span class="pri">${pesos(price)}</span>` : ""}</div>
+        <div class="times">${chips}</div>
+        ${rline ? `<p class="note" style="margin-top:5px">${rline}</p>` : ""}</div>`;
     }).join("");
     return `<div class="cin"><button class="hdr" data-cin="${c.id}">
       <span><span class="n">${esc(c.n)}</span></span>
@@ -1264,12 +1568,29 @@ function filmSheet(fid) {
   const types = new Set();
   rows.forEach(([, list]) => list.forEach(s =>
     ((SHOWS.fmts[s[1]] || {}).t || []).forEach(t => types.add(t))));
-  const notes = ORDER.filter(t => types.has(t) && FORMAT_NOTE[t]);
-  const gloss = notes.length
-    ? `<div class="sec"><h3>What these formats mean</h3><dl class="spec">` + notes.map(t => {
-        const [k, txt] = FORMAT_NOTE[t];
-        return `<dt>${esc(k)}</dt><dd>${esc(txt)}</dd>`;
-      }).join("") + `</dl></div>`
+  // THE GLOSSARY, from two places, and neither invents anything.
+  //
+  // FORMAT_NOTE is the audited copy and wins where it has an entry: it carries local
+  // knowledge no dictionary has -- that every IMAX in Mexico is the 1.90:1 kind and the
+  // tall rooms do not exist here. detail.json fills the rest from the operator's own
+  // 52-key format dictionary, and where the operator NAMES a format and describes it
+  // nowhere, this says exactly that rather than writing a plausible sentence. Infinity
+  // Vision is the live case: 150 showtimes in this app run in one and Cinemex's entire
+  // CMS does not mention it once.
+  const gk = [...new Set([...ORDER, ...types])].filter(t => types.has(t));
+  const glossRows = gk.map(t => {
+    if (FORMAT_NOTE[t]) return [FORMAT_NOTE[t][0], FORMAT_NOTE[t][1], "audit"];
+    const f = DETAIL && DETAIL.fmt && DETAIL.fmt[t];
+    if (!f) return null;
+    if (f.en) return [f.es || t, f.en, f.conf];
+    return [f.es || t, "Cinemex names this format and describes it nowhere in its own "
+      + "site, app or API, so there is nothing honest to put here. It is a real room you "
+      + "can buy a seat in; what makes it different is not published.", "unknown"];
+  }).filter(Boolean);
+  const gloss = glossRows.length
+    ? `<div class="sec"><h3>What these formats mean</h3><dl class="spec">` + glossRows.map(
+        ([k, txt, conf]) => `<dt>${esc(k)}</dt><dd>${esc(txt)} ${srcTag(conf)}</dd>`
+      ).join("") + `</dl></div>`
     : "";
   openSheet(head, go, body + gloss, "var(--c-big)");
 }
@@ -1297,6 +1618,26 @@ function venueSheet(i) {
     body += `<div class="sec"><h3>The audit</h3><dl class="spec">` + v.spec.map(([k, txt, conf]) =>
       `<dt>${esc(k)}</dt><dd>${esc(txt)} <span class="tag ${esc(conf)}">${
         conf === "v" ? "verified" : conf === "l" ? "likely" : "unknown"}</span></dd>`).join("") + `</dl></div>`;
+  }
+  // THE FOUR INDEPENDENTS ARE ON THE MAP AND CARRY NO SHOWTIMES, so this sheet is the
+  // only place anything can be said about them. They join by the map's own spelling of
+  // the name rather than by an id, because they have no id in the showtimes payload --
+  // that is what `map_venue` is for, and all four strings match a venue here exactly.
+  const indie = DETAIL && (DETAIL.indie || []).find(x => x.map === v.name);
+  if (indie) {
+    const th = (indie.themes || []).map(([name, pct]) =>
+      `<b>${esc(name)}</b><em>${pct}%</em><i><span style="width:${Math.min(100, pct)}%"></span></i>`
+    ).join("");
+    body += `<div class="sec"><h3>What reviewers say</h3>
+      <div class="pricetab" style="margin-bottom:9px">
+        <b>${indie.n ? indie.n.toLocaleString("en-US") + " Google reviews" : "Google rating"}</b>
+        <em>${indie.rating != null ? indie.rating.toFixed(1) + " \u2605" : "&mdash;"}</em></div>
+      ${th ? `<div class="thm">${th}</div>` : ""}
+      <p class="note">No showtimes here: this one publishes nothing a page like this can
+      read, so the map marker and this are what there is.</p></div>`;
+  } else if (live) {
+    // A mapped venue that IS a cinema in the list gets the same detail as its row.
+    body += priceSection(live.id) + reviewSection(live.id);
   }
   openSheet(head, go, body, v.grp === "indie" ? "var(--c-art)" : "var(--c-std)");
 }

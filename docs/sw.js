@@ -18,7 +18,7 @@
 // from the cached shell first and he sees the previous build for one more launch -- which
 // is exactly what happened while this change was being tested: the page on screen was two
 // edits behind the file on disk.
-const V = "sala-v14";
+const V = "sala-v15";
 const SHELL = V + "-shell";
 const LIB = V + "-lib";
 const TILES = V + "-tiles";
@@ -145,6 +145,29 @@ self.addEventListener("fetch", (e) => {
         return r;
       }).catch(() => null);
       return hit || (await fresh) || new Response("", { status: 504 });
+    })());
+    return;
+  }
+
+  // THE CINEMA DETAIL. It needs its own branch for the same reason the posters do: the
+  // read-only branch below answers from the cache and otherwise goes to the network, and
+  // never PUTS anything, so detail.json would be re-fetched on every launch and would be
+  // missing entirely with no signal -- prices, seat counts and ratings all quietly gone
+  // underground, which is where he will be reading this.
+  //
+  // Cache-first with a background refresh rather than never-revalidated: unlike a poster,
+  // its contents change when the build runs, and the copy on screen being one launch
+  // behind is the right trade for a sheet that opens instantly.
+  if (url.origin === self.location.origin && /\/detail\.json$/.test(url.pathname)) {
+    e.respondWith((async () => {
+      const c = await caches.open(SHELL);
+      const hit = await c.match(req);
+      const fresh = fetch(req).then((r) => {
+        if (r && r.ok) c.put(req, r.clone());
+        return r;
+      }).catch(() => null);
+      return hit || (await fresh) || new Response("null",
+        { headers: { "Content-Type": "application/json" } });
     })());
     return;
   }
