@@ -19,6 +19,13 @@ screen with no browser bars, and works with no signal after the first launch.
   cinema's own checkout, which is always current even when the listing here is not.
 - **Map** of 42 venues, coloured by what kind of room they are, with walking distance from
   wherever you are. Tapping one opens its full write-up and a walking-directions link.
+- **Coming up.** Twenty of the eighty films in the current payload are not on today at
+  all, and the only way to find them was to tap along thirty date chips. The Films tab
+  now ends with them, in date order, with their dates spelled out where there are one or
+  two: PULP on Thursday 24 September at eight cinemas, Queen: Budapest on 7 and 10
+  October, Always Lalisa on the 12th and 14th. Tapping one moves the whole app to that
+  day. A film in its last day carries a badge saying so, and that badge means something
+  -- see below.
 - **Films** index. There was a fourth tab, a Guide carrying the venue audit, and it was
   removed on 8 September on his own instruction -- "i dont like the guide tab to begin w".
   The audit did not go with it: the screen sizes, the projection, the sound and the note
@@ -119,6 +126,36 @@ The controls take the live payload, pull a merged film back into the two entries
 published, and require every check to go red on it before requiring them to go green after
 the merge. That red half is the point: it was run against the unfixed page first, where it
 found 12 duplicated title keys across 8 films and not one film reachable in both chains.
+
+## What "last day" is allowed to mean
+
+The obvious way to find the screenings worth knowing about in advance is to count them:
+everything playing once or twice in the next month. On this data that count is an
+artefact and would have put a false sentence on the screen.
+
+**Cineteca publishes two days at a time.** Cinemex carries thirty days; Cineteca carried
+2026-09-09 and 2026-09-10 and nothing else. Twenty-two of the twenty-three films with
+three or fewer showings are Cineteca titles, and they are rare in this data because the
+board stops on Thursday rather than because the film does.
+
+So the test is not a count, it is a question about the listing: **has a cinema published a
+whole programming week that does not contain this film?** Cinema weeks here start on
+Thursday, which is why a Tuesday pull sees less than a Thursday one, so a complete week is
+seven consecutive published days beginning on a Thursday. A run is over only when every
+cinema showing the film has published such a week after its last date. The seven is the
+number of days in a week, not a threshold anybody picked.
+
+Cineteca has never published a complete week, so nothing there is ever called a last day.
+The same rule refuses PULP -- one date, eight cinemas, Thursday 24 September, and Cinemex
+has published only six days past it -- and refusing that is the proof it works. It accepts
+Rebelion en la Granja, which plays thirty times today at fourteen cinemas and appears in
+none of the three published weeks after it.
+
+    node test-coming-up.mjs
+
+The controls run the real functions against the real payload with the clock stubbed, and
+section 4 runs the rejected count rule beside the week rule and requires them to disagree.
+A rule is only worth its complexity if the simpler one it replaced actually fails.
 
 The refresh refuses to write a payload that is materially worse than the published one --
 fewer cinemas, a big drop in showtimes, fewer films, or a first day that is not today. An
