@@ -76,6 +76,17 @@ try {
   await send("Emulation.setDeviceMetricsOverride",
     { width: 390, height: 844, deviceScaleFactor: 2, mobile: true, screenWidth: 390, screenHeight: 844 });
 
+  // ONE expression, read twice: with a signal and then without. Defining it once is what
+  // makes the comparison below mean anything.
+  const READING = `JSON.stringify({
+    cinemas: document.querySelectorAll("#showlist .cin").length,
+    count: $("scount").textContent.trim(),
+    prices: document.querySelectorAll("#showlist .pri").length,
+    posters: document.querySelectorAll("#showlist .pw img").length,
+    maplibre: typeof maplibregl,
+    faces: document.fonts ? document.fonts.size : 0
+  })`;
+
   console.log("section 1 -- ONE launch with a signal, and nothing else");
   await send("Page.navigate", { url: URL_ });
   await sleep(3200);
@@ -88,6 +99,12 @@ try {
     return JSON.stringify({ counts, urls, controlled: !!navigator.serviceWorker.controller });
   })()`));
   console.log("  caches after one visit:", JSON.stringify(warm.counts));
+  // What the page shows WITH a signal. Everything in section 2 is measured against this.
+  const on = JSON.parse(await js(READING));
+  console.log("  online: ", JSON.stringify(on));
+  // A floor, so that "offline equals online" cannot pass on two empty pages.
+  check("the page has something on it to begin with",
+        on.cinemas > 5 && on.prices > 50 && on.posters > 20, on.count);
   check("the worker is controlling the page", warm.controlled);
   // THE ASSERTION THIS FILE EXISTS FOR. Before 2026-09-09 there was no lib cache at all
   // after one visit, so this is the line that was red.
@@ -107,18 +124,19 @@ try {
   await send("Page.navigate", { url: URL_ });
   await sleep(4200);
   await js(`localStorage.setItem("sala.install","done"); document.querySelectorAll("[role=dialog]").forEach(d=>d.remove()); true`);
-  const off = JSON.parse(await js(`JSON.stringify({
-    cinemas: document.querySelectorAll("#showlist .cin").length,
-    count: $("scount").textContent.trim(),
-    prices: document.querySelectorAll("#showlist .pri").length,
-    posters: document.querySelectorAll("#showlist .pw img").length,
-    maplibre: typeof maplibregl,
-    faces: document.fonts ? document.fonts.size : 0
-  })`));
+  const off = JSON.parse(await js(READING));
   console.log("  offline:", JSON.stringify(off));
-  check("the showtimes are all there", off.cinemas >= 30, off.count);
-  check("the prices came back, so detail.json was cached", off.prices > 100);
-  check("the posters came back", off.posters > 50);
+  // AGAINST THE ONLINE READING, NOT AGAINST A NUMBER. This line used to ask for at least
+  // 30 cinemas and at least 100 prices -- both of them facts about 9 September, when the
+  // page was built. On 11 September the same payload opens on a day with 29 cinemas on
+  // it and the test went red on a calendar rather than on a defect. The question it is
+  // actually asking is whether cutting the network changes what the page shows, and the
+  // only answer that cannot decay is the same reading taken twice.
+  check("the showtimes are all there", off.cinemas === on.cinemas && off.count === on.count,
+        `${off.count} offline, ${on.count} online`);
+  check("the prices came back, so detail.json was cached", off.prices === on.prices,
+        `${off.prices} of ${on.prices}`);
+  check("the posters came back", off.posters === on.posters, `${off.posters} of ${on.posters}`);
   check("MapLibre loaded with no network at all", off.maplibre === "object");
   check("the typeface rules survived, so it is not falling back to system fonts",
         off.faces > 10, off.faces + " faces");

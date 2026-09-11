@@ -69,7 +69,15 @@ const decl = re => {
 // The payload itself, and the real functions that read it. NOW is 18:00 on 2026-09-09,
 // which is the first day of this snapshot, so "today" means day 0 throughout.
 const PAYLOAD = span("const SHOWS=", "\n/* ====").replace(/\n\/\* ====$/, "");
+// THE CLOCK IS STUBBED, not just isToday. dayLabel and dateAbs call `new Date()` with no
+// argument, so on any day other than 9 September this harness had isToday saying one thing
+// and dayLabel saying another, and "dateWords(1) is Tomorrow" went red on the calendar
+// rather than on a defect. The real Date arrives as a parameter because a `const Date`
+// declared in a scope that also reads the global Date is in the temporal dead zone there.
 const harness = `
+  const Date = new Proxy(RealDate, {
+    construct(T, a) { return a.length ? new T(...a) : new T(NOW); }
+  });
   ${PAYLOAD}
   const DAYS = SHOWS.days;
   const nowMins = () => ${18 * 60};
@@ -86,9 +94,9 @@ const harness = `
   ${lift("dateAbs")}
   ${lift("dateWords")}
   ${lift("filmRuns")}
-  ({ SHOWS, DAYS, S, WEEK_AFTER, filmRuns, dateAbs, dateWords })
+  return { SHOWS, DAYS, S, WEEK_AFTER, filmRuns, dateAbs, dateWords };
 `;
-const F = eval(harness);
+const F = new Function("RealDate", "NOW", harness)(Date, "2026-09-09T18:00:00");
 const { SHOWS, DAYS } = F;
 const nameOf = fid => (SHOWS.films[fid] || {}).n || "?";
 const isCT = id => /^cineteca-/.test(String(id));
