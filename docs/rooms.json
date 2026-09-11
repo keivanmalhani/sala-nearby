@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-09T14:21:14+00:00",
+ "generated_at": "2026-09-11T22:01:19+00:00",
  "generated_by": "build-rooms.py",
  "about": "One record per auditorium for the 32 Cinemex venues in this app: the room's name and screen number, its seat count broken out into ordinary seats, wheelchair spaces and companion spaces, its row count, and which formats that specific room runs. Read one session per distinct room rather than one per showing.",
  "sources": {
@@ -43,8 +43,8 @@
  "totals": {
   "rooms": 287,
   "rooms_with_a_seat_map": 287,
-  "seats": 32046,
-  "wheelchair_spaces": 512,
+  "seats": 32370,
+  "wheelchair_spaces": 513,
   "companion_spaces": 0,
   "rooms_with_no_wheelchair_space": 111,
   "smallest_room": 28,
@@ -63,9 +63,9 @@
  },
  "seat_types_in_use": {
   "types_seen": {
-   "blank": 15503,
-   "regular": 31534,
-   "wheelchair": 512
+   "blank": 15352,
+   "regular": 31857,
+   "wheelchair": 513
   },
   "confidence": "measured",
   "source": "cinemex_sessions_rooms",
@@ -91,8 +91,8 @@
     "IMAX Subtitulada",
     "IMAX Español"
    ],
-   "showtimes_matching_the_claim": 75,
-   "showtimes_in_the_room": 75,
+   "showtimes_matching_the_claim": 85,
+   "showtimes_in_the_room": 85,
    "exclusive": "yes"
   },
   {
@@ -106,11 +106,10 @@
    "formats_actually_run": [
     "Dolby Atmos Español",
     "Dolby Atmos Infinity Vision Español",
-    "Español Tradicional",
-    "Dolby Atmos Subtitulada"
+    "Español Tradicional"
    ],
-   "showtimes_matching_the_claim": 72,
-   "showtimes_in_the_room": 76,
+   "showtimes_matching_the_claim": 78,
+   "showtimes_in_the_room": 83,
    "exclusive": "no"
   },
   {
@@ -125,11 +124,10 @@
    "formats_actually_run": [
     "Dolby Atmos Español",
     "Dolby Atmos Infinity Vision Español",
-    "Español Tradicional",
-    "Dolby Atmos Subtitulada"
+    "Español Tradicional"
    ],
    "showtimes_matching_the_claim": 0,
-   "showtimes_in_the_room": 76,
+   "showtimes_in_the_room": 83,
    "exclusive": null
   }
  ],
@@ -162,24 +160,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 15
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 14
+       "showtimes_in_this_room": 42
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 13
       }
      ],
-     "read_from_session": "65601810",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65656555",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -216,15 +214,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 26
-      },
-      {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65601803",
@@ -265,7 +255,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 24
+       "showtimes_in_this_room": 16
       }
      ],
      "read_from_session": "65601840",
@@ -304,7 +294,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 25
+       "showtimes_in_this_room": 33
       },
       {
        "label": "Premium Subtitulada",
@@ -312,11 +302,11 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 1
       }
      ],
-     "read_from_session": "65601773",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65656560",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -353,7 +343,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 76
+       "showtimes_in_this_room": 78
       },
       {
        "label": "Premium Español",
@@ -361,11 +351,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 1
       }
      ],
-     "read_from_session": "65491138",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65674545",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -399,7 +389,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 21
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Premium Subtitulada",
@@ -407,7 +397,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 6
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "65601754",
@@ -451,7 +441,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 70
+       "showtimes_in_this_room": 60
       },
       {
        "label": "Premium Infinity Vision Subtitulada",
@@ -461,18 +451,10 @@
         "lang_sub"
        ],
        "showtimes_in_this_room": 24
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 2
       }
      ],
-     "read_from_session": "65443362",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65663545",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -506,7 +488,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 22
+       "showtimes_in_this_room": 23
       },
       {
        "label": "Premium Subtitulada",
@@ -514,11 +496,11 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 3
       }
      ],
-     "read_from_session": "65641524",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65655725",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -552,15 +534,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 24
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 16
       }
      ],
      "read_from_session": "65380819",
@@ -599,7 +573,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 25
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Premium Subtitulada",
@@ -607,7 +581,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 13
+       "showtimes_in_this_room": 7
       }
      ],
      "read_from_session": "65576777",
@@ -641,24 +615,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 32
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 46
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 22
       }
      ],
-     "read_from_session": "65641602",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65663577",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -692,7 +666,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 26
+       "showtimes_in_this_room": 16
       },
       {
        "label": "Premium Subtitulada",
@@ -700,10 +674,10 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 11
+       "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65641501",
+     "read_from_session": "65641497",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -737,23 +711,23 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Platino Subtitulada",
-       "type": [
-        "platinum",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 9
-      },
-      {
        "label": "Platino Español",
        "type": [
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 6
+      },
+      {
+       "label": "Platino Subtitulada",
+       "type": [
+        "platinum",
+        "lang_sub"
+       ],
+       "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65604023",
+     "read_from_session": "65623699",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -786,7 +760,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 14
+       "showtimes_in_this_room": 9
       },
       {
        "label": "Platino Subtitulada",
@@ -794,11 +768,11 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 11
+       "showtimes_in_this_room": 8
       }
      ],
-     "read_from_session": "65604052",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65675311",
+     "read_for_day": "2026-09-19",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -830,7 +804,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 11
       },
       {
        "label": "Platino Español",
@@ -838,11 +812,11 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 14
+       "showtimes_in_this_room": 7
       }
      ],
-     "read_from_session": "65604045",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65673975",
+     "read_for_day": "2026-10-17",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -874,19 +848,11 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 27
-      },
-      {
-       "label": "Platino Subtitulada",
-       "type": [
-        "platinum",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 50
       }
      ],
-     "read_from_session": "65623719",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65659691",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -921,11 +887,11 @@
         "imax",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 71
+       "showtimes_in_this_room": 74
       }
      ],
-     "read_from_session": "65470504",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65659658",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -969,7 +935,7 @@
         "dolby_atmos",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 20
+       "showtimes_in_this_room": 12
       },
       {
        "label": "Dolby Atmos Español",
@@ -1025,11 +991,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 24
       }
      ],
-     "read_from_session": "65624357",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65665095",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1067,7 +1033,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 72
+       "showtimes_in_this_room": 65
       }
      ],
      "read_from_session": "65591165",
@@ -1109,11 +1075,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 92
+       "showtimes_in_this_room": 88
       }
      ],
-     "read_from_session": "65483521",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65665091",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1151,7 +1117,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 30
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65624338",
@@ -1194,11 +1160,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 52
       }
      ],
-     "read_from_session": "65618718",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65656720",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1240,11 +1206,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 54
       }
      ],
-     "read_from_session": "65385164",
-     "read_for_day": "2026-09-20",
+     "read_from_session": "65656690",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1282,7 +1248,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 30
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65624304",
@@ -1325,7 +1291,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 31
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65624381",
@@ -1368,7 +1334,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65618641",
@@ -1411,7 +1377,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 26
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65618613",
@@ -1461,8 +1427,8 @@
        "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65570641",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65672195",
+     "read_for_day": "2026-09-11",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1499,11 +1465,19 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 1
+      },
+      {
+       "label": "Subtitulada Tradicional",
+       "type": [
+        "lang_sub",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 1
       }
      ],
-     "read_from_session": "65595730",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65672189",
+     "read_for_day": "2026-09-11",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1536,24 +1510,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Español Tradicional",
-       "type": [
-        "lang_es",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 10
-      },
-      {
        "label": "Subtitulada Tradicional",
        "type": [
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 2
+       "showtimes_in_this_room": 35
+      },
+      {
+       "label": "Español Tradicional",
+       "type": [
+        "lang_es",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 12
       }
      ],
-     "read_from_session": "65474546",
-     "read_for_day": "2026-09-20",
+     "read_from_session": "65652989",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1591,11 +1565,27 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 9
+      },
+      {
+       "label": "3D Subtitulada",
+       "type": [
+        "v3d",
+        "lang_sub"
+       ],
+       "showtimes_in_this_room": 7
+      },
+      {
+       "label": "Subtitulada Tradicional",
+       "type": [
+        "lang_sub",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 1
       }
      ],
-     "read_from_session": "65595720",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65653004",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1634,19 +1624,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 3
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65595727",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65676460",
+     "read_for_day": "2026-09-11",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1685,7 +1667,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 63
+       "showtimes_in_this_room": 81
       },
       {
        "label": "Subtitulada Tradicional",
@@ -1693,11 +1675,11 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 17
+       "showtimes_in_this_room": 21
       }
      ],
-     "read_from_session": "65489238",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65668336",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1712,11 +1694,11 @@
      "room": "Sala 1",
      "auditorium_name": "Sala 1",
      "screen_number": 1,
-     "seats_total": 178,
-     "seats_regular": 172,
+     "seats_total": 267,
+     "seats_regular": 261,
      "wheelchair_spaces": 6,
      "companion_spaces": 0,
-     "blank_cells": 148,
+     "blank_cells": 59,
      "rows": 13,
      "row_names": [
       "A",
@@ -1743,11 +1725,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 101
+       "showtimes_in_this_room": 94
       }
      ],
-     "read_from_session": "65488939",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65674022",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1781,11 +1763,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 58
       }
      ],
-     "read_from_session": "65609870",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65660340",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1794,11 +1776,11 @@
      "room": "Sala 3",
      "auditorium_name": "Sala 3",
      "screen_number": 3,
-     "seats_total": 143,
-     "seats_regular": 139,
+     "seats_total": 144,
+     "seats_regular": 140,
      "wheelchair_spaces": 4,
      "companion_spaces": 0,
-     "blank_cells": 47,
+     "blank_cells": 46,
      "rows": 10,
      "row_names": [
       "A",
@@ -1822,11 +1804,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 67
+       "showtimes_in_this_room": 62
       }
      ],
-     "read_from_session": "65592269",
-     "read_for_day": "2026-09-23",
+     "read_from_session": "65666977",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -1861,7 +1843,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65609918",
@@ -1874,11 +1856,11 @@
      "room": "Sala 6",
      "auditorium_name": "Sala 6",
      "screen_number": 6,
-     "seats_total": 40,
-     "seats_regular": 36,
+     "seats_total": 60,
+     "seats_regular": 56,
      "wheelchair_spaces": 4,
      "companion_spaces": 0,
-     "blank_cells": 37,
+     "blank_cells": 17,
      "rows": 7,
      "row_names": [
       "A",
@@ -1899,15 +1881,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 40
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 32
       }
      ],
      "read_from_session": "65239151",
@@ -1920,11 +1894,11 @@
      "room": "Sala 7",
      "auditorium_name": "Sala 7",
      "screen_number": 7,
-     "seats_total": 43,
-     "seats_regular": 39,
+     "seats_total": 66,
+     "seats_regular": 62,
      "wheelchair_spaces": 4,
      "companion_spaces": 0,
-     "blank_cells": 58,
+     "blank_cells": 35,
      "rows": 7,
      "row_names": [
       "A",
@@ -1945,7 +1919,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65625414",
@@ -1958,11 +1932,11 @@
      "room": "Sala 8",
      "auditorium_name": "Sala 8",
      "screen_number": 8,
-     "seats_total": 43,
-     "seats_regular": 39,
+     "seats_total": 67,
+     "seats_regular": 63,
      "wheelchair_spaces": 4,
      "companion_spaces": 0,
-     "blank_cells": 51,
+     "blank_cells": 27,
      "rows": 7,
      "row_names": [
       "A",
@@ -1983,7 +1957,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 26
+       "showtimes_in_this_room": 19
       },
       {
        "label": "Subtitulada Tradicional",
@@ -1991,7 +1965,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 18
+       "showtimes_in_this_room": 15
       }
      ],
      "read_from_session": "65572891",
@@ -2029,7 +2003,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 27
       }
      ],
      "read_from_session": "65385740",
@@ -2067,7 +2041,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 19
       }
      ],
      "read_from_session": "65625446",
@@ -2080,11 +2054,11 @@
      "room": "Sala 11",
      "auditorium_name": "Sala 11",
      "screen_number": 11,
-     "seats_total": 43,
-     "seats_regular": 39,
+     "seats_total": 66,
+     "seats_regular": 62,
      "wheelchair_spaces": 4,
      "companion_spaces": 0,
-     "blank_cells": 51,
+     "blank_cells": 28,
      "rows": 7,
      "row_names": [
       "A",
@@ -2105,7 +2079,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65609933",
@@ -2148,15 +2122,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 105
-      },
-      {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 6
+       "showtimes_in_this_room": 99
       }
      ],
      "read_from_session": "65485881",
@@ -2194,7 +2160,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 44
+       "showtimes_in_this_room": 48
       },
       {
        "label": "Platino Español",
@@ -2202,11 +2168,11 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 35
+       "showtimes_in_this_room": 27
       }
      ],
-     "read_from_session": "65645061",
-     "read_for_day": "2026-09-23",
+     "read_from_session": "65660464",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -2215,11 +2181,11 @@
      "room": "Sala 3",
      "auditorium_name": "Sala 3",
      "screen_number": 3,
-     "seats_total": 77,
-     "seats_regular": 75,
+     "seats_total": 75,
+     "seats_regular": 73,
      "wheelchair_spaces": 2,
      "companion_spaces": 0,
-     "blank_cells": 48,
+     "blank_cells": 50,
      "rows": 7,
      "row_names": [
       "A",
@@ -2240,7 +2206,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65617965",
@@ -2277,7 +2243,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Platino Español",
@@ -2322,11 +2288,11 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 58
       }
      ],
-     "read_from_session": "65617892",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65660499",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -2357,15 +2323,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 34
-      },
-      {
-       "label": "Platino Subtitulada",
-       "type": [
-        "platinum",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 2
+       "showtimes_in_this_room": 24
       }
      ],
      "read_from_session": "65626201",
@@ -2401,7 +2359,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65617926",
@@ -2437,7 +2395,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65617825",
@@ -2473,7 +2431,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65626184",
@@ -2503,20 +2461,20 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 17
-      },
-      {
        "label": "Platino Subtitulada",
        "type": [
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 11
+       "showtimes_in_this_room": 9
+      },
+      {
+       "label": "Platino Español",
+       "type": [
+        "platinum",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 9
       }
      ],
      "read_from_session": "65626150",
@@ -2564,7 +2522,7 @@
         "imax",
         "lang_es"
        ],
-       "showtimes_in_this_room": 76
+       "showtimes_in_this_room": 64
       },
       {
        "label": "IMAX Subtitulada",
@@ -2572,11 +2530,11 @@
         "imax",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 8
+       "showtimes_in_this_room": 19
       }
      ],
-     "read_from_session": "65584498",
-     "read_for_day": "2026-10-14",
+     "read_from_session": "65660546",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -2612,7 +2570,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 40
+       "showtimes_in_this_room": 27
       }
      ],
      "read_from_session": "65633675",
@@ -2652,11 +2610,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 96
+       "showtimes_in_this_room": 85
       }
      ],
-     "read_from_session": "65488732",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65670695",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -2690,7 +2648,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 48
+       "showtimes_in_this_room": 36
       }
      ],
      "read_from_session": "65239183",
@@ -2728,7 +2686,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 30
+       "showtimes_in_this_room": 23
       },
       {
        "label": "Subtitulada Tradicional",
@@ -2736,7 +2694,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "65634959",
@@ -2774,7 +2732,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65633718",
@@ -2812,7 +2770,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65633813",
@@ -2850,10 +2808,10 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 23
       }
      ],
-     "read_from_session": "65633921",
+     "read_from_session": "65634966",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -2888,7 +2846,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 39
+       "showtimes_in_this_room": 25
       }
      ],
      "read_from_session": "65633635",
@@ -2926,7 +2884,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 47
+       "showtimes_in_this_room": 35
       },
       {
        "label": "Subtitulada Tradicional",
@@ -2972,7 +2930,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 22
       },
       {
        "label": "Subtitulada Tradicional",
@@ -3018,7 +2976,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Subtitulada Tradicional",
@@ -3026,11 +2984,11 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 13
+       "showtimes_in_this_room": 12
       }
      ],
-     "read_from_session": "65564337",
-     "read_for_day": "2026-09-16",
+     "read_from_session": "65662263",
+     "read_for_day": "2026-10-17",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3066,7 +3024,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 24
       }
      ],
      "read_from_session": "65389921",
@@ -3106,11 +3064,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 65
       }
      ],
-     "read_from_session": "65634966",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65660576",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3146,11 +3104,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 25
       }
      ],
-     "read_from_session": "65633581",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65660595",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3191,11 +3149,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 16
       }
      ],
-     "read_from_session": "65617305",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65650295",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3230,11 +3188,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 15
       }
      ],
-     "read_from_session": "65617306",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65650274",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3269,11 +3227,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 19
       }
      ],
-     "read_from_session": "65617291",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65650365",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3312,7 +3270,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 50
+       "showtimes_in_this_room": 68
       },
       {
        "label": "Subtitulada Tradicional",
@@ -3323,8 +3281,8 @@
        "showtimes_in_this_room": 7
       }
      ],
-     "read_from_session": "65490803",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65670774",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3361,11 +3319,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 7
+       "showtimes_in_this_room": 22
       }
      ],
-     "read_from_session": "65395037",
-     "read_for_day": "2026-09-20",
+     "read_from_session": "65670776",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3402,11 +3360,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 22
       }
      ],
-     "read_from_session": "65617284",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65660644",
+     "read_for_day": "2026-09-24",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3441,11 +3399,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 14
       }
      ],
-     "read_from_session": "65617297",
-     "read_for_day": "2026-09-09",
+     "read_from_session": "65650330",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3484,7 +3442,16 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 17
+       "showtimes_in_this_room": 20
+      },
+      {
+       "label": "Platino 3D Español",
+       "type": [
+        "platinum",
+        "v3d",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 7
       },
       {
        "label": "Platino Subtitulada",
@@ -3492,11 +3459,11 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 7
+       "showtimes_in_this_room": 5
       }
      ],
-     "read_from_session": "65614279",
-     "read_for_day": "2026-09-14",
+     "read_from_session": "65667185",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3505,11 +3472,11 @@
      "room": "Sala 2",
      "auditorium_name": "Sala 2",
      "screen_number": 2,
-     "seats_total": 45,
-     "seats_regular": 45,
+     "seats_total": 43,
+     "seats_regular": 43,
      "wheelchair_spaces": 0,
      "companion_spaces": 0,
-     "blank_cells": 56,
+     "blank_cells": 58,
      "rows": 6,
      "row_names": [
       "A",
@@ -3529,7 +3496,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 10
+       "showtimes_in_this_room": 38
       },
       {
        "label": "Platino Español",
@@ -3537,11 +3504,11 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 8
       }
      ],
-     "read_from_session": "65614263",
-     "read_for_day": "2026-09-14",
+     "read_from_session": "65667169",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3574,7 +3541,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 19
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Platino Subtitulada",
@@ -3582,11 +3549,11 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65614307",
-     "read_for_day": "2026-09-14",
+     "read_from_session": "65667122",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3619,7 +3586,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 16
       },
       {
        "label": "Platino Español",
@@ -3627,7 +3594,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 5
       }
      ],
      "read_from_session": "65390523",
@@ -3664,7 +3631,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 21
+       "showtimes_in_this_room": 20
       },
       {
        "label": "Platino Subtitulada",
@@ -3672,11 +3639,11 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 8
       }
      ],
-     "read_from_session": "65614302",
-     "read_for_day": "2026-09-14",
+     "read_from_session": "65667138",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3708,7 +3675,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 20
+       "showtimes_in_this_room": 19
       },
       {
        "label": "Platino Subtitulada",
@@ -3716,11 +3683,11 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 1
       }
      ],
-     "read_from_session": "65626502",
-     "read_for_day": "2026-09-14",
+     "read_from_session": "65667142",
+     "read_for_day": "2026-09-19",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -3754,15 +3721,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 79
-      },
-      {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 76
       }
      ],
      "read_from_session": "65491837",
@@ -3809,20 +3768,20 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Español Tradicional",
-       "type": [
-        "lang_es",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 48
-      },
-      {
        "label": "Subtitulada Tradicional",
        "type": [
         "lang_sub",
         "traditional"
        ],
        "showtimes_in_this_room": 48
+      },
+      {
+       "label": "Español Tradicional",
+       "type": [
+        "lang_es",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 42
       }
      ],
      "read_from_session": "65490459",
@@ -3863,7 +3822,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 20
+       "showtimes_in_this_room": 14
       }
      ],
      "read_from_session": "65618171",
@@ -3902,7 +3861,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 30
+       "showtimes_in_this_room": 23
       },
       {
        "label": "Subtitulada Tradicional",
@@ -3946,20 +3905,20 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
+       "label": "Español Tradicional",
+       "type": [
+        "lang_es",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 46
+      },
+      {
        "label": "Subtitulada Tradicional",
        "type": [
         "lang_sub",
         "traditional"
        ],
        "showtimes_in_this_room": 21
-      },
-      {
-       "label": "Español Tradicional",
-       "type": [
-        "lang_es",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65490471",
@@ -4000,7 +3959,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 26
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65627752",
@@ -4039,15 +3998,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 25
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65627798",
@@ -4088,7 +4039,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 19
       }
      ],
      "read_from_session": "65627783",
@@ -4130,7 +4081,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 20
+       "showtimes_in_this_room": 14
       }
      ],
      "read_from_session": "65618271",
@@ -4175,20 +4126,20 @@
        "showtimes_in_this_room": 48
       },
       {
-       "label": "Español Tradicional",
-       "type": [
-        "lang_es",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 23
-      },
-      {
        "label": "3D Español",
        "type": [
         "v3d",
         "lang_es"
        ],
        "showtimes_in_this_room": 21
+      },
+      {
+       "label": "Español Tradicional",
+       "type": [
+        "lang_es",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 16
       }
      ],
      "read_from_session": "48899865",
@@ -4230,11 +4181,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 24
+       "showtimes_in_this_room": 47
       }
      ],
-     "read_from_session": "65618202",
-     "read_for_day": "2026-09-14",
+     "read_from_session": "65656649",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -4269,7 +4220,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 26
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Subtitulada Tradicional",
@@ -4317,19 +4268,19 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 24
       },
       {
-       "label": "Subtitulada Tradicional",
+       "label": "3D Español",
        "type": [
-        "lang_sub",
-        "traditional"
+        "v3d",
+        "lang_es"
        ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 7
       }
      ],
-     "read_from_session": "65627726",
-     "read_for_day": "2026-09-14",
+     "read_from_session": "48993408",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -4365,7 +4316,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 21
+       "showtimes_in_this_room": 16
       },
       {
        "label": "Subtitulada Tradicional",
@@ -4413,7 +4364,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 26
+       "showtimes_in_this_room": 19
       }
      ],
      "read_from_session": "65627763",
@@ -4457,7 +4408,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 32
       },
       {
        "label": "Premium Español",
@@ -4465,7 +4416,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 30
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65593525",
@@ -4503,7 +4454,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 15
       },
       {
        "label": "Premium Subtitulada",
@@ -4511,7 +4462,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 13
+       "showtimes_in_this_room": 7
       }
      ],
      "read_from_session": "65619078",
@@ -4549,7 +4500,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 36
+       "showtimes_in_this_room": 31
       },
       {
        "label": "Premium Español",
@@ -4557,7 +4508,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 10
+       "showtimes_in_this_room": 8
       }
      ],
      "read_from_session": "65244272",
@@ -4595,7 +4546,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 36
       },
       {
        "label": "Premium Español",
@@ -4603,11 +4554,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 18
       }
      ],
-     "read_from_session": "65383888",
-     "read_for_day": "2026-09-20",
+     "read_from_session": "65654424",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -4641,7 +4592,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 50
       },
       {
        "label": "Premium Español",
@@ -4649,11 +4600,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 8
       }
      ],
-     "read_from_session": "65619166",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65654412",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -4687,7 +4638,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 22
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Premium Español",
@@ -4695,11 +4646,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 12
+       "showtimes_in_this_room": 9
       }
      ],
-     "read_from_session": "65564367",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65665608",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -4733,15 +4684,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 24
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65619105",
@@ -4779,19 +4722,11 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 84
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 83
       }
      ],
-     "read_from_session": "65483785",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65665614",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -4823,15 +4758,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 31
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 2
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65619005",
@@ -4862,24 +4789,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 17
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
        "showtimes_in_this_room": 16
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 14
       }
      ],
-     "read_from_session": "65627957",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65673435",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -4907,20 +4834,20 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 14
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 14
+       "showtimes_in_this_room": 9
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 9
       }
      ],
      "read_from_session": "65618971",
@@ -4957,7 +4884,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 23
       },
       {
        "label": "Premium Subtitulada",
@@ -4965,7 +4892,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 3
       }
      ],
      "read_from_session": "65462008",
@@ -5017,19 +4944,11 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 93
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 2
+       "showtimes_in_this_room": 95
       }
      ],
-     "read_from_session": "65484823",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65674535",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -5068,7 +4987,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 19
       }
      ],
      "read_from_session": "65602075",
@@ -5110,7 +5029,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 17
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Premium Subtitulada",
@@ -5118,7 +5037,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 10
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "65602033",
@@ -5161,7 +5080,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 21
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Premium Español",
@@ -5169,7 +5088,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 10
+       "showtimes_in_this_room": 8
       }
      ],
      "read_from_session": "65386015",
@@ -5206,24 +5125,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 28
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 7
+       "showtimes_in_this_room": 41
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 22
       }
      ],
-     "read_from_session": "65571024",
-     "read_for_day": "2026-09-19",
+     "read_from_session": "65661378",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -5259,15 +5178,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 29
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65602044",
@@ -5305,15 +5216,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 32
-      },
-      {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65628932",
@@ -5358,7 +5261,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65629152",
@@ -5396,7 +5299,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 24
+       "showtimes_in_this_room": 17
       }
      ],
      "read_from_session": "65613567",
@@ -5434,7 +5337,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65629151",
@@ -5480,7 +5383,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 68
+       "showtimes_in_this_room": 59
       }
      ],
      "read_from_session": "65586173",
@@ -5526,11 +5429,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 88
+       "showtimes_in_this_room": 66
       }
      ],
-     "read_from_session": "65483806",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65483800",
+     "read_for_day": "2026-09-28",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -5564,7 +5467,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65629185",
@@ -5602,10 +5505,10 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 22
       }
      ],
-     "read_from_session": "65629212",
+     "read_from_session": "65629213",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -5644,7 +5547,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 16
       }
      ],
      "read_from_session": "65613579",
@@ -5686,11 +5589,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 55
       }
      ],
-     "read_from_session": "65613508",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65675478",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -5728,11 +5631,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 22
+       "showtimes_in_this_room": 29
       }
      ],
-     "read_from_session": "65613476",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65675495",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -5768,7 +5671,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 30
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65322641",
@@ -5807,7 +5710,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 20
+       "showtimes_in_this_room": 17
       },
       {
        "label": "Subtitulada Tradicional",
@@ -5815,7 +5718,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 8
       }
      ],
      "read_from_session": "65571349",
@@ -5871,7 +5774,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65619791",
@@ -5911,7 +5814,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 31
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65619604",
@@ -5954,11 +5857,19 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 108
+       "showtimes_in_this_room": 98
+      },
+      {
+       "label": "Subtitulada Tradicional",
+       "type": [
+        "lang_sub",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65491082",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65674068",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -5993,7 +5904,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 37
       },
       {
        "label": "Subtitulada Tradicional",
@@ -6001,11 +5912,11 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 20
       }
      ],
-     "read_from_session": "65566293",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65674103",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -6037,7 +5948,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 30
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65619570",
@@ -6074,7 +5985,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65634927",
@@ -6111,7 +6022,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 25
       },
       {
        "label": "Premium Subtitulada",
@@ -6157,7 +6068,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65619561",
@@ -6197,11 +6108,19 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 30
+       "showtimes_in_this_room": 28
+      },
+      {
+       "label": "3D Español",
+       "type": [
+        "v3d",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 7
       }
      ],
-     "read_from_session": "65634897",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65674116",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -6244,7 +6163,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "36706437",
@@ -6285,7 +6204,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 68
+       "showtimes_in_this_room": 72
       },
       {
        "label": "Premium Español",
@@ -6293,11 +6212,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 22
       }
      ],
-     "read_from_session": "65485778",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65667989",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -6326,24 +6245,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 54
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 56
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 53
       }
      ],
-     "read_from_session": "65583310",
-     "read_for_day": "2026-09-23",
+     "read_from_session": "65667993",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -6373,14 +6292,6 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 31
-      },
-      {
        "label": "Premium 3D Español",
        "type": [
         "premium",
@@ -6390,12 +6301,12 @@
        "showtimes_in_this_room": 28
       },
       {
-       "label": "Premium Español",
+       "label": "Premium Subtitulada",
        "type": [
         "premium",
-        "lang_es"
+        "lang_sub"
        ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65490050",
@@ -6432,7 +6343,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 35
+       "showtimes_in_this_room": 43
       },
       {
        "label": "Premium Subtitulada",
@@ -6440,11 +6351,11 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 8
+       "showtimes_in_this_room": 2
       }
      ],
-     "read_from_session": "36666891",
-     "read_for_day": "2026-09-23",
+     "read_from_session": "65659045",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -6477,7 +6388,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Premium Español",
@@ -6485,7 +6396,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 10
+       "showtimes_in_this_room": 5
       }
      ],
      "read_from_session": "65390516",
@@ -6522,7 +6433,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Premium Español",
@@ -6567,7 +6478,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65641616",
@@ -6604,7 +6515,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 20
       },
       {
        "label": "Premium Español",
@@ -6612,7 +6523,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 19
+       "showtimes_in_this_room": 17
       }
      ],
      "read_from_session": "36379745",
@@ -6649,7 +6560,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 35
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65622662",
@@ -6686,7 +6597,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 24
+       "showtimes_in_this_room": 19
       },
       {
        "label": "Premium Subtitulada",
@@ -6694,7 +6605,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 10
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "36706447",
@@ -6731,15 +6642,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 35
-      },
-      {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 27
       }
      ],
      "read_from_session": "65622664",
@@ -6776,15 +6679,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65618436",
@@ -6826,20 +6721,20 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 20
-      },
-      {
        "label": "Premium Español",
        "type": [
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 19
+       "showtimes_in_this_room": 15
+      },
+      {
+       "label": "Premium Subtitulada",
+       "type": [
+        "premium",
+        "lang_sub"
+       ],
+       "showtimes_in_this_room": 15
       }
      ],
      "read_from_session": "65605178",
@@ -6874,20 +6769,20 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 24
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 24
+       "showtimes_in_this_room": 47
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 7
       }
      ],
      "read_from_session": "65243902",
@@ -6927,19 +6822,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 32
-      },
-      {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 30
       }
      ],
-     "read_from_session": "65622785",
-     "read_for_day": "2026-09-16",
+     "read_from_session": "65660889",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -6975,7 +6862,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 44
+       "showtimes_in_this_room": 40
       },
       {
        "label": "Premium Español",
@@ -6983,7 +6870,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65583611",
@@ -7023,15 +6910,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 73
-      },
-      {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 22
+       "showtimes_in_this_room": 58
       }
      ],
      "read_from_session": "65493027",
@@ -7068,15 +6947,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 31
-      },
-      {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 2
+       "showtimes_in_this_room": 24
       }
      ],
      "read_from_session": "65622788",
@@ -7113,15 +6984,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 29
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65605171",
@@ -7158,7 +7021,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 22
+       "showtimes_in_this_room": 16
       },
       {
        "label": "Premium Subtitulada",
@@ -7166,7 +7029,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 8
+       "showtimes_in_this_room": 5
       }
      ],
      "read_from_session": "65622745",
@@ -7213,7 +7076,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65635881",
@@ -7254,7 +7117,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 20
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Premium Subtitulada",
@@ -7262,7 +7125,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 11
+       "showtimes_in_this_room": 9
       }
      ],
      "read_from_session": "65619893",
@@ -7302,7 +7165,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 26
       },
       {
        "label": "Premium Subtitulada",
@@ -7310,11 +7173,11 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65635928",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65673520",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -7354,11 +7217,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 45
       }
      ],
-     "read_from_session": "65619816",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65653212",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -7399,7 +7262,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65619826",
@@ -7441,24 +7304,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Español Tradicional",
-       "type": [
-        "lang_es",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 33
-      },
-      {
        "label": "Subtitulada Tradicional",
        "type": [
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 49
+      },
+      {
+       "label": "Español Tradicional",
+       "type": [
+        "lang_es",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 25
       }
      ],
-     "read_from_session": "65647231",
-     "read_for_day": "2026-09-23",
+     "read_from_session": "65653125",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -7501,11 +7364,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 70
+       "showtimes_in_this_room": 89
       }
      ],
-     "read_from_session": "65647233",
-     "read_for_day": "2026-09-23",
+     "read_from_session": "65653138",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -7546,7 +7409,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65619876",
@@ -7591,15 +7454,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 22
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65619888",
@@ -7640,7 +7495,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65619806",
@@ -7681,7 +7536,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 19
+       "showtimes_in_this_room": 13
       },
       {
        "label": "Subtitulada Tradicional",
@@ -7689,7 +7544,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 7
+       "showtimes_in_this_room": 5
       }
      ],
      "read_from_session": "65619901",
@@ -7730,7 +7585,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 37
+       "showtimes_in_this_room": 60
       },
       {
        "label": "Subtitulada Tradicional",
@@ -7782,7 +7637,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 37
+       "showtimes_in_this_room": 34
       },
       {
        "label": "Subtitulada Tradicional",
@@ -7790,7 +7645,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 10
       }
      ],
      "read_from_session": "65363388",
@@ -7828,11 +7683,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 23
       }
      ],
-     "read_from_session": "65601922",
-     "read_for_day": "2026-09-11",
+     "read_from_session": "65662503",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -7874,7 +7729,7 @@
         "imax",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 47
+       "showtimes_in_this_room": 61
       },
       {
        "label": "IMAX Español",
@@ -7882,11 +7737,11 @@
         "imax",
         "lang_es"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 24
       }
      ],
-     "read_from_session": "65585002",
-     "read_for_day": "2026-10-14",
+     "read_from_session": "65671066",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -7922,11 +7777,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 23
       }
      ],
-     "read_from_session": "65630677",
-     "read_for_day": "2026-09-11",
+     "read_from_session": "65662586",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -7962,19 +7817,19 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 17
+       "showtimes_in_this_room": 26
       },
       {
-       "label": "Subtitulada Tradicional",
+       "label": "Premium Español",
        "type": [
-        "lang_sub",
-        "traditional"
+        "premium",
+        "lang_es"
        ],
        "showtimes_in_this_room": 1
       }
      ],
-     "read_from_session": "65630682",
-     "read_for_day": "2026-09-11",
+     "read_from_session": "65662645",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8007,24 +7862,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 12
-      },
-      {
        "label": "Español Tradicional",
        "type": [
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 11
+       "showtimes_in_this_room": 18
+      },
+      {
+       "label": "Subtitulada Tradicional",
+       "type": [
+        "lang_sub",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 13
       }
      ],
-     "read_from_session": "65319835",
-     "read_for_day": "2026-10-04",
+     "read_from_session": "65671065",
+     "read_for_day": "2026-10-17",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8062,19 +7917,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 14
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 38
       }
      ],
-     "read_from_session": "65601939",
-     "read_for_day": "2026-09-11",
+     "read_from_session": "65653315",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8107,16 +7954,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
+       "label": "Subtitulada Tradicional",
+       "type": [
+        "lang_sub",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 35
+      },
+      {
        "label": "Español Tradicional",
        "type": [
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 18
+       "showtimes_in_this_room": 26
       }
      ],
-     "read_from_session": "65601944",
-     "read_for_day": "2026-09-11",
+     "read_from_session": "65671135",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8154,11 +8009,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 14
+       "showtimes_in_this_room": 23
       }
      ],
-     "read_from_session": "65601961",
-     "read_for_day": "2026-09-11",
+     "read_from_session": "65662616",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8199,7 +8054,7 @@
         "dolby_atmos",
         "lang_es"
        ],
-       "showtimes_in_this_room": 48
+       "showtimes_in_this_room": 57
       },
       {
        "label": "Dolby Atmos Infinity Vision Español",
@@ -8216,15 +8071,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 4
-      },
-      {
-       "label": "Dolby Atmos Subtitulada",
-       "type": [
-        "dolby_atmos",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 5
       }
      ],
      "read_from_session": "65470478",
@@ -8267,7 +8114,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 22
       },
       {
        "label": "Platino Español",
@@ -8275,11 +8122,11 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 13
+       "showtimes_in_this_room": 11
       }
      ],
-     "read_from_session": "65391967",
-     "read_for_day": "2026-09-20",
+     "read_from_session": "65672271",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8312,15 +8159,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 28
-      },
-      {
-       "label": "Platino Subtitulada",
-       "type": [
-        "platinum",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65603826",
@@ -8357,15 +8196,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 76
-      },
-      {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 69
       }
      ],
      "read_from_session": "65485855",
@@ -8400,7 +8231,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 21
+       "showtimes_in_this_room": 13
       },
       {
        "label": "Platino Español",
@@ -8408,7 +8239,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 7
       }
      ],
      "read_from_session": "65603850",
@@ -8443,15 +8274,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 28
-      },
-      {
-       "label": "Platino Subtitulada",
-       "type": [
-        "platinum",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65632365",
@@ -8493,7 +8316,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 81
+       "showtimes_in_this_room": 55
       },
       {
        "label": "Platino Español",
@@ -8501,7 +8324,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 17
+       "showtimes_in_this_room": 38
       }
      ],
      "read_from_session": "65513005",
@@ -8536,7 +8359,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 19
+       "showtimes_in_this_room": 13
       },
       {
        "label": "Platino Español",
@@ -8544,7 +8367,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 10
+       "showtimes_in_this_room": 7
       }
      ],
      "read_from_session": "65602098",
@@ -8579,7 +8402,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 20
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Platino Español",
@@ -8587,7 +8410,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 15
+       "showtimes_in_this_room": 10
       }
      ],
      "read_from_session": "65602114",
@@ -8617,20 +8440,20 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 27
-      },
-      {
        "label": "Platino Subtitulada",
        "type": [
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 22
+       "showtimes_in_this_room": 51
+      },
+      {
+       "label": "Platino Español",
+       "type": [
+        "platinum",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65243956",
@@ -8665,7 +8488,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 21
+       "showtimes_in_this_room": 17
       },
       {
        "label": "Platino Subtitulada",
@@ -8673,7 +8496,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 8
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "65602130",
@@ -8708,7 +8531,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 38
+       "showtimes_in_this_room": 30
       },
       {
        "label": "Platino Subtitulada",
@@ -8716,11 +8539,11 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 23
       }
      ],
-     "read_from_session": "39274317",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65653434",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8754,6 +8577,14 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
+       "label": "Platino Español",
+       "type": [
+        "platinum",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 24
+      },
+      {
        "label": "Platino Subtitulada",
        "type": [
         "platinum",
@@ -8762,16 +8593,17 @@
        "showtimes_in_this_room": 10
       },
       {
-       "label": "Platino Español",
+       "label": "Platino 3D Español",
        "type": [
         "platinum",
+        "v3d",
         "lang_es"
        ],
        "showtimes_in_this_room": 6
       }
      ],
-     "read_from_session": "65613872",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65671538",
+     "read_for_day": "2026-09-29",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8780,11 +8612,11 @@
      "room": "Sala 2",
      "auditorium_name": "Sala 2",
      "screen_number": 2,
-     "seats_total": 35,
-     "seats_regular": 35,
+     "seats_total": 36,
+     "seats_regular": 36,
      "wheelchair_spaces": 0,
      "companion_spaces": 0,
-     "blank_cells": 25,
+     "blank_cells": 24,
      "rows": 5,
      "row_names": [
       "A",
@@ -8824,11 +8656,11 @@
      "room": "Sala 3",
      "auditorium_name": "Sala 3",
      "screen_number": 3,
-     "seats_total": 76,
-     "seats_regular": 76,
+     "seats_total": 79,
+     "seats_regular": 79,
      "wheelchair_spaces": 0,
      "companion_spaces": 0,
-     "blank_cells": 50,
+     "blank_cells": 47,
      "rows": 7,
      "row_names": [
       "A",
@@ -8849,7 +8681,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 12
+       "showtimes_in_this_room": 17
       },
       {
        "label": "Platino Subtitulada",
@@ -8857,11 +8689,11 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 8
+       "showtimes_in_this_room": 10
       }
      ],
-     "read_from_session": "65636047",
-     "read_for_day": "2026-09-16",
+     "read_from_session": "65674677",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -8895,15 +8727,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 30
-      },
-      {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 33
       }
      ],
      "read_from_session": "65488175",
@@ -8916,11 +8740,11 @@
      "room": "Sala 5",
      "auditorium_name": "Sala 5",
      "screen_number": 5,
-     "seats_total": 53,
-     "seats_regular": 53,
+     "seats_total": 55,
+     "seats_regular": 55,
      "wheelchair_spaces": 0,
      "companion_spaces": 0,
-     "blank_cells": 37,
+     "blank_cells": 35,
      "rows": 6,
      "row_names": [
       "A",
@@ -8935,20 +8759,20 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Platino Subtitulada",
-       "type": [
-        "platinum",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 10
-      },
-      {
        "label": "Platino Español",
        "type": [
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 7
+       "showtimes_in_this_room": 9
+      },
+      {
+       "label": "Platino Subtitulada",
+       "type": [
+        "platinum",
+        "lang_sub"
+       ],
+       "showtimes_in_this_room": 9
       }
      ],
      "read_from_session": "65613857",
@@ -8961,11 +8785,11 @@
      "room": "Sala 6",
      "auditorium_name": "Sala 6",
      "screen_number": 6,
-     "seats_total": 51,
-     "seats_regular": 51,
+     "seats_total": 54,
+     "seats_regular": 54,
      "wheelchair_spaces": 0,
      "companion_spaces": 0,
-     "blank_cells": 39,
+     "blank_cells": 36,
      "rows": 6,
      "row_names": [
       "A",
@@ -8993,7 +8817,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 8
       }
      ],
      "read_from_session": "65402909",
@@ -9029,7 +8853,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 15
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Platino Subtitulada",
@@ -9037,7 +8861,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 2
       }
      ],
      "read_from_session": "65613886",
@@ -9050,11 +8874,11 @@
      "room": "Sala 8",
      "auditorium_name": "Sala 8",
      "screen_number": 8,
-     "seats_total": 35,
-     "seats_regular": 35,
+     "seats_total": 36,
+     "seats_regular": 36,
      "wheelchair_spaces": 0,
      "companion_spaces": 0,
-     "blank_cells": 26,
+     "blank_cells": 25,
      "rows": 5,
      "row_names": [
       "A",
@@ -9073,7 +8897,7 @@
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 9
+       "showtimes_in_this_room": 11
       },
       {
        "label": "Platino Español",
@@ -9081,7 +8905,7 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "65613865",
@@ -9135,11 +8959,11 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 11
+       "showtimes_in_this_room": 6
       }
      ],
-     "read_from_session": "65607920",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65664511",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9176,7 +9000,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 83
+       "showtimes_in_this_room": 71
       },
       {
        "label": "Premium Infinity Vision Subtitulada",
@@ -9186,10 +9010,18 @@
         "lang_sub"
        ],
        "showtimes_in_this_room": 28
+      },
+      {
+       "label": "Premium Subtitulada",
+       "type": [
+        "premium",
+        "lang_sub"
+       ],
+       "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65406155",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65664508",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9226,7 +9058,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 52
+       "showtimes_in_this_room": 47
       },
       {
        "label": "Premium Español",
@@ -9234,7 +9066,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65586536",
@@ -9275,7 +9107,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Premium Español",
@@ -9283,7 +9115,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 8
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "65393291",
@@ -9321,19 +9153,20 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 31
+       "showtimes_in_this_room": 30
       },
       {
-       "label": "Premium Subtitulada",
+       "label": "Premium 3D Español",
        "type": [
         "premium",
-        "lang_sub"
+        "v3d",
+        "lang_es"
        ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 7
       }
      ],
-     "read_from_session": "65607772",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65664589",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9369,7 +9202,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 36
+       "showtimes_in_this_room": 27
       },
       {
        "label": "Premium Subtitulada",
@@ -9377,7 +9210,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 12
+       "showtimes_in_this_room": 10
       }
      ],
      "read_from_session": "65375654",
@@ -9417,15 +9250,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 32
-      },
-      {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65630191",
@@ -9460,24 +9285,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 27
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 14
+       "showtimes_in_this_room": 47
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 19
       }
      ],
-     "read_from_session": "65571917",
-     "read_for_day": "2026-09-23",
+     "read_from_session": "65664573",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9486,7 +9311,7 @@
   },
   "430": {
    "name": "Patriotismo Platino",
-   "room_count": 4,
+   "room_count": 3,
    "rooms": [
     {
      "room": "Sala 1",
@@ -9510,24 +9335,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 32
-      },
-      {
        "label": "Platino Subtitulada",
        "type": [
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 8
+       "showtimes_in_this_room": 41
+      },
+      {
+       "label": "Platino Español",
+       "type": [
+        "platinum",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 16
       }
      ],
-     "read_from_session": "65613987",
-     "read_for_day": "2026-09-16",
+     "read_from_session": "65654584",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9555,24 +9380,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 24
-      },
-      {
        "label": "Platino Subtitulada",
        "type": [
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 22
+      },
+      {
+       "label": "Platino Español",
+       "type": [
+        "platinum",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 19
       }
      ],
-     "read_from_session": "65488636",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65669656",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9599,49 +9424,12 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Platino Español",
-       "type": [
-        "platinum",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 36
-      }
-     ],
-     "read_from_session": "65613950",
-     "read_for_day": "2026-09-16",
-     "name_agrees_with_page": true,
-     "source": "cinemex_sessions_rooms",
-     "confidence": "measured"
-    },
-    {
-     "room": "Sala 4",
-     "auditorium_name": "Sala 4",
-     "screen_number": 4,
-     "seats_total": 59,
-     "seats_regular": 59,
-     "wheelchair_spaces": 0,
-     "companion_spaces": 0,
-     "blank_cells": 78,
-     "rows": 6,
-     "row_names": [
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F"
-     ],
-     "spacer_rows_in_layout": 5,
-     "assigned_seating": true,
-     "max_tickets_per_order": 6,
-     "formats_run_here": [
-      {
        "label": "Platino Subtitulada",
        "type": [
         "platinum",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 8
+       "showtimes_in_this_room": 40
       },
       {
        "label": "Platino Español",
@@ -9649,11 +9437,11 @@
         "platinum",
         "lang_es"
        ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 25
       }
      ],
-     "read_from_session": "65614002",
-     "read_for_day": "2026-09-16",
+     "read_from_session": "65673954",
+     "read_for_day": "2026-09-23",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9694,7 +9482,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 39
+       "showtimes_in_this_room": 28
       },
       {
        "label": "Subtitulada Tradicional",
@@ -9741,7 +9529,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65575678",
@@ -9780,11 +9568,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 62
       }
      ],
-     "read_from_session": "65608185",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65655535",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9824,15 +9612,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 62
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 54
       }
      ],
      "read_from_session": "65595236",
@@ -9845,11 +9625,11 @@
      "room": "Sala 5",
      "auditorium_name": "Sala 5",
      "screen_number": 5,
-     "seats_total": 306,
-     "seats_regular": 294,
+     "seats_total": 308,
+     "seats_regular": 296,
      "wheelchair_spaces": 12,
      "companion_spaces": 0,
-     "blank_cells": 73,
+     "blank_cells": 71,
      "rows": 14,
      "row_names": [
       "A",
@@ -9877,7 +9657,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 96
+       "showtimes_in_this_room": 88
       }
      ],
      "read_from_session": "65483381",
@@ -9921,7 +9701,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65630648",
@@ -9961,10 +9741,18 @@
         "traditional"
        ],
        "showtimes_in_this_room": 28
+      },
+      {
+       "label": "3D Español",
+       "type": [
+        "v3d",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 7
       }
      ],
-     "read_from_session": "65608200",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65655553",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -9999,7 +9787,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 46
+       "showtimes_in_this_room": 35
       }
      ],
      "read_from_session": "36640758",
@@ -10038,10 +9826,10 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 26
+       "showtimes_in_this_room": 18
       }
      ],
-     "read_from_session": "65608043",
+     "read_from_session": "65655497",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -10088,11 +9876,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 97
+       "showtimes_in_this_room": 94
       }
      ],
-     "read_from_session": "65487004",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65665539",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -10128,7 +9916,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65645489",
@@ -10168,7 +9956,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65645598",
@@ -10208,11 +9996,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 31
       }
      ],
-     "read_from_session": "65645566",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65655862",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -10250,7 +10038,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65645585",
@@ -10292,7 +10080,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65645519",
@@ -10332,7 +10120,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "35978076",
@@ -10372,11 +10160,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 57
       }
      ],
-     "read_from_session": "65387724",
-     "read_for_day": "2026-09-20",
+     "read_from_session": "65655856",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -10421,7 +10209,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 37
+       "showtimes_in_this_room": 28
       }
      ],
      "read_from_session": "65386933",
@@ -10465,18 +10253,10 @@
         "traditional"
        ],
        "showtimes_in_this_room": 24
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 1
       }
      ],
-     "read_from_session": "65641352",
-     "read_for_day": "2026-09-13",
+     "read_from_session": "65673320",
+     "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -10510,7 +10290,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 31
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65641245",
@@ -10550,7 +10330,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 19
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Subtitulada Tradicional",
@@ -10558,10 +10338,10 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 6
+       "showtimes_in_this_room": 4
       }
      ],
-     "read_from_session": "65641339",
+     "read_from_session": "65641333",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -10601,7 +10381,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 68
+       "showtimes_in_this_room": 57
       }
      ],
      "read_from_session": "65488456",
@@ -10644,10 +10424,18 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 17
+      },
+      {
+       "label": "Subtitulada Tradicional",
+       "type": [
+        "lang_sub",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 1
       }
      ],
-     "read_from_session": "65641333",
+     "read_from_session": "65641339",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -10681,15 +10469,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 40
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 32
       }
      ],
      "read_from_session": "65239938",
@@ -10729,7 +10509,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65641315",
@@ -10773,15 +10553,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 25
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 4
+       "showtimes_in_this_room": 19
       }
      ],
      "read_from_session": "65357142",
@@ -10814,24 +10586,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Subtitulada",
-       "type": [
-        "premium",
-        "lang_sub"
-       ],
-       "showtimes_in_this_room": 21
-      },
-      {
        "label": "Premium Español",
        "type": [
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 12
+       "showtimes_in_this_room": 9
+      },
+      {
+       "label": "Premium Subtitulada",
+       "type": [
+        "premium",
+        "lang_sub"
+       ],
+       "showtimes_in_this_room": 2
       }
      ],
-     "read_from_session": "65605253",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65656309",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -10864,7 +10636,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 23
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Premium Subtitulada",
@@ -10872,7 +10644,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 11
+       "showtimes_in_this_room": 9
       }
      ],
      "read_from_session": "65605453",
@@ -10913,7 +10685,7 @@
         "dolby_atmos",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 39
+       "showtimes_in_this_room": 37
       },
       {
        "label": "Premium Subtitulada",
@@ -10921,7 +10693,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 9
       },
       {
        "label": "Premium Español",
@@ -10965,24 +10737,33 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 28
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 14
+       "showtimes_in_this_room": 24
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 19
+      },
+      {
+       "label": "Premium 3D Español",
+       "type": [
+        "premium",
+        "v3d",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 7
       }
      ],
-     "read_from_session": "65309492",
-     "read_for_day": "2026-10-04",
+     "read_from_session": "65674013",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -11019,7 +10800,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65605342",
@@ -11060,7 +10841,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65605280",
@@ -11101,15 +10882,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 23
-      },
-      {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 5
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65605435",
@@ -11147,7 +10920,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 22
       },
       {
        "label": "Premium Subtitulada",
@@ -11155,7 +10928,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 19
+       "showtimes_in_this_room": 14
       }
      ],
      "read_from_session": "65572120",
@@ -11193,7 +10966,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 10
       },
       {
        "label": "Premium Español",
@@ -11201,7 +10974,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 12
+       "showtimes_in_this_room": 9
       }
      ],
      "read_from_session": "65605364",
@@ -11239,7 +11012,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 35
+       "showtimes_in_this_room": 36
       },
       {
        "label": "Premium Subtitulada",
@@ -11247,11 +11020,11 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 12
+       "showtimes_in_this_room": 7
       }
      ],
-     "read_from_session": "65332700",
-     "read_for_day": "2026-09-23",
+     "read_from_session": "65673723",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -11295,7 +11068,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 21
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Premium Español",
@@ -11303,7 +11076,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 6
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "65598592",
@@ -11345,7 +11118,7 @@
         "premium",
         "lang_es"
        ],
-       "showtimes_in_this_room": 21
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Premium Subtitulada",
@@ -11353,7 +11126,7 @@
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 7
+       "showtimes_in_this_room": 4
       }
      ],
      "read_from_session": "65630732",
@@ -11401,8 +11174,8 @@
        "showtimes_in_this_room": 73
       }
      ],
-     "read_from_session": "65492031",
-     "read_for_day": "2026-09-30",
+     "read_from_session": "65671980",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -11432,24 +11205,24 @@
      "max_tickets_per_order": 6,
      "formats_run_here": [
       {
-       "label": "Premium Español",
-       "type": [
-        "premium",
-        "lang_es"
-       ],
-       "showtimes_in_this_room": 31
-      },
-      {
        "label": "Premium Subtitulada",
        "type": [
         "premium",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 2
+       "showtimes_in_this_room": 35
+      },
+      {
+       "label": "Premium Español",
+       "type": [
+        "premium",
+        "lang_es"
+       ],
+       "showtimes_in_this_room": 22
       }
      ],
-     "read_from_session": "65630712",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65666899",
+     "read_for_day": "2026-09-30",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -11498,7 +11271,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 72
+       "showtimes_in_this_room": 62
       },
       {
        "label": "Infinity Vision Español",
@@ -11553,7 +11326,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 59
+       "showtimes_in_this_room": 51
       }
      ],
      "read_from_session": "65581497",
@@ -11595,7 +11368,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65608399",
@@ -11635,7 +11408,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65631738",
@@ -11672,7 +11445,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65631729",
@@ -11710,7 +11483,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65631701",
@@ -11750,7 +11523,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 22
+       "showtimes_in_this_room": 16
       }
      ],
      "read_from_session": "65608348",
@@ -11791,7 +11564,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 24
+       "showtimes_in_this_room": 16
       }
      ],
      "read_from_session": "65608462",
@@ -11834,15 +11607,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 23
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65631672",
@@ -11882,7 +11647,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 31
+       "showtimes_in_this_room": 24
       }
      ],
      "read_from_session": "65404405",
@@ -11923,7 +11688,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65608485",
@@ -11962,7 +11727,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65631667",
@@ -12002,7 +11767,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 9
       }
      ],
      "read_from_session": "65608522",
@@ -12042,7 +11807,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65631670",
@@ -12055,7 +11820,7 @@
   },
   "83": {
    "name": "San Esteban",
-   "room_count": 10,
+   "room_count": 11,
    "rooms": [
     {
      "room": "Sala 1",
@@ -12093,11 +11858,56 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 95
+       "showtimes_in_this_room": 83
       }
      ],
      "read_from_session": "65486553",
      "read_for_day": "2026-09-30",
+     "name_agrees_with_page": true,
+     "source": "cinemex_sessions_rooms",
+     "confidence": "measured"
+    },
+    {
+     "room": "Sala 2",
+     "auditorium_name": "Sala 2",
+     "screen_number": 2,
+     "seats_total": 263,
+     "seats_regular": 260,
+     "wheelchair_spaces": 3,
+     "companion_spaces": 0,
+     "blank_cells": 115,
+     "rows": 14,
+     "row_names": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N"
+     ],
+     "spacer_rows_in_layout": 0,
+     "assigned_seating": true,
+     "max_tickets_per_order": 6,
+     "formats_run_here": [
+      {
+       "label": "Español Tradicional",
+       "type": [
+        "lang_es",
+        "traditional"
+       ],
+       "showtimes_in_this_room": 1
+      }
+     ],
+     "read_from_session": "65667632",
+     "read_for_day": "2026-12-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -12133,7 +11943,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 35
+       "showtimes_in_this_room": 24
       }
      ],
      "read_from_session": "65645000",
@@ -12173,7 +11983,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65644960",
@@ -12213,7 +12023,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65644931",
@@ -12253,7 +12063,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 37
+       "showtimes_in_this_room": 26
       }
      ],
      "read_from_session": "65390508",
@@ -12291,7 +12101,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 39
+       "showtimes_in_this_room": 31
       }
      ],
      "read_from_session": "65238707",
@@ -12332,10 +12142,10 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 22
       }
      ],
-     "read_from_session": "65645016",
+     "read_from_session": "65644909",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -12371,11 +12181,11 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 28
+       "showtimes_in_this_room": 57
       }
      ],
-     "read_from_session": "65644798",
-     "read_for_day": "2026-09-15",
+     "read_from_session": "65664003",
+     "read_for_day": "2026-12-16",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
      "confidence": "measured"
@@ -12414,7 +12224,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 21
       }
      ],
      "read_from_session": "65644898",
@@ -12453,10 +12263,10 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 20
       }
      ],
-     "read_from_session": "65645046",
+     "read_from_session": "65644968",
      "read_for_day": "2026-09-15",
      "name_agrees_with_page": true,
      "source": "cinemex_sessions_rooms",
@@ -12506,7 +12316,7 @@
         "dolby_atmos",
         "lang_sub"
        ],
-       "showtimes_in_this_room": 40
+       "showtimes_in_this_room": 36
       },
       {
        "label": "Dolby Atmos Infinity Vision Español",
@@ -12523,7 +12333,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 12
+       "showtimes_in_this_room": 10
       },
       {
        "label": "Subtitulada Tradicional",
@@ -12531,7 +12341,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 11
+       "showtimes_in_this_room": 9
       },
       {
        "label": "Dolby Atmos Infinity Vision Subtitulada",
@@ -12548,7 +12358,7 @@
         "dolby_atmos",
         "lang_es"
        ],
-       "showtimes_in_this_room": 6
+       "showtimes_in_this_room": 5
       }
      ],
      "read_from_session": "65407686",
@@ -12591,7 +12401,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 32
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65611992",
@@ -12604,9 +12414,9 @@
      "room": "Sala 3",
      "auditorium_name": "Sala 3",
      "screen_number": 3,
-     "seats_total": 145,
-     "seats_regular": 143,
-     "wheelchair_spaces": 2,
+     "seats_total": 77,
+     "seats_regular": 77,
+     "wheelchair_spaces": 0,
      "companion_spaces": 0,
      "blank_cells": 35,
      "rows": 10,
@@ -12632,7 +12442,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 27
+       "showtimes_in_this_room": 18
       }
      ],
      "read_from_session": "65612079",
@@ -12672,7 +12482,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 33
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65623445",
@@ -12712,7 +12522,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 29
+       "showtimes_in_this_room": 20
       }
      ],
      "read_from_session": "65612051",
@@ -12749,15 +12559,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 41
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 3
+       "showtimes_in_this_room": 34
       }
      ],
      "read_from_session": "65242905",
@@ -12794,15 +12596,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 30
-      },
-      {
-       "label": "Subtitulada Tradicional",
-       "type": [
-        "lang_sub",
-        "traditional"
-       ],
-       "showtimes_in_this_room": 1
+       "showtimes_in_this_room": 23
       }
      ],
      "read_from_session": "65612033",
@@ -12840,7 +12634,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 20
+       "showtimes_in_this_room": 14
       },
       {
        "label": "Subtitulada Tradicional",
@@ -12848,7 +12642,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 16
+       "showtimes_in_this_room": 12
       }
      ],
      "read_from_session": "65461559",
@@ -12886,7 +12680,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 31
+       "showtimes_in_this_room": 22
       }
      ],
      "read_from_session": "65611942",
@@ -12924,7 +12718,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 26
+       "showtimes_in_this_room": 18
       },
       {
        "label": "Subtitulada Tradicional",
@@ -12932,7 +12726,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 2
+       "showtimes_in_this_room": 1
       }
      ],
      "read_from_session": "65564624",
@@ -12970,7 +12764,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 34
+       "showtimes_in_this_room": 25
       },
       {
        "label": "Subtitulada Tradicional",
@@ -12978,7 +12772,7 @@
         "lang_sub",
         "traditional"
        ],
-       "showtimes_in_this_room": 17
+       "showtimes_in_this_room": 16
       }
      ],
      "read_from_session": "65244070",
@@ -13026,7 +12820,7 @@
         "lang_es",
         "traditional"
        ],
-       "showtimes_in_this_room": 71
+       "showtimes_in_this_room": 61
       }
      ],
      "read_from_session": "65590045",

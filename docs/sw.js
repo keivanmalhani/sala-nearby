@@ -18,7 +18,7 @@
 // from the cached shell first and he sees the previous build for one more launch -- which
 // is exactly what happened while this change was being tested: the page on screen was two
 // edits behind the file on disk.
-const V = "sala-v26";
+const V = "sala-v28";
 const SHELL = V + "-shell";
 const LIB = V + "-lib";
 const TILES = V + "-tiles";

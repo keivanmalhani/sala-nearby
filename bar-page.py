@@ -15,7 +15,16 @@ directly underneath a paragraph containing those exact words. The evidence has t
 it does not have to be on the screen twice. It stays in the BAR table below, where the
 guard reads it, and the paragraph above the list is the venue's own words about it.
 
-Seven of forty-two. Nothing is written for the other thirty-five: a venue with no drinks
+NOT WHERE THE CHAIN ALREADY ANSWERS IT. Cinemex publishes a real drinks list for nine of
+its own cinemas -- Topo Chico Hard Seltzer brought to your seat, with prices -- and the
+sheet already draws that as its own section. Printing "Drinks: Bar on site" above a
+priced bar menu is the app telling him something he can already read two inches lower, so
+the row stands down wherever that section exists. What is left is the half no chain
+publishes: the independents and the cultural venues, which is where his own audit is the
+only source there is.
+
+Seven of forty-two before that check, fewer after. Nothing is written for the other
+thirty-five: a venue with no drinks
 row is a venue whose write-up does not mention a drink, which is a weaker claim than "no
 bar" and is the only one the audit can support.
 """
@@ -71,7 +80,8 @@ const SHOWS=""" % rows,
 
 swap("""    ${v.proj ? `<dt>Projection</dt><dd>${esc(v.proj)}</dd>` : ""}""",
      """    ${v.proj ? `<dt>Projection</dt><dd>${esc(v.proj)}</dd>` : ""}
-    ${BAR[v.name] ? `<dt>Drinks</dt><dd>Bar on site</dd>` : ""}""",
+    ${BAR[v.name] && !(live && (det(live.id) || {}).bar)
+      ? `<dt>Drinks</dt><dd>Bar on site</dd>` : ""}""",
      "the Drinks row on the venue sheet")
 
 open(PAGE, "w", encoding="utf-8").write(s)

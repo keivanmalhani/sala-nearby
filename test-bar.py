@@ -74,7 +74,19 @@ print("\nsection 3 -- the page does not make the stronger claim it cannot suppor
 check("nothing on the page says a venue has no bar",
       "No bar" not in SRC and "no bar on site" not in SRC.lower())
 check("the drinks row only ever appears with a quote behind it",
-      SRC.count("<dt>Drinks</dt>") == 1 and "BAR[v.name] ?" in SRC)
+      SRC.count("<dt>Drinks</dt>") == 1 and "BAR[v.name] &&" in SRC)
+
+# AND IT STANDS DOWN WHERE THE CHAIN ALREADY ANSWERS IT. Cinemex publishes a priced drinks
+# list for nine of its own cinemas and the sheet draws that as its own section, so a
+# "Drinks: Bar on site" line above it would be the app repeating itself two inches higher.
+D = json.load(open(os.path.join(ROOT, "docs", "detail.json"), encoding="utf-8"))
+withbar = {i for i, v in D["ven"].items() if v.get("bar")}
+check("the chain really does publish a bar for some cinemas, or this guard is moot",
+      len(withbar) > 0)
+check("the row is suppressed wherever that section exists",
+      "!(live && (det(live.id) || {}).bar)" in SRC)
+print("  (%d cinemas carry a bar section from Cinemex; the audit table has %d venues)"
+      % (len(withbar), len(table)))
 
 print("\nsection 4 -- and none of this was true at %s, so the checks can fail" % BASELINE)
 check("the baseline has no BAR table", "const BAR={" not in BEFORE)

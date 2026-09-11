@@ -13,8 +13,9 @@ screen with no browser bars, and works with no signal after the first launch.
 - **Showtimes** for 35 venues within 9 km, filterable by day and by any combination of
   "starting soon", subtitled-not-dubbed, IMAX, Atmos and Platino. The chips stack, so
   "subtitled IMAX" is a thing you can ask for, and the combination is remembered between
-  launches -- across the payload it is 7,762 dubbed showings against 3,335 subtitled, so
-  the default in this city is against you and re-tapping it every time was the wrong
+  launches -- on the 11 September pull it is 6,999 dubbed showings against 3,442 subtitled,
+  and the ratio has held at roughly two to one on every pull so far, so the default in this
+  city is against you and re-tapping it every time was the wrong
   shape. "Starting soon" is deliberately not remembered. Every time links straight to the
   cinema's own checkout, which is always current even when the listing here is not.
 - **Map** of 42 venues, coloured by what kind of room they are, with walking distance from
@@ -34,6 +35,28 @@ screen with no browser bars, and works with no signal after the first launch.
   The audit did not go with it: the screen sizes, the projection, the sound and the note
   saying which of those was verified rather than assumed all live on each cinema's own
   sheet now, which is where somebody is actually asking the question.
+- **The day rail starts today.** The showtimes are a snapshot baked into the page, and the
+  page is opened on later days than the one it was built on. Until 11 September the rail led
+  with whatever day the payload was pulled on, so a two-day-old build put two days that were
+  over ahead of Today, and tapping one listed showtimes that had already finished with
+  nothing on the row to say so. It offers days that have not been and gone now, and opens on
+  the first of them. If the whole payload is in the past it hands back the full list rather
+  than an empty rail, because an empty rail says less than a stale one.
+- **Find a film by its director or its genre.** The search box read the title and the
+  original title only, so "nolan" returned nothing while La Odisea played at twenty-five
+  cinemas and "terror" returned nothing on a board carrying four horror films. Cinemex
+  truncates director names at a fixed width -- their pull says "Christopher Nola" -- and
+  `director-truncation.py` restores the longer spelling this project already published,
+  which is the only repair it makes. One field is still cut off mid-word at the source and
+  is left that way rather than filled in with a name nobody read.
+- **Whether there is a bar.** Seven of the forty-two venues serve a drink and the audit
+  already said so in prose that nothing on screen could reach. There is no snack or drink
+  menu to be had -- `candybar` is false on all seventy CDMX Cinemex sites and their own
+  dulceria page is a 404 -- so this is the only part of that request the data supports. The
+  classification is a local model reading the write-ups, and every answer had to come back
+  with a verbatim quote that gets checked against the source before it ships: `bar.py` and
+  `test-bar.py`. A venue with no Drinks row is one whose audit does not mention a drink,
+  which is a weaker claim than "no bar", and the page does not make the stronger one.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has
@@ -74,8 +97,13 @@ loads -- and then measures it: `tools/offline-check.mjs` loads the app once with
 **clears the browser's own HTTP cache**, cuts the network and reloads. That clear is what
 makes it a test rather than a restatement; without it an offline reload can be served
 entirely out of the disk cache and every assertion passes on an app that would fail on the
-Metro. After the fix, one visit is enough: 1,318 showings, 454 prices, 407 posters, 33
-typefaces and the map, with the network off and the browser cache empty.
+Metro. After the fix, one visit is enough: the whole day's listing, every price, every
+poster, all 33 typefaces and the map, with the network off and the browser cache empty.
+
+It used to assert numbers -- at least 30 cinemas, at least 100 prices -- and those were
+facts about 9 September rather than about caching, so the run went red on the calendar the
+moment the payload rolled to a day with 29. It takes the same reading with a signal and
+without one now and requires them to be equal, which is the question it was always asking.
 
 ## How it is built
 
@@ -131,7 +159,21 @@ To refresh them:
     /opt/homebrew/bin/python3 refresh-showtimes.py             # write the Cinemex half
     /opt/homebrew/bin/python3 refresh-cineteca.py              # add the three sedes
     /opt/homebrew/bin/python3 refresh-posters.py               # posters for any new films
+    /opt/homebrew/bin/python3 director-truncation.py           # names Cinemex cut off
+    /opt/homebrew/bin/python3 build-rooms.py                   # only if test-detail goes red
     # then bump the cache name in docs/sw.js, or an installed phone keeps the old build
+
+`director-truncation.py` runs every time, and it runs against the page it is replacing: it
+restores a director name only where the new value is a strict PREFIX of the one already
+published, which is the exact signature of a fixed-width truncation and nothing else. The
+two-chain merge repairs those names too, but only while both chains happen to be showing the
+same film -- Cineteca showed La Odisea on 9 September and not on the 11th, and "Christopher
+Nolan" silently became "Christopher Nola" again.
+
+`build-rooms.py` is 287 calls and about seven minutes, so it is not part of every refresh.
+Run it when `test-detail.py` reports a session whose room name is missing from that cinema's
+room table, which happens when a film opens in an auditorium that had nothing on it last
+time.
 
 `refresh-cineteca.py` runs the film merge itself as its last step, because it is the only
 point in the chain where both chains are on the page at once -- `refresh-showtimes.py`

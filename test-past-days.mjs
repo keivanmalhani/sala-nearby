@@ -89,7 +89,26 @@ check("   ... and the page no longer does", !SRC.includes("const idxs = [...have
 check("the baseline has no isPast", !/function isPast\(/.test(BEFORE));
 
 console.log("\nsection 2 -- two days into the snapshot, the old rule offers dead days");
-const F = at("2026-09-11T15:30:00");
+// THE CLOCK IS MOVED, NOT THE PAYLOAD. The first version stubbed 11 September, which was
+// two days into the snapshot on the day it was written -- and then the payload was
+// refreshed, day 0 became today, and every check below went green for the wrong reason:
+// there were no past days left to offer. The defect is "the page is opened later than it
+// was built", so the clock is computed from the payload's own first day and the situation
+// is reproduced whatever is in the file.
+const DAY0 = JSON.parse(PAYLOAD.slice("const SHOWS=".length).replace(/;$/, "")).days[0];
+const plusDays = (iso, n) => new Date(+new Date(iso + "T12:00:00") + n * 86400000)
+  .toISOString().slice(0, 10);
+/** A date the payload skips. Every pull here has gaps in its tail -- advance sales are a
+ *  handful of dates weeks out -- so the day before one of the last ones is absent. */
+function skipped(days) {
+  const have = new Set(days);
+  for (let i = days.length - 1; i > 0; i--) {
+    const d = plusDays(days[i], -1);
+    if (!have.has(d)) return d;
+  }
+  throw new Error("this payload has no gap in it, so section 3 cannot be run");
+}
+const F = at(plusDays(DAY0, 2) + "T15:30:00");
 const { DAYS } = F;
 const oldI = F.oldIdxs(), newI = F.liveDayIdxs();
 const past = oldI.filter(i => F.isPast(DAYS[i]));
@@ -113,22 +132,21 @@ const openNew = (() => {
 check("with today in the payload both rules agree, because this is not that bug",
       openOld === openNew && F.isToday(DAYS[openNew]));
 
-// Where they diverge: a day the snapshot skips. This payload has nothing on 13 October
-// and a showing on the 14th, so `findIndex(isToday)` is -1 and the old rule's fallback --
-// day 0 -- is the oldest day in the file, five weeks gone.
-const H = at("2026-10-13T12:00:00");
+// Where they diverge: a day the snapshot skips, so `findIndex(isToday)` is -1 and the old
+// rule's fallback -- day 0 -- is the oldest day in the file, weeks gone.
+const H = at(skipped(F.DAYS) + "T12:00:00");
 const hLive = H.liveDayIdxs();
 const hOld = (() => { const t = H.DAYS.findIndex(H.isToday); return t >= 0 ? t : 0; })();
 const hNew = hLive.includes(H.DAYS.findIndex(H.isToday))
   ? H.DAYS.findIndex(H.isToday) : (hLive.length ? hLive[0] : 0);
 console.log(`  (on a day the payload skips: old opens ${H.DAYS[hOld]}, new opens ${H.DAYS[hNew]})`);
-check("on a day the payload skips, the old rule opens five weeks in the past",
+check("on a day the payload skips, the old rule opens weeks in the past",
       hOld === 0 && H.isPast(H.DAYS[hOld]));
 check("   ... and the new one opens on the next day that still has something on it",
       !H.isPast(H.DAYS[hNew]) && hNew !== hOld);
 
 console.log("\nsection 4 -- the fallback, because an empty rail says less than a stale one");
-const G = at("2026-11-01T12:00:00");
+const G = at(plusDays(F.DAYS[F.DAYS.length - 1], 1) + "T12:00:00");
 check("with every day in the past the rail is not empty", G.liveDayIdxs().length > 0);
 check("   ... and it is the whole list, unfiltered", G.liveDayIdxs().join() === G.oldIdxs().join());
 

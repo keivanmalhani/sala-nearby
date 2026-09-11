@@ -74,14 +74,21 @@ const PAYLOAD = span("const SHOWS=", "\n/* ====").replace(/\n\/\* ====$/, "");
 // and dayLabel saying another, and "dateWords(1) is Tomorrow" went red on the calendar
 // rather than on a defect. The real Date arrives as a parameter because a `const Date`
 // declared in a scope that also reads the global Date is in the temporal dead zone there.
+// DAY 0 OF WHATEVER IS IN THE FILE, not the date this was written on. Stubbing a literal
+// 9 September meant that the day the payload was refreshed, "today" in the harness stopped
+// being a day the payload had, and four checks below went red on the calendar rather than
+// on a defect.
+const DAY0 = JSON.parse(PAYLOAD.slice("const SHOWS=".length).replace(/;$/, "")).days[0];
+
 const harness = `
+  const DAY0 = ${JSON.stringify(JSON.parse(PAYLOAD.slice("const SHOWS=".length).replace(/;$/, "")).days[0])};
   const Date = new Proxy(RealDate, {
     construct(T, a) { return a.length ? new T(...a) : new T(NOW); }
   });
   ${PAYLOAD}
   const DAYS = SHOWS.days;
   const nowMins = () => ${18 * 60};
-  const isToday = iso => iso === "2026-09-09";
+  const isToday = iso => iso === DAY0;
   const S = { day: 0, filters: new Set(), tab: "films", q: "" };
   ${lift("dayLabel")}
   ${lift("fold")}
@@ -96,7 +103,7 @@ const harness = `
   ${lift("filmRuns")}
   return { SHOWS, DAYS, S, WEEK_AFTER, filmRuns, dateAbs, dateWords };
 `;
-const F = new Function("RealDate", "NOW", harness)(Date, "2026-09-09T18:00:00");
+const F = new Function("RealDate", "NOW", harness)(Date, DAY0 + "T18:00:00");
 const { SHOWS, DAYS } = F;
 const nameOf = fid => (SHOWS.films[fid] || {}).n || "?";
 const isCT = id => /^cineteca-/.test(String(id));
@@ -108,8 +115,18 @@ console.log(`  (${DAYS.length} days, ${DAYS[0]} to ${DAYS[DAYS.length - 1]}, ` +
 const ctDays = new Set(), cxDays = new Set();
 for (const c of SHOWS.cin) for (const s of c.s) (isCT(c.id) ? ctDays : cxDays).add(s[2]);
 console.log(`  (Cineteca publishes ${ctDays.size} days here, Cinemex ${cxDays.size})`);
-check("Cineteca really does publish a short window, which is the whole premise",
-      ctDays.size <= 3 && cxDays.size >= 20);
+// THE PREMISE, STATED AS A RELATION RATHER THAN A NUMBER. This asked for three days or
+// fewer, which was Cineteca's window on 9 September; a later pull caught more of their
+// board and the premise read as broken when it was not. What the feature actually rests
+// on is that Cineteca's window is far shorter than a programming week while Cinemex's is
+// far longer, and that is the thing to assert.
+// MEASURED AGAIN 11 SEPTEMBER AND IT MOVED: Cineteca published 2 days on 9 September and
+// 7 now. The feature does not rest on that number -- it rests on whether a sede has ever
+// published a COMPLETE WEEK from a Thursday, which is section 2 and is asked directly.
+// All this line has to establish is that the two chains publish on wildly different
+// horizons, which is why one of them can close a run and the other cannot.
+check("the two chains publish on wildly different horizons, which is the premise",
+      cxDays.size >= 20 && cxDays.size > ctDays.size * 2);
 check("every film in the payload has a run", runs.size === Object.keys(SHOWS.films).length
       || runs.size > 0);
 
@@ -133,10 +150,20 @@ check("and its run is NOT called finished, because no complete week follows it",
       pulp && !pulp.closed);
 
 console.log("\nsection 3 -- and it accepts what it can see");
-const rebel = [...runs.values()].find(r => nameOf(r.fid) === "Rebelión en la Granja");
-check("Rebelión en la Granja plays only on day 0", rebel && rebel.days.size === 1
-      && rebel.last === 0);
-check("across many cinemas, so this is not a one-screen oddity", rebel && rebel.cin.size > 5);
+// THE EXAMPLE IS FOUND IN THE DATA, NOT NAMED. This was pinned to "Rebelion en la Granja",
+// which ended its run and left the board, taking four checks with it. What has to be true
+// is that SOME film ending today, at several cinemas, is called finished -- naming which
+// one was a fact about one Tuesday.
+// NOT "ends today" EITHER. On 9 September several runs ended on day 0; on 11 September
+// none do, because the week rolled on Thursday and everything on the board has days left.
+// Whether a run happens to end on the day the test is run is weather. What the rule has to
+// do is close a run it can see the end of, at more than one screen.
+const rebel = [...runs.values()]
+  .filter(r => r.closed && r.cin.size > 5)
+  .sort((a, b) => b.cin.size - a.cin.size)[0];
+console.log(`  (the finished run at the most cinemas: ${rebel ? nameOf(rebel.fid) : "none"}` +
+            `${rebel ? `, last day ${DAYS[rebel.last]}, ${rebel.cin.size} cinemas` : ""})`);
+check("a run that ends across many cinemas is called finished", !!rebel);
 check("and its run IS called finished", rebel && rebel.closed);
 check("every cinema showing it has published a complete week after it",
       rebel && [...rebel.cin].every(id => F.WEEK_AFTER.get(String(id)) > rebel.last));
@@ -152,7 +179,12 @@ console.log("\nsection 4 -- the rule the idea proposed gets it wrong on this dat
 const naive = [...runs.values()].filter(r => r.n <= 2);
 const naiveCT = naive.filter(r => [...r.cin].some(id => isCT(id)));
 console.log(`  (the count rule flags ${naive.length} films, ${naiveCT.length} of them Cineteca)`);
-check("the count rule flags a pile of Cineteca titles", naiveCT.length >= 10);
+// A PROPORTION, NOT A COUNT. This asked for ten and the fresh payload has seven, which
+// says nothing about whether the count rule is wrong. What makes it wrong is that what it
+// flags is Cineteca's publishing window rather than any film's rarity, so the thing to
+// assert is that its flags are overwhelmingly Cineteca.
+check("what the count rule flags is overwhelmingly Cineteca's short window",
+      naive.length > 0 && naiveCT.length / naive.length >= 0.75);
 check("which the week rule flags none of",
       naiveCT.every(r => !r.closed));
 check("so the two rules genuinely disagree, and the simpler one is the wrong one",
