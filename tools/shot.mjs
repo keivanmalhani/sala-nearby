@@ -11,8 +11,11 @@
 // nothing was wrong with the page. Two hours of that is two hours of chasing a bug that
 // does not exist. CDP's Emulation.setDeviceMetricsOverride sets the LAYOUT viewport, which
 // is the number the CSS actually responds to, and `mobile:true` is what makes
-// `env(safe-area-inset-*)`, touch media queries and the visual viewport behave as they do
-// on the phone.
+// `env(safe-area-inset-*)` and the visual viewport behave as they do on the phone.
+//
+// Touch is a SEPARATE call and this tool did not make it until 11 September, so
+// `(pointer:coarse)` did not match and every tap-target rule in the app was inert in every
+// screenshot taken here. See the comment beside the call.
 //
 // It launches its own headless Chrome on port 9333 with a throwaway profile. It never
 // touches the automation Chrome on 9222 -- that one holds his logged-in tabs and a
@@ -119,6 +122,17 @@ try {
     width, height, deviceScaleFactor: dsf, mobile: true,
     screenWidth: width, screenHeight: height,
   });
+  // AND THE TOUCH HALF, which setDeviceMetricsOverride does NOT do. The header above used
+  // to claim `mobile: true` makes touch media queries behave as on the phone. It does not:
+  // `matchMedia("(pointer:coarse)").matches` read FALSE with only that call, so the whole
+  // `@media (pointer:coarse)` block -- every enlarged tap target in the app -- was inert in
+  // every screenshot this tool has ever taken. Measured: the free-screens pill came back
+  // 38 high instead of 44, the icon buttons 38 instead of 44 and the tab bar 54 instead of
+  // 56, which is exactly the shape of a regression that never happened. Anyone checking a
+  // tap target through this tool would have read the desktop size and believed it.
+  await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+  await send("Emulation.setEmitTouchEventsForMouse", { enabled: true, configuration: "mobile" })
+    .catch(() => {});   // not on every build; the media query comes from the call above
   if (scheme) {
     await send("Emulation.setEmulatedMedia", {
       features: [{ name: "prefers-color-scheme", value: scheme }],

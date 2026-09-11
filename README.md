@@ -42,6 +42,13 @@ screen with no browser bars, and works with no signal after the first launch.
   nothing on the row to say so. It offers days that have not been and gone now, and opens on
   the first of them. If the whole payload is in the past it hands back the full list rather
   than an empty rail, because an empty rail says less than a stale one.
+- **It says when its own listing has run out.** The rail dropping past days covers a page
+  that is a few days old. A page that is months old has nothing left to offer, so the rail
+  hands back the full list and every time on the screen has already happened. On the day
+  after the last date the payload holds, both lists carry one sentence saying so, naming
+  that date and saying that tapping a time still opens the cinema's own page, which is
+  live. It does not appear a day early -- the last day is a day he can still buy a ticket
+  for -- and it is not on the map, because the venues do not go stale with the showtimes.
 - **Find a film by its director or its genre.** The search box read the title and the
   original title only, so "nolan" returned nothing while La Odisea played at twenty-five
   cinemas and "terror" returned nothing on a board carrying four horror films. Cinemex

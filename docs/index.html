@@ -415,6 +415,11 @@ button.pw:active{opacity:.72}
   font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;
   text-transform:uppercase;color:var(--c-free);font-weight:600}
 .mapfree:active{background:var(--tap)}
+.stale{display:block;margin:0 0 10px;padding:10px 12px;border-radius:10px;
+  border:1px solid var(--c-free);background:var(--surface);color:var(--ink);
+  font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:13px;line-height:1.45;text-transform:none;letter-spacing:0}
+.stale b{display:block;color:var(--c-free);margin-bottom:2px}
 /* An empty action bar is 25 pixels of padding and a rule under a heading. A sheet that
    has no single action -- fifteen venues have fifteen -- should not draw one. */
 .sheet .go:empty{display:none}
@@ -1022,6 +1027,21 @@ function isPast(iso) {
   const d = new Date(iso + "T12:00:00"), t = new Date(); t.setHours(12, 0, 0, 0);
   return +d < +t;
 }
+/** Has this whole snapshot run out? True only when there is not one day left in it that
+ *  has not already been and gone -- which is the case liveDayIdxs falls back on, and the
+ *  one case where everything the app draws is a description of the past. */
+function listingIsDead() {
+  return DAYS.length > 0 && DAYS.every(isPast);
+}
+/** The sentence, or nothing at all. Built here rather than at each call site so the two
+ *  tabs cannot drift into saying it differently. */
+function staleLine() {
+  if (!listingIsDead()) return "";
+  return `<div class="stale"><b>These showtimes have run out.</b>
+    The last day this page holds is ${esc(dateAbs(DAYS.length - 1))}, and everything on it
+    has already played. Tapping a time still opens the cinema's own page, which is live.</div>`;
+}
+
 /** The day indices worth putting on the rail: every day the payload has a session on,
  *  minus the ones that have already been and gone.
  *
@@ -1362,7 +1382,7 @@ function renderShows() {
     : `<div class="empty"><b>Nothing matches</b>
        Try another day, or tap Everything to clear the filters.</div>`);
   let lbl = countLabel(shown, S.filters.has("sub") ? unlisted : 0);
-  $("scount").innerHTML = `<b>${shown}</b> ${esc(lbl)}${
+  $("scount").innerHTML = staleLine() + `<b>${shown}</b> ${esc(lbl)}${
     S.q ? ` matching &ldquo;${esc(S.q)}&rdquo;` : ""} &middot; ${withAny} ${
     withAny === 1 ? "cinema" : "cinemas"}`;
   /* THE GUIDE TAB IS GONE, so this no longer points at it. It said "Cinepolis and the
@@ -1408,9 +1428,9 @@ function renderFilms() {
   const later = S.filters.has("now") ? []
     : [...runs.values()].filter(r => r.first > S.day)
         .sort((a, b) => a.first - b.first || b.n - a.n);
-  $("fcount").innerHTML = S.q
+  $("fcount").innerHTML = staleLine() + (S.q
     ? `<b>${rows.length}</b> ${esc(nf)} matching &ldquo;${esc(S.q)}&rdquo; ${isToday(dayIso) ? "today" : "that day"}`
-    : `<b>${rows.length}</b> ${esc(nf)} playing ${isToday(dayIso) ? "today" : "that day"} near you`;
+    : `<b>${rows.length}</b> ${esc(nf)} playing ${isToday(dayIso) ? "today" : "that day"} near you`);
   if (later.length) $("fcount").innerHTML +=
     ` &middot; ${later.length} more start${later.length === 1 ? "s" : ""} later`;
   $("filmlist").innerHTML = rows.map(r => {
