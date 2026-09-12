@@ -79,6 +79,9 @@ screen with no browser bars, and works with no signal after the first launch.
   a player, so the app still works with no signal. Cinemex sends these for almost every
   film; Cineteca sends none, and its sheets show nothing rather than an empty line.
   `refresh-posters.py --meta` refreshes them without touching an image.
+- **Four tabs.** Movies, Showtimes, Map and Settings, left to right, opening on Movies.
+  Settings holds Appearance (System, Light, Dark), where distances are measured from,
+  and when the showtimes were read. The theme is no longer a button in the header.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has
