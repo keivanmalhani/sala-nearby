@@ -118,11 +118,17 @@ def km(a, b):
     return 2 * R * math.asin(math.sqrt(h))
 
 
+# What Cinemex's cache said about the last answer, so an empty one can say whether it was
+# a stored reply. Filled by get(); read by movies_for().
+LAST = {}
+
+
 def get(path, tries=3, cap=12_000_000):
     for i in range(tries):
         try:
             req = urllib.request.Request(BASE + path.lstrip("/"), headers=HEADERS)
             with urllib.request.urlopen(req, timeout=45, context=CTX) as r:
+                LAST["cache"], LAST["age"] = r.headers.get("X-Cache"), r.headers.get("Age")
                 return json.loads(r.read(cap))
         except urllib.error.HTTPError as e:
             if e.code in (429, 502, 503, 504) and i < tries - 1:
@@ -146,15 +152,23 @@ def movies_for(cid, waits=(4, 10)):
     12 September 2026, the first scheduled run on GitHub's machines: Portal Centro came back
     with nothing, the empty-cinema guard refused the whole refresh, and from the laptop a few
     minutes later the same endpoint gave 20 movies and 340 sessions for a cinema whose status
-    read open. A 200 with an empty list is sometimes a bad moment, not a closed cinema. It is
-    asked twice more, after 4 and then 10 seconds; if it is still empty the guard in check()
-    decides, exactly as before."""
+    read open. It is asked twice more, after 4 and then 10 seconds; if it is still empty the
+    guard in check() decides, exactly as before.
+
+    THE RETRIES CARRY A THROWAWAY QUERY VALUE, because the second run refused the same way
+    with plain retries. Cinemex answers through a shared cache (Cache-Control s-maxage=2700,
+    X-Cache HIT, Age in the thousands of seconds), so asking the identical URL again gets the
+    identical stored reply for up to 45 minutes, and a runner whose cache node holds an empty
+    one can never see past it. `?_=<n>` is a new cache key: measured from the laptop, it
+    answers X-Cache MISS, Age 0, and the same 340 sessions as the plain URL."""
     movies = get("cinemas/%s/movies" % cid)
     for wait in waits:
         if has_sessions(movies):
             break
+        print("  cinema %s answered with no showtimes (X-Cache %s, Age %s), asking past the cache"
+              % (cid, LAST.get("cache") or "-", LAST.get("age") or "-"))
         time.sleep(wait)
-        movies = get("cinemas/%s/movies" % cid)
+        movies = get("cinemas/%s/movies?_=%d" % (cid, time.time_ns()))
     return movies
 
 
