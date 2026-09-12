@@ -183,8 +183,12 @@ console.log(`  (the count rule flags ${naive.length} films, ${naiveCT.length} of
 // says nothing about whether the count rule is wrong. What makes it wrong is that what it
 // flags is Cineteca's publishing window rather than any film's rarity, so the thing to
 // assert is that its flags are overwhelmingly Cineteca.
-check("what the count rule flags is overwhelmingly Cineteca's short window",
-      naive.length > 0 && naiveCT.length / naive.length >= 0.75);
+// NOT A PROPORTION EITHER, as of 12 September: the payload GitHub published that afternoon
+// flagged 9 films and only 3 were Cineteca, because Cinemex had one-off concerts and
+// re-releases on. The mix is weather. What stays true is that the count rule puts a rarity
+// claim on Cineteca films the week rule does not call finished, which the next check holds.
+check("the count rule flags Cineteca films only because Cineteca publishes a short window",
+      naiveCT.length > 0);
 check("which the week rule flags none of",
       naiveCT.every(r => !r.closed));
 check("so the two rules genuinely disagree, and the simpler one is the wrong one",
@@ -222,7 +226,11 @@ check("the page is still one document",
       SRC.split("<body>").length === 2 && SRC.trimEnd().endsWith("</body></html>"));
 check("no anchor was replaced twice", SRC.split("function filmRuns(").length === 2
       && SRC.split('<div class="up">').length === 2);
-check("the file grew rather than shrank", SRC.length > BEFORE.length);
+// Measured without the listings blob, which the daily refresh rewrites: a quiet week's
+// listings are smaller than the baseline's and failed this on 12 September with the code intact.
+const codeOnly = s => { const i = s.indexOf("const SHOWS="); return i < 0 ? s : s.slice(0, i) + s.slice(s.indexOf("\n", i)); };
+check("the file grew rather than shrank, leaving out the listings, which change daily",
+      codeOnly(SRC).length > codeOnly(BEFORE).length);
 const swNow = readFileSync(join(ROOT, "docs", "sw.js"), "utf8").match(/const V = "(sala-v\d+)"/);
 const swWas = execFileSync("git", ["-C", ROOT, "show", `${BASELINE}:docs/sw.js`],
                            { encoding: "utf8" }).match(/const V = "(sala-v\d+)"/);

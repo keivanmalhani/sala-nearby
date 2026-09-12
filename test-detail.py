@@ -88,7 +88,11 @@ for c in S["cin"]:
         if r in rooms:
             ok += 1
 print("  (%d of %d sessions carrying a room name find it)" % (ok, tot))
-check("every session's room name is a key in that cinema's room table", ok == tot and tot > 10000)
+# The floor is a share of the payload, not a fixed count. It was tot > 10000, which a normal
+# day's listings fall under: on 12 September 9,081 of 9,081 joined and this still failed.
+every = sum(len(c["s"]) for c in S["cin"])
+check("every session's room name is a key in that cinema's room table (%d of %d sessions named)"
+      % (tot, every), ok == tot and tot > every * 0.8)
 seats = [r[1] for v in D["ven"].values() for r in (v.get("rooms") or {}).values()]
 check("every room has a seat count", all(x is not None for x in seats) and len(seats) == 287)
 nowheel = sum(1 for v in D["ven"].values() for r in (v.get("rooms") or {}).values() if not r[2])

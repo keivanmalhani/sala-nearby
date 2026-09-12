@@ -133,7 +133,16 @@ check("the page is still one document",
 check("no anchor was replaced twice",
       NOW.count("function freeSheet(") == 1 and NOW.count('class="mapfree') == 1
       and NOW.count("const CAT = v =>") == 1)
-check("the file grew rather than shrank", len(NOW) > len(BEFORE))
+# Measured without the listings blob. The daily refresh rewrites `const SHOWS=` and a quiet
+# week's listings are tens of KB smaller than the baseline's, which failed this on 12 September
+# with the feature code untouched.
+def code_only(s):
+    i = s.find("const SHOWS=")
+    return s if i < 0 else s[:i] + s[s.find("\n", i):]
+
+
+check("the file grew rather than shrank, leaving out the listings, which change daily",
+      len(code_only(NOW)) > len(code_only(BEFORE)))
 
 sw_now = open(os.path.join(ROOT, "docs", "sw.js"), encoding="utf-8").read()
 v_now = re.search(r'const V = "(sala-v\d+)"', sw_now).group(1)
