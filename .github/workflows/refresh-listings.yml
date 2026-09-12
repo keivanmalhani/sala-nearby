@@ -1,0 +1,99 @@
+# Refresh the listings every morning, without the laptop.
+#
+# Ask 1 on 12 September was "swipe down to refresh". A pull can only find something newer
+# if the listings on the site get newer, and until now they only did when somebody ran the
+# refresh scripts by hand on one laptop. This runs the same scripts, in the order the README
+# gives, on GitHub's machines, and publishes only if every source that feeds the page came
+# back sound.
+#
+# macOS, because refresh-posters.py resizes with sips. Public repositories run it for free.
+name: Refresh the listings
+
+on:
+  schedule:
+    - cron: "17 11 * * *"   # 05:17 in Mexico City, before anyone is picking a film
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: refresh-listings
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # director-truncation.py reads the previous page out of git
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # Each fetch refuses to write a payload materially worse than the published one, so a
+      # blocked or broken source leaves the page as it was. continue-on-error keeps a site
+      # that turns a hosted runner away from failing the job every morning.
+      - name: Showtimes from Cinemex
+        id: cinemex
+        continue-on-error: true
+        run: python3 refresh-showtimes.py
+
+      # refresh-showtimes.py writes a Cinemex-only page and refresh-cineteca.py merges
+      # Cineteca back in. Publishing after the first alone would drop a whole chain, so
+      # nothing is published unless both succeed.
+      - name: Cineteca, merged back in
+        id: cineteca
+        if: steps.cinemex.outcome == 'success'
+        continue-on-error: true
+        run: python3 refresh-cineteca.py
+
+      - name: Director names Cinemex cuts off
+        id: directors
+        if: steps.cinemex.outcome == 'success' && steps.cineteca.outcome == 'success'
+        continue-on-error: true
+        env:
+          SALA_PREV_REF: HEAD
+        run: python3 director-truncation.py
+
+      - name: Posters for new films, and cast, country and trailers
+        if: steps.directors.outcome == 'success'
+        continue-on-error: true
+        run: python3 refresh-posters.py --missing
+
+      - name: Publish if the listings changed
+        id: publish
+        if: steps.directors.outcome == 'success'
+        run: |
+          if git diff --quiet -- docs; then
+            echo "The listings did not change."
+            exit 0
+          fi
+          python3 bump-sw.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git commit -m "Listings refreshed $(date -u +%Y-%m-%d)"
+          git push
+          echo "published=yes" >> "$GITHUB_OUTPUT"
+
+      - name: Ask Pages to rebuild
+        if: steps.publish.outputs.published == 'yes'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
+
+      - name: Say what happened
+        if: always()
+        run: |
+          {
+            echo "Cinemex: ${{ steps.cinemex.outcome }}"
+            echo "Cineteca: ${{ steps.cineteca.outcome }}"
+            echo "Directors: ${{ steps.directors.outcome }}"
+            echo "Published: ${{ steps.publish.outputs.published || 'no' }}"
+          } >> "$GITHUB_STEP_SUMMARY"

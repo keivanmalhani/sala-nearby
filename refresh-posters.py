@@ -4,6 +4,7 @@
     /opt/homebrew/bin/python3 refresh-posters.py          # fetch, verify, write
     /opt/homebrew/bin/python3 refresh-posters.py --check  # verify what is on disk, write nothing
     /opt/homebrew/bin/python3 refresh-posters.py --meta   # refresh cast, country, year, trailer; touch no image
+    /opt/homebrew/bin/python3 refresh-posters.py --missing  # fetch only films with no poster yet
 
 WHERE THE POSTERS COME FROM. Cinemex's own API, the same one cinemex.com calls:
 
@@ -222,6 +223,16 @@ def main():
         if url.startswith("//"):
             url = "https:" + url
         dest = os.path.join(OUT, "%s.jpg" % fid)
+        # --missing: a poster already on disk that is still a real picture is kept as it is.
+        # The daily scheduled refresh uses this, because re-encoding forty-odd unchanged
+        # posters every morning would rewrite them all in git for no visible difference.
+        if "--missing" in sys.argv and verify(dest)[0]:
+            wh = jpeg_size(dest)
+            manifest[fid] = {"w": wh[0], "h": wh[1],
+                             "url": "https:" + m["url"] if m.get("url", "").startswith("//") else m.get("url", ""),
+                             **film_meta(m)}
+            got += 1
+            continue
         try:
             r = urllib.request.urlopen(urllib.request.Request(url, headers=HEADERS), timeout=40)
             body = r.read()
