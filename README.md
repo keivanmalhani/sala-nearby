@@ -74,6 +74,11 @@ screen with no browser bars, and works with no signal after the first launch.
   does not invent a new number, and the rows and the chip share one function so they
   cannot disagree. It measures from wherever the distances do, so it follows the
   location button, and like Starting soon it is not remembered between launches.
+- **Cast, country and trailer.** A film's sheet says where it is from, when, and who is
+  in it, and has a Trailer button beside Walk to that opens YouTube rather than embedding
+  a player, so the app still works with no signal. Cinemex sends these for almost every
+  film; Cineteca sends none, and its sheets show nothing rather than an empty line.
+  `refresh-posters.py --meta` refreshes them without touching an image.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has

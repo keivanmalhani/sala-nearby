@@ -3,6 +3,7 @@
 
     /opt/homebrew/bin/python3 refresh-posters.py          # fetch, verify, write
     /opt/homebrew/bin/python3 refresh-posters.py --check  # verify what is on disk, write nothing
+    /opt/homebrew/bin/python3 refresh-posters.py --meta   # refresh cast, country, year, trailer; touch no image
 
 WHERE THE POSTERS COME FROM. Cinemex's own API, the same one cinemex.com calls:
 
@@ -56,6 +57,30 @@ HEADERS = {
 # pixel, a square logo and an error page rendered as an image all fail at least one.
 MIN_W, MIN_H = 120, 160
 MAX_RATIO, MIN_RATIO = 0.90, 0.50          # width / height
+
+YOUTUBE = re.compile(r"^https?://(?:www\.|m\.)?(?:youtube\.com/watch\?(?:\S*&)?v=|youtu\.be/)([\w-]{11})(?![\w-])")
+
+
+def film_meta(m):
+    """What the film sheet shows besides the poster, out of the same API record.
+
+    Idea 8 in docs/IDEAS-2026-09-09.md: Cinemex sends cast, country, year and a trailer for
+    nearly every film, and the app threw all of it away. Normalised here so the page can
+    trust it. A trailer is kept only when it is a real YouTube video id -- one record on
+    12 September sent the bare "https://www.youtube.com/", which would have been a button
+    that opens YouTube's home page -- and the cast is cut to the first four names, because
+    the longest record that day was 631 characters and a sheet is not a credits roll."""
+    info = m.get("info") or {}
+    t = YOUTUBE.match((info.get("trailer") or "").strip())
+    cast = [c.strip() for c in (info.get("cast") or "").split(",") if c.strip()]
+    year = str(info.get("year") or "").strip()
+    return {
+        "syn": info.get("sinopsis") or "",
+        "cast": ", ".join(cast[:4]),
+        "country": (info.get("country") or "").strip(),
+        "year": year if re.fullmatch(r"\d{4}", year) else "",
+        "trailer": "https://www.youtube.com/watch?v=" + t.group(1) if t else "",
+    }
 
 
 def jpeg_size(path):
@@ -146,6 +171,25 @@ def main():
         print("\n%d of %d posters are real pictures" % (len(films) - len(bad), len(films)))
         return 1 if bad else 0
 
+    if "--meta" in sys.argv:
+        # THE WORDS WITHOUT THE PICTURES. Re-downloading and re-encoding every poster to
+        # refresh a cast list rewrites forty-odd JPEGs in git for no visible change, so this
+        # updates the text of the entries already on disk and touches no image. The fetch
+        # happens before the file is opened for writing, so a failed fetch leaves it alone.
+        path = os.path.join(OUT, "index.json")
+        manifest = json.load(open(path, encoding="utf-8"))
+        movies = {str(m["id"]): m for m in fetch_movies()}
+        done = 0
+        for fid, entry in manifest.items():
+            if fid in movies:
+                entry.update(film_meta(movies[fid]))
+                done += 1
+        json.dump(manifest, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1, sort_keys=True)
+        have = lambda k: sum(1 for e in manifest.values() if e.get(k))
+        print("updated %d of %d entries: cast %d, country %d, year %d, trailer %d"
+              % (done, len(manifest), have("cast"), have("country"), have("year"), have("trailer")))
+        return 0 if done else 1
+
     movies = {str(m["id"]): m for m in fetch_movies()}
     print("the API knows %d films; the page lists %d" % (len(movies), len(films)))
 
@@ -204,7 +248,7 @@ def main():
         manifest[fid] = {
             "w": jpeg_size(dest)[0], "h": jpeg_size(dest)[1],
             "url": "https:" + m["url"] if m.get("url", "").startswith("//") else m.get("url", ""),
-            "syn": (m.get("info") or {}).get("sinopsis") or "",
+            **film_meta(m),
         }
         print("  %-8s %-46s %s" % (fid, (m.get("name") or "")[:46], why))
 

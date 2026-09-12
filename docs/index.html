@@ -458,6 +458,10 @@ button.pw:active{opacity:.72}
 .sheet .go{display:flex;gap:8px;padding:12px 18px;flex:none;border-bottom:1px solid var(--line-2)}
 .sheet .go a{flex:1;min-height:44px;display:grid;place-items:center;border-radius:12px;font-size:14px;font-weight:700;border:1px solid var(--line);color:var(--ink);text-align:center;padding:0 6px}
 .sheet .go a.pri{background:var(--lamp);border-color:var(--lamp);color:var(--lamp-ink)}
+/* Trailer takes its own width and leaves the rest of the bar to Walk to, whose label is the
+   long one. */
+.sheet .go a.yt{flex:none;padding:0 18px}
+.sheet .made{color:var(--ink-2);font-size:12.5px;line-height:1.45;margin-top:5px}
 .sheet .body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:20px}
 .sheet .plain{font-family:Newsreader,Georgia,serif;font-size:16.5px;line-height:1.55;padding:14px 18px 4px;margin:0;color:var(--ink)}
 .sec{padding:14px 18px;border-top:1px solid var(--line-2)}
@@ -2091,6 +2095,14 @@ function filmSheet(fid) {
     if (list.length) rows.push([c, list.sort((a, b) => a[3] - b[3])]);
   }
   const syn = (POSTERS[fid] || {}).syn || "";
+  // CAST, COUNTRY, YEAR AND TRAILER, from the same file as the synopsis and missing the same
+  // way: a Cineteca title, or a sheet opened before the file lands, shows none of it rather
+  // than an empty line. The trailer is checked again here, so a bad manifest cannot draw a
+  // button that goes anywhere but a YouTube video.
+  const meta = POSTERS[fid] || {};
+  const made = [[meta.country, meta.year].filter(Boolean).join(", "),
+                meta.cast ? "with " + meta.cast : ""].filter(Boolean).join(" · ");
+  const yt = /^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{11}$/.test(meta.trailer || "") ? meta.trailer : "";
   // The backdrop only exists where there is artwork to make one from. A film with no
   // poster gets the header it always had rather than an empty tinted box, which is the
   // same rule the placeholder initials already follow.
@@ -2101,6 +2113,7 @@ function filmSheet(fid) {
       ${posterCard(fid, f.n, "", false)}
       <div><h2>${esc(f.n)}</h2>${starBtn(fid)}<div class="addr">${
     esc([f.o && f.o !== f.n ? f.o : "", f.d, f.r, (f.g || []).join(", "), f.dir].filter(Boolean).join(" · "))}</div>
+      ${made ? `<div class="made">${esc(made)}</div>` : ""}
       ${syn ? `<div class="syn" id="syn"><p>${esc(syn)}</p>${
         // The toggle is only offered where there is something hidden to reveal. Three
         // lines at 13px over this column is about 150 characters; below that the clamp
@@ -2115,6 +2128,9 @@ function filmSheet(fid) {
         >Walk to ${esc(rows[0][0].n)} &middot; ${
           esc(far(km(origin, { lat: rows[0][0].lat, lng: rows[0][0].lng })).d)}</a>`
     : "";
+  // A link out, never an embed: a player breaks the no-signal promise and puts a third party
+  // on a page that has none. It sits in the bar beside Walk to.
+  const trailer = yt ? `<a class="yt" href="${esc(yt)}" target="_blank" rel="noopener">Trailer</a>` : "";
   const body = `<div class="sec"><h3>${rows.length} ${
     rows.length === 1 ? "cinema" : "cinemas"}, nearest first</h3></div>` + rows.map(([c, list]) => {
     const F = far(km(origin, { lat: c.lat, lng: c.lng }));
@@ -2193,7 +2209,7 @@ function filmSheet(fid) {
         ([k, txt, conf]) => `<dt>${esc(k)}</dt><dd>${esc(txt)} ${srcTag(conf)}</dd>`
       ).join("") + `</dl></div>`
     : "";
-  openSheet(head, go, body + gloss, "var(--c-big)");
+  openSheet(head, go + trailer, body + gloss, "var(--c-big)");
 }
 
 function venueSheet(i) {
