@@ -1274,6 +1274,13 @@ function countLabel(n, unlisted) {
   const head = (w ? w + " " + noun : noun) + (S.filters.has("walk") ? " within walking distance" : "");
   return S.filters.has("now") ? head + " starting in the next four hours" : head;
 }
+/** Where "near" is measured from, said as what it is: the park until the location button
+ *  is on, the phone after. With Walkable on it says walking distance, as the Showtimes
+ *  line does, so the two tabs never make different claims about one filter. */
+function whereFrom() {
+  const who = liveLoc ? "you" : HOME.name;
+  return S.filters.has("walk") ? "within walking distance of " + who : "near " + who;
+}
 
 /** How many showings each chip would leave on the selected day if it were tapped ON --
  *  so, the active set PLUS that chip -- along with `active`, what the set finds as it
@@ -1480,7 +1487,7 @@ function renderFilms() {
         .sort((a, b) => a.first - b.first || b.n - a.n);
   $("fcount").innerHTML = staleLine() + (S.q
     ? `<b>${rows.length}</b> ${esc(nf)} matching &ldquo;${esc(S.q)}&rdquo; ${isToday(dayIso) ? "today" : "that day"}`
-    : `<b>${rows.length}</b> ${esc(nf)} playing ${isToday(dayIso) ? "today" : "that day"} near you`);
+    : `<b>${rows.length}</b> ${esc(nf)} playing ${isToday(dayIso) ? "today" : "that day"} ${esc(whereFrom())}`);
   if (later.length) $("fcount").innerHTML +=
     ` &middot; ${later.length} more start${later.length === 1 ? "s" : ""} later`;
   $("filmlist").innerHTML = rows.map(r => {

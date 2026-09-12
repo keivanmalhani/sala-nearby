@@ -77,7 +77,7 @@ function world(src, SHOWS) {
     localStorage: memStore(),
     S: { day: 0, filters: new Set(), tab: "shows", q: "", starred: new Set() },
     DAYS: ["2026-09-13"], SHOWS,
-    origin: { ...PARK },
+    origin: { ...PARK }, HOME: { ...PARK }, liveLoc: false,
     isToday: () => false, nowMins: () => 0, matchesQuery: () => true, isStarred: () => false,
     esc: x => String(x),
   };
@@ -88,7 +88,7 @@ function world(src, SHOWS) {
     lift(src, "walkable"), lift(src, "km"), lift(src, "travelMin"), lift(src, "far"),
     liftConst(src, "FILTER_OPTS"), liftConst(src, "FILTER_WORD"), liftConst(src, "WORD_ORDER"),
     lift(src, "passesOne"), lift(src, "passes"), lift(src, "filterCounts"),
-    lift(src, "saveFilters"), lift(src, "filterWords"), lift(src, "countLabel"),
+    lift(src, "saveFilters"), lift(src, "filterWords"), lift(src, "countLabel"), lift(src, "whereFrom"),
   ].join("\n"), ctx);
   return ctx;
 }
@@ -154,6 +154,19 @@ paired('the count line reads "subtitled showing within walking distance"', src =
   const soon = w.countLabel(3, 0);
   return one === "subtitled showing within walking distance"
       && soon === "subtitled showings within walking distance starting in the next four hours";
+});
+
+paired('the Films line names the origin it measures from, and says walking with Walkable on', src => {
+  const w = world(src, tiny());
+  const park = w.whereFrom();
+  w.S.filters.add("walk");
+  const parkWalk = w.whereFrom();
+  w.liveLoc = true;
+  const here = w.whereFrom();
+  return park === "near Parque Mexico" && parkWalk === "within walking distance of Parque Mexico"
+      && here === "within walking distance of you"
+      && lift(src, "renderFilms").includes('"that day"} ${esc(whereFrom())}`')
+      && !lift(src, "renderFilms").includes("near you");
 });
 
 console.log("5. every caller hands the cinema through");
