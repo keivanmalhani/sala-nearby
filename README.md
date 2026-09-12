@@ -82,6 +82,10 @@ screen with no browser bars, and works with no signal after the first launch.
 - **Four tabs.** Movies, Showtimes, Map and Settings, left to right, opening on Movies.
   Settings holds Appearance (System, Light, Dark), where distances are measured from,
   and when the showtimes were read. The theme is no longer a button in the header.
+- **Colour that means something.** Distances and walking times are blue everywhere;
+  IMAX, Atmos, Platino and Subtitled are solid badges and Premium, Standard, 3D and
+  Dubbed are outlines; amber is what is selected. Every small text colour clears WCAG's
+  4.5:1 in both themes, which light mode's grey labels and amber did not before.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has
