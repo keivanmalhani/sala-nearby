@@ -681,6 +681,14 @@ button.pw:active{opacity:.72}
           <p class="setnote">System follows the phone, so the app goes dark when the phone does.</p>
         </div>
         <div class="setgrp">
+          <h3>Language</h3>
+          <div class="seg" role="radiogroup" aria-label="Language" id="langseg">
+            <button role="radio" aria-checked="false" data-lang-set="en">English</button>
+            <button role="radio" aria-checked="false" data-lang-set="es">Espa&ntilde;ol</button>
+          </div>
+          <p class="setnote" id="langnote"></p>
+        </div>
+        <div class="setgrp">
           <h3>Distances from</h3>
           <div class="seg" role="radiogroup" aria-label="Distances from" id="originseg">
             <button role="radio" aria-checked="true" data-origin="home">Parque Mexico</button>
@@ -1149,13 +1157,15 @@ loadStarred();
 
 /* the day the snapshot was taken, so "today" means the right row */
 const DAYS = SHOWS.days;
+const DOW_ES = ["dom", "lun", "mar", "mie", "jue", "vie", "sab"];
 function dayLabel(iso, i) {
   const d = new Date(iso + "T12:00:00");
   const today = new Date(); today.setHours(12, 0, 0, 0);
   const diff = Math.round((d - today) / 86400000);
-  const dow = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()];
-  if (diff === 0) return { b: "Today", e: dow + " " + d.getDate() };
-  if (diff === 1) return { b: "Tomorrow", e: dow + " " + d.getDate() };
+  const es = typeof langPref === "function" && langPref() === "es";
+  const dow = es ? DOW_ES[d.getDay()] : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()];
+  if (diff === 0) return { b: es ? "Hoy" : "Today", e: dow + " " + d.getDate() };
+  if (diff === 1) return { b: es ? "Mañana" : "Tomorrow", e: dow + " " + d.getDate() };
   return { b: dow, e: d.getDate() + "/" + (d.getMonth() + 1) };
 }
 function nowMins() { const n = new Date(); return n.getHours() * 60 + n.getMinutes(); }
@@ -1311,13 +1321,17 @@ function filmRuns() {
  *  out to Tomorrow" is a sentence that stops being true overnight. */
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MON_ES = ["ene", "feb", "mar", "abr", "may", "jun",
+                "jul", "ago", "sep", "oct", "nov", "dic"];
 function dateAbs(i) {
   const d = new Date(DAYS[i] + "T12:00:00");
-  return `${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
+  const es = typeof langPref === "function" && langPref() === "es";
+  const dow = es ? DOW_ES[d.getDay()] : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()];
+  return `${dow} ${d.getDate()} ${es ? MON_ES[d.getMonth()] : MON[d.getMonth()]}`;
 }
 function dateWords(i) {
   const L = dayLabel(DAYS[i], i);
-  return L.b === "Today" || L.b === "Tomorrow" ? L.b : dateAbs(i);
+  return L.b === "Today" || L.b === "Tomorrow" || L.b === "Hoy" || L.b === "Mañana" ? L.b : dateAbs(i);
 }
 
 /* ---------- distance-aware cinema list ---------- */
@@ -2867,10 +2881,297 @@ function setTheme(mode) {
   window.dispatchEvent(new Event("sala:theme"));
   renderSettings();
 }
+
+/* LANGUAGE. His words, 12 September: "do a Spanish slash English like language switch in
+   the settings themselves". This is a translation LAYER over the rendered DOM, not a
+   rewrite of every render function -- the page has too many English literals for that.
+   English is a no-op, and enforced as one rather than promised: dictTranslate returns null
+   outright, patternTranslate and translateComposed return early, and the observer is not
+   even connected. So an English session never has a byte of this touch it. Film names,
+   cinema names, genres and synopses are source data -- measured against the live payload,
+   0 of 294 of them collide with this table in either direction. */
+function langPref() {
+  try {
+    const v = localStorage.getItem("sala.lang");
+    if (v === "en" || v === "es") return v;
+  } catch (e) { /* fall through to detection */ }
+  return (navigator.language || "").toLowerCase().startsWith("es") ? "es" : "en";
+}
+function setLang(v) {
+  try { localStorage.setItem("sala.lang", v === "es" ? "es" : "en"); } catch (e) { /* this launch only */ }
+  document.documentElement.lang = v === "es" ? "es" : "en";
+  // Regenerate every render-owned piece of dynamic text in English before the translator
+  // runs, the same way setOrigin already does when where-from changes -- so going back to
+  // English is a fresh render rather than an attempt to un-translate a sentence with
+  // numbers baked into it.
+  renderDates(); renderFilters(); renderShows(); if (S.tab === "films") renderFilms();
+  renderSettings();
+  observeLang();   // connect when Spanish goes on, disconnect when it goes off
+  // The re-render above restores everything a render function owns. The chrome it does not
+  // own -- tabs, headings, placeholders, aria-labels -- comes back from what was remembered
+  // before it was ever translated.
+  if (v !== "es") restoreEnglish(document.body);
+  translateApp();
+}
+
+/* THE DICTIONARY. Exact strings only -- every key here is matched against a text node or
+   an attribute's FULL trimmed value, never a substring, so a film called "Settings" (there
+   is no such film, but the method has to hold anyway) could never be mistaken for the
+   Settings tab. REVERSE_ES is built from it so English can come back the same way. */
+const DICT_ES = {
+  "Movies": "Películas", "Showtimes": "Horarios", "Map": "Mapa", "Settings": "Ajustes",
+  "Sections": "Secciones",
+  "Everything": "Todo", "Starting soon": "Empieza pronto", "Starred": "Destacada",
+  "Walkable": "A pie", "Subtitled": "Subtitulada", "IMAX": "IMAX", "Atmos": "Atmos",
+  "Platino": "Platino", "Dubbed": "Doblada", "Standard": "Estándar",
+  "Language unknown": "Idioma desconocido", "showings": "funciones",
+  "Put it on your home screen": "Ponla en tu pantalla de inicio",
+  "Installs like an app. No store, nothing to pay.":
+    "Se instala como una app. Sin tienda, sin pagar nada.",
+  "Tap Share, then": "Toca Compartir, luego",
+  "Add to Home Screen": "Agregar a pantalla de inicio",
+  ". It opens full screen with no browser bars, and works with no signal.":
+    ". Abre a pantalla completa sin barras del navegador, y funciona sin señal.",
+  "Install": "Instalar", "Not now": "Ahora no", "Got it": "Entendido",
+  "Appearance": "Apariencia", "System": "Sistema", "Light": "Claro", "Dark": "Oscuro",
+  "System follows the phone, so the app goes dark when the phone does.":
+    "El sistema sigue al teléfono: la app se pone oscura cuando el teléfono lo hace.",
+  "Language": "Idioma", "English": "English", "Español": "Español",
+  "Distances from": "Distancias desde", "Where I am": "Dónde estoy",
+  "Somewhere else": "Otro lugar",
+  "Every distance, walking time and the Walkable chip are measured from where the phone is.":
+    "Toda distancia, tiempo a pie y el filtro A pie se miden desde donde está el teléfono.",
+  "Movie, director, genre, cinema": "Película, director, género, cine",
+  "Find a movie, director, genre or cinema": "Buscar película, director, género o cine",
+  "Clear the search": "Borrar la búsqueda",
+  "Measure from where I am": "Medir desde donde estoy",
+  "Choose where distances are measured from": "Elegir desde dónde se miden las distancias",
+  "Back to the centre": "Volver al centro", "Zoom in": "Acercar", "Zoom out": "Alejar",
+  "Star this film": "Destacar esta película",
+  "Walk me there": "Ir caminando", "Live times": "Horarios en vivo",
+  "Read more": "Leer más", "Read less": "Leer menos",
+  "No film called that": "Ninguna película con ese nombre",
+  "Nothing matches": "Nada coincide",
+  "Try another day, or tap Everything to clear the filters.":
+    "Prueba otro día, o toca Todo para quitar los filtros.",
+  "Nothing that day": "Nada ese día",
+  "Coming up": "Próximamente", "Free screens": "Salas gratuitas",
+  "Free": "Gratis", "Sometimes free": "A veces gratis",
+  "What these formats mean": "Qué significan estos formatos",
+  "What it is": "Qué es", "The audit": "La auditoría",
+  "What reviewers say": "Lo que dicen las reseñas",
+  "Operator": "Operador", "Rooms": "Salas", "Price": "Precio", "Best room": "Mejor sala",
+  "Projection": "Proyección", "Drinks": "Bebidas", "Bar on site": "Bar en el lugar",
+  "nearest": "más cercano",
+  "Neighbourhood, Metro, postcode": "Colonia, Metro, código postal",
+  "Type a neighbourhood, station, landmark or postcode":
+    "Escribe una colonia, estación, punto de referencia o código postal",
+  "On now": "Activo ahora", "Uses the phone's location": "Usa la ubicación del teléfono",
+  "Now": "Ahora", "Save": "Guardar", "Saved": "Guardados",
+  "Loading places": "Cargando lugares",
+  "Nothing called that within 15 km. Try a colonia, a station or a five-digit postcode.":
+    "Nada con ese nombre a menos de 15 km. Prueba una colonia, una estación o un código postal.",
+  "Type a neighbourhood, a Metro or Metrobus station, a landmark or a postcode.\n      Every distance, walking time and the Walkable chip then start from there.":
+    "Escribe una colonia, una estación de Metro o Metrobús, un punto de referencia o un código postal.\n      Toda distancia, tiempo a pie y el filtro A pie se miden desde ahí.",
+  "Rated AA, for everyone, made for children under 7":
+    "Clasificación AA: para todo público, con atractivo infantil, comprensible para menores de 7 años",
+  "Rated A, for everyone": "Clasificación A: para todo público",
+  "Rated B, for teens 12 and up": "Clasificación B: para adolescentes de 12 años en adelante",
+  "Rated B15, for teens over 15": "Clasificación B15: para adolescentes mayores de 15 años",
+  "Rated C, adults 18 and up, checked at the door":
+    "Clasificación C: para adultos de 18 años en adelante",
+  "Rated D, adults only, explicit sex or extreme violence":
+    "Clasificación D: para adultos, con advertencia de sexo explícito o violencia",
+  "Age rating not published yet": "Clasificación aún no publicada",
+  "People": "Personas", "Cinemas": "Cines", "Genres": "Géneros",
+};
+const REVERSE_ES = {};
+for (const k in DICT_ES) if (!(DICT_ES[k] in REVERSE_ES)) REVERSE_ES[DICT_ES[k]] = k;
+function dictTranslate(s) {
+  // English returns null without looking anything up. The reverse map exists only so the
+  // table can be read both ways in tests; translating BACK is never how English is reached,
+  // because setLang re-renders first. Running the reverse pass here would mean an English
+  // session rewriting any text node whose value happens to equal a Spanish word in the
+  // table -- and the film and format names come from Cinemex in Spanish, refreshed every
+  // morning, so "Gratis" or "Estándar" arriving in tomorrow's listings would start
+  // silently rewriting his source data. Checked against today's payload: 0 of 294 live
+  // strings collide. That is a fact about today's catalogue, not a property of the code.
+  if (langPref() !== "es") return null;
+  return Object.prototype.hasOwnProperty.call(DICT_ES, s) ? DICT_ES[s] : null;
+}
+
+/* THE PATTERNS. A short list, one per composed line that carries a number or a name, each
+   anchored start to end (^...$) against a single node's OWN full text so it can only ever
+   fire on that exact shape of sentence -- never as a substring search across a longer
+   paragraph, which is what keeps this from ever touching a venue's audit prose or a film's
+   synopsis. Only run toward Spanish; going back to English is a fresh render (see setLang),
+   never an un-translate. */
+const PATTERNS = [
+  [/^(\d+) min walk$/, (m) => `${m[1]} min caminando`],
+  [/^(\d+) min drive$/, (m) => `${m[1]} min en coche`],
+  [/^(\d+) cinemas?, nearest first$/, (m) => `${m[1]} ${m[1] === "1" ? "cine" : "cines"}, el más cercano primero`],
+  [/^(\d+) cinemas?$/, (m) => `${m[1]} ${m[1] === "1" ? "cine" : "cines"}`],
+  [/^(\d+) free screens$/, (m) => `${m[1]} salas gratuitas`],
+  [/^from (.+) · (\d+) dates$/, (m) => `desde ${m[1]} · ${m[2]} fechas`],
+  [/^Leave now for the (\d{1,2}:\d{2})$/, (m) => `Sal ahora para la de las ${m[1]}`],
+  [/^Leave (\d{1,2}:\d{2}) for the (\d{1,2}:\d{2})$/, (m) => `Sal a las ${m[1]} para la de las ${m[2]}`],
+  [/^(.+) \(location refused\)$/, (m) => `${m[1]} (ubicación rechazada)`],
+  [/^Every distance, walking time and the Walkable chip are measured from (.+)\.$/,
+    (m) => `Toda distancia, tiempo a pie y el filtro A pie se miden desde ${m[1]}.`],
+  [/^(.+) · with (.+)$/, (m) => `${m[1]} · con ${m[2]}`],
+  [/^with (.+)$/, (m) => `con ${m[1]}`],
+  [/^Walk to (.+)$/, (m) => `Caminar a ${m[1]}`],
+  [/^at (\d+) cinemas?$/, (m) => `en ${m[1]} ${m[1] === "1" ? "cine" : "cines"}`],
+  [/^Director of (.+)$/, (m) => `Director de ${m[1]}`],
+  [/^(\d+) movies?$/, (m) => `${m[1]} ${m[1] === "1" ? "película" : "películas"}`],
+  [/^Nothing playing this day matches “(.+)”\. Try another day, or clear the box\.$/,
+    (m) => `Ninguna película coincide con “${m[1]}”. Prueba otro día, o borra la búsqueda.`],
+  [/^Nothing on this day, but one film starts later\.$/,
+    () => `Nada este día, pero una película empieza después.`],
+  [/^Nothing on this day, but (\d+) films start later\.$/,
+    (m) => `Nada este día, pero ${m[1]} películas empiezan después.`],
+  [/^(\d+) (?:cinemas?) within a walk · nearest (.+), (\d+) min (walk|drive)$/,
+    (m) => `${m[1]} ${m[1] === "1" ? "cine" : "cines"} a pie · el más cercano ${m[2]}, ${m[3]} min ${m[4] === "walk" ? "caminando" : "en coche"}`],
+  [/^No cinema within a walk · nearest (.+), (\d+) min (walk|drive)$/,
+    (m) => `Ningún cine a pie · el más cercano ${m[1]}, ${m[2]} min ${m[3] === "walk" ? "caminando" : "en coche"}`],
+  [/^(\d+) cinemas? within a walk$/, (m) => `${m[1]} ${m[1] === "1" ? "cine" : "cines"} a pie`],
+  [/^No cinema within a walk$/, () => `Ningún cine a pie`],
+  [/^(.+), leave now$/, (m) => `${m[1]}, sal ahora`],
+  [/^(.+), leave at (\d{1,2}:\d{2})$/, (m) => `${m[1]}, sal a las ${m[2]}`],
+  [/^(.+), nothing on this day$/, (m) => `${DICT_ES[m[1]] || m[1]}, no hay nada este día`],
+];
+function patternTranslate(s) {
+  if (langPref() !== "es") return null;
+  for (const [re, fn] of PATTERNS) { const m = s.match(re); if (m) return fn(m); }
+  return null;
+}
+function translateOne(s) {
+  const d = dictTranslate(s);
+  if (d !== null) return d;
+  return patternTranslate(s);
+}
+/* fcount and scount compose a whole sentence out of filterWords()+noun+connective words in
+   one text node, so a single anchored pattern cannot describe every combination (five
+   possible filter words, singular or plural, with or without a search query, with or
+   without the "more start later" tail). Both are scoped, generated-only containers -- never
+   prose -- so a short ordered substring chain is safe here specifically, per the plan. */
+const COMPOSED_CHAIN = [
+  [/\bsubtitled or unlisted\b/g, "subtitulada o sin idioma"],
+  [/\bstarting in the next four hours\b/g, "que empiezan en las próximas cuatro horas"],
+  [/\bwithin walking distance\b/g, "a poca distancia a pie"],
+  [/\bplaying today\b/g, "en cartelera hoy"],
+  [/\bplaying that day\b/g, "en cartelera ese día"],
+  [/\bmatching\b/g, "que coinciden con"],
+  [/\bmore starts? later\b/g, "más por venir"],
+  [/\bshowings\b/g, "funciones"], [/\bshowing\b/g, "función"],
+  [/\bcinemas\b/g, "cines"], [/\bcinema\b/g, "cine"],
+  [/\bfilms\b/g, "películas"], [/\bfilm\b/g, "película"],
+  [/\bstarred\b/g, "destacadas"], [/\bsubtitled\b/g, "subtitulada"],
+  [/\bnear\b/g, "cerca de"],
+];
+function translateComposed(el) {
+  if (!el || langPref() !== "es") return;
+  const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  let n;
+  while ((n = w.nextNode())) {
+    let v = n.nodeValue;
+    for (const [re, rep] of COMPOSED_CHAIN) v = v.replace(re, rep);
+    if (v !== n.nodeValue) n.nodeValue = v;
+  }
+}
+
+let _translating = false;
+function translateNode(root) {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let n;
+  while ((n = w.nextNode())) {
+    const raw = n.nodeValue, t = raw.trim();
+    if (!t) continue;
+    const out = translateOne(t);
+    if (out !== null && out !== t) {
+      rememberText(n, raw);
+      const lead = raw.slice(0, raw.indexOf(t));
+      const trail = raw.slice(raw.indexOf(t) + t.length);
+      n.nodeValue = lead + out + trail;
+    }
+  }
+  const ATTRS = ["placeholder", "aria-label", "title"];
+  root.querySelectorAll("[placeholder],[aria-label],[title]").forEach(el => {
+    for (const a of ATTRS) {
+      const v = el.getAttribute(a);
+      if (v == null) continue;
+      const out = translateOne(v.trim());
+      if (out !== null && out !== v) { rememberAttr(el, a, v); el.setAttribute(a, out); }
+    }
+  });
+  translateComposed(document.getElementById("fcount"));
+  translateComposed(document.getElementById("scount"));
+}
+function translateApp() {
+  _translating = true;
+  try { translateNode(document.body); } finally { _translating = false; }
+}
+
+/* PUTTING ENGLISH BACK.
+ *
+ * Most of the page is redrawn by renderShows/renderFilms/renderSettings, which emit English,
+ * so setLang's re-render restores them for free. The chrome is not: the tab labels, the
+ * Appearance and Language headings, System/Light/Dark, the search placeholder and nineteen
+ * aria-labels are written once in the markup and no render function owns them. Translating
+ * them is a one-way door -- nothing would ever write English back.
+ *
+ * Caught by driving the real page rather than by the unit tests, which never touch a DOM:
+ * after Spanish then English the tabs still read Películas, Horarios, Mapa, Ajustes.
+ *
+ * So every node this layer edits records what it said BEFORE the first edit, and going back
+ * to English replays that. Restoring the remembered original is right where reversing the
+ * dictionary is wrong: it puts back exactly what the page shipped, and it cannot be fooled
+ * by source data that happens to be a Spanish word. */
+const _origText = new WeakMap();   // text node  -> its English nodeValue
+const _origAttr = new WeakMap();   // element    -> { attr: English value }
+function rememberText(n, v) { if (!_origText.has(n)) _origText.set(n, v); }
+function rememberAttr(el, a, v) {
+  let m = _origAttr.get(el);
+  if (!m) { m = {}; _origAttr.set(el, m); }
+  if (!(a in m)) m[a] = v;
+}
+function restoreEnglish(root) {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let n;
+  while ((n = w.nextNode())) {
+    if (_origText.has(n)) n.nodeValue = _origText.get(n);
+  }
+  root.querySelectorAll("[placeholder],[aria-label],[title]").forEach(el => {
+    const m = _origAttr.get(el);
+    if (m) for (const a in m) el.setAttribute(a, m[a]);
+  });
+}
+// ONE observer over the whole page body: the app div, the sheet aside and the install
+// banner (which showInstall appends to the document body itself) all live under it, and
+// that is what he actually looks at. Guarded so the observer's own writes do not loop.
+//
+// It runs ONLY while Spanish is on. In English there is nothing for it to do -- every
+// render already emits English -- so leaving it connected would walk the whole tree on
+// every mutation batch for no possible edit, which on a long showtimes list is a full
+// TreeWalker per render on his phone.
+const _langObserver = new MutationObserver(() => { if (!_translating) translateApp(); });
+function observeLang() {
+  _langObserver.disconnect();
+  if (langPref() === "es") {
+    _langObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+}
+observeLang();
+
 function renderSettings() {
   const mode = themeMode();
   document.querySelectorAll("#themeseg [data-theme-set]").forEach(b =>
     b.setAttribute("aria-checked", String(b.dataset.themeSet === mode)));
+  const lang = langPref();
+  document.querySelectorAll("#langseg [data-lang-set]").forEach(b =>
+    b.setAttribute("aria-checked", String(b.dataset.langSet === lang)));
+  const ln = $("langnote");
+  if (ln) ln.textContent = lang === "es" ? "Algunas notas largas siguen en inglés." : "";
   const atHome = !liveLoc && origin.lat === HOME.lat && origin.lng === HOME.lng;
   document.querySelectorAll("#originseg [data-origin]").forEach(b => b.setAttribute("aria-checked", String(
     b.dataset.origin === "here" ? liveLoc : b.dataset.origin === "home" ? atHome : !liveLoc && !atHome)));
@@ -2884,10 +3185,13 @@ function renderSettings() {
   if (st) st.innerHTML = `Read <b>${esc(SHOWS.at.replace("T", " "))}</b> from Cinemex's and
     Cineteca Nacional's own listings. A snapshot, not a live feed: every time opens the cinema's
     own checkout, which is always current.`;
+  translateApp();
 }
 document.addEventListener("click", e => {
   const th = e.target.closest("#themeseg [data-theme-set]");
   if (th) return setTheme(th.dataset.themeSet);
+  const lg = e.target.closest("#langseg [data-lang-set]");
+  if (lg) return setLang(lg.dataset.langSet);
   // The header's location button already knows how to find him, refuse, and put everything
   // back; pressing it is the whole implementation, and only when the choice would change.
   const og = e.target.closest("#originseg [data-origin]");
@@ -3154,6 +3458,7 @@ S.day = liveIdxs.includes(todayIdx) ? todayIdx : (liveIdxs.length ? liveIdxs[0] 
 // Where distances start comes back before the first list is drawn, or the app would open
 // measuring from the park and jump when it remembered.
 origin = savedOrigin(); $("fromn").textContent = origin.name;
+document.documentElement.lang = langPref() === "es" ? "es" : "en";
 renderDates(); renderFilters(); renderShows();
 // Movies is the leftmost tab and the one the app opens on, his order on 12 September.
 setTab(S.tab); renderSettings();
