@@ -97,6 +97,17 @@ One request per cinema, 0.35 s between them, and only the cinemas inside the rad
 `refresh-showtimes.py --cached` re-uses the last raw pull so repeated analysis costs them
 nothing.
 
+## It answers through a shared cache, so asking again is not asking again
+
+Every answer carries `Cache-Control: max-age=900, public, s-maxage=2700`, `X-Cache` and `Age`.
+A reply the cache has stored is served to everyone for up to 45 minutes, empty ones included.
+On 12 September 2026 GitHub's runner got Portal Centro with no showtimes twice, three asks each
+time, while the laptop got 340: the runner's cache node held an empty reply (`X-Cache HIT`,
+`Age 2548`) and every retry of the same URL got it back. Any unused query value is a new cache
+key, so `cinemas/354/movies?_=<n>` answers `X-Cache MISS`, `Age 0`, from the origin.
+`movies_for()` uses that for its retries only; the first ask stays plain so an ordinary refresh
+still uses the cache.
+
 ## 4. The version in this file still works, and it is not the current one
 
 Measured 2026-09-09, same minute, same consumer key:
