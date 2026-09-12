@@ -146,7 +146,15 @@ try {
   // Page.loadEventFired is not enough on its own here: the fonts arrive from Google and
   // the boot splash fades on a timer, so a screenshot taken at load shows the splash.
   await sleep(settle);
-  if (js) await send("Runtime.evaluate", { expression: js, awaitPromise: true });
+  // A --js that throws used to vanish: the shot was taken of an untouched page and nothing
+  // said the setup never ran. It says so now, the same way --print does.
+  if (js) {
+    const r = await send("Runtime.evaluate", { expression: js, awaitPromise: true });
+    if (r.exceptionDetails) {
+      console.log("js: THREW " + ((r.exceptionDetails.exception && r.exceptionDetails.exception.description) || r.exceptionDetails.text));
+      code = 1;
+    }
+  }
   if (js) await sleep(600);
   if (printExpr) {
     const r = await send("Runtime.evaluate", { expression: printExpr, returnByValue: true, awaitPromise: true });

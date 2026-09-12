@@ -145,7 +145,28 @@ a{color:var(--lamp);text-decoration:none}
   padding-right:calc(env(safe-area-inset-right,0px) + 14px);
   background:var(--surface);border-bottom:1px solid var(--line);position:relative;z-index:30;
 }
-.top .from{flex:1;min-width:0}
+.top .from{flex:1;min-width:0;text-align:left;display:block;border-radius:10px;padding:3px 6px;margin:-3px -6px}
+.top .from:active{background:var(--tap)}
+/* The chevron is what says the name can be changed. Beam blue, because it is about place. */
+.top .from .n::after{content:"";display:inline-block;width:6px;height:6px;margin-left:9px;
+  border-right:1.8px solid var(--beam);border-bottom:1.8px solid var(--beam);transform:translateY(-3px) rotate(45deg)}
+.pksrch{margin-top:10px}
+.pksrch input,.pksave input{-webkit-appearance:none;appearance:none;width:100%;min-width:0;min-height:44px;border-radius:12px;
+  border:1px solid var(--line);background:var(--ground);color:var(--ink);font:inherit;font-size:16px;padding:0 13px}
+.pksrch input:focus,.pksave input:focus{outline:2px solid var(--beam);outline-offset:-1px;border-color:var(--beam)}
+.pkrow{display:block;width:100%;text-align:left;padding:11px 18px;border-bottom:1px solid var(--line-2);min-height:54px}
+.pkrow:active{background:var(--tap)}
+.pkrow.on{box-shadow:inset 3px 0 0 var(--beam)}
+.pkn{display:block;font-weight:700;font-size:15px;letter-spacing:-.01em;line-height:1.3}
+.pkn em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-left:8px;font-weight:500}
+.pkl{display:block;margin-top:3px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--beam);line-height:1.4}
+.pksaved{display:grid;grid-template-columns:1fr auto;align-items:stretch;border-bottom:1px solid var(--line-2)}
+.pksaved .pkrow{border-bottom:none}
+.pkx{padding:0 16px;font-size:12.5px;color:var(--ink-2);min-height:44px}
+.pksave{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 18px 12px;border-bottom:1px solid var(--line-2)}
+.pksave button{min-height:44px;border-radius:12px;background:var(--lamp);color:var(--lamp-ink);font-weight:700;padding:0 18px;font-size:14px}
+.note.pkhint{padding:12px 18px 0;margin:0}
+.note.pksrc{padding-bottom:18px;font-size:11px}
 .top .from .k{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block}
 .top .from .n{font-weight:700;font-size:17px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;line-height:1.2}
 .iconbtn{width:38px;height:38px;flex:none;border-radius:11px;display:grid;place-items:center;border:1px solid var(--line);background:var(--sunk)}
@@ -581,10 +602,10 @@ button.pw:active{opacity:.72}
     <button class="iconbtn" id="locbtn" aria-pressed="false" aria-label="Measure from where I am">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="8"/><path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5"/></svg>
     </button>
-    <div class="from">
+    <button class="from" id="fromopen" aria-haspopup="dialog" aria-label="Choose where distances are measured from">
       <span class="k" id="fromk">Distances from</span>
       <span class="n" id="fromn">Parque Mexico</span>
-    </div>
+    </button>
   </header>
 
   <div class="panes">
@@ -637,6 +658,7 @@ button.pw:active{opacity:.72}
           <div class="seg" role="radiogroup" aria-label="Distances from" id="originseg">
             <button role="radio" aria-checked="true" data-origin="home">Parque Mexico</button>
             <button role="radio" aria-checked="false" data-origin="here">Where I am</button>
+            <button role="radio" aria-checked="false" data-origin="place">Somewhere else</button>
           </div>
           <p class="setnote" id="originnote"></p>
         </div>
@@ -1325,7 +1347,7 @@ function countLabel(n, unlisted) {
  *  is on, the phone after. With Walkable on it says walking distance, as the Showtimes
  *  line does, so the two tabs never make different claims about one filter. */
 function whereFrom() {
-  const who = liveLoc ? "you" : HOME.name;
+  const who = liveLoc ? "you" : origin.name;
   return S.filters.has("walk") ? "within walking distance of " + who : "near " + who;
 }
 
@@ -2683,12 +2705,15 @@ function renderSettings() {
   const mode = themeMode();
   document.querySelectorAll("#themeseg [data-theme-set]").forEach(b =>
     b.setAttribute("aria-checked", String(b.dataset.themeSet === mode)));
-  document.querySelectorAll("#originseg [data-origin]").forEach(b =>
-    b.setAttribute("aria-checked", String((b.dataset.origin === "here") === liveLoc)));
+  const atHome = !liveLoc && origin.lat === HOME.lat && origin.lng === HOME.lng;
+  document.querySelectorAll("#originseg [data-origin]").forEach(b => b.setAttribute("aria-checked", String(
+    b.dataset.origin === "here" ? liveLoc : b.dataset.origin === "home" ? atHome : !liveLoc && !atHome)));
+  const other = document.querySelector('#originseg [data-origin="place"]');
+  if (other) other.textContent = !liveLoc && !atHome ? origin.name : "Somewhere else";
   const note = $("originnote");
   if (note) note.textContent = liveLoc
     ? "Every distance, walking time and the Walkable chip are measured from where the phone is."
-    : "Every distance, walking time and the Walkable chip are measured from Parque Mexico.";
+    : "Every distance, walking time and the Walkable chip are measured from " + origin.name + ".";
   const st = $("setstamp");
   if (st) st.innerHTML = `Read <b>${esc(SHOWS.at.replace("T", " "))}</b> from Cinemex's and
     Cineteca Nacional's own listings. A snapshot, not a live feed: every time opens the cinema's
@@ -2701,14 +2726,162 @@ document.addEventListener("click", e => {
   // back; pressing it is the whole implementation, and only when the choice would change.
   const og = e.target.closest("#originseg [data-origin]");
   if (og && (og.dataset.origin === "here") !== liveLoc) $("locbtn").click();
+  if (og && og.dataset.origin === "place") return placeSheet();
+  if (og && og.dataset.origin === "home" && !liveLoc) setOrigin(null);
 });
 window.addEventListener("sala:origin", renderSettings);
 
+/* WHERE DISTANCES START, TYPED. Ask 5 on 12 September: "I wanna type in there in a unique
+   good way that's useful to a user". The places are OpenStreetMap's colonias, stations and
+   landmarks, baked into places.json by build-places.py, so the picker works with no signal
+   and nothing he types leaves the phone. Every suggestion answers the question the picker
+   is for: how many cinemas are a walk from there, and which is nearest. */
+let PLACES = null, LAST_HITS = [];
+const PLACE_KIND = { col: "Neighbourhood", q: "Area", d: "District", m: "Metro", mb: "Metrobús",
+                     tl: "Tren Ligero", cb: "Cablebús", sub: "Suburbano", lm: "Landmark" };
+function loadPlaces() {
+  if (PLACES) return Promise.resolve(PLACES);
+  return fetch("places.json").then(r => (r.ok ? r.json() : null)).then(j => {
+    PLACES = j && Array.isArray(j.p)
+      ? j.p.map(r => ({ n: r[0], k: r[1], lat: r[2], lng: r[3], cp: r[4] || "", f: fold([r[0], ...r.slice(5)].join(" ")) }))
+      : [];
+    return PLACES;
+  }).catch(() => (PLACES = []));
+}
+/** Best first: the name starts with it, then a word in it does, then it appears anywhere. A
+ *  postcode matches its colonia. places.json is nearest-first, and the sort is stable, so
+ *  within a rank the nearer place wins. */
+function placeMatches(q) {
+  const raw = String(q || "").trim(), f = fold(raw);
+  if (!f || !PLACES) return [];
+  const cp = /^\d{3,5}$/.test(raw);
+  const ranked = [];
+  for (const p of PLACES) {
+    const r = cp ? (p.cp.startsWith(raw) ? 0 : -1)
+      : p.f.startsWith(f) ? 0 : p.f.includes(" " + f) ? 1 : p.f.includes(f) ? 2 : -1;
+    if (r >= 0) ranked.push([r, p]);
+  }
+  return ranked.sort((a, b) => a[0] - b[0]).slice(0, 8).map(x => x[1]);
+}
+function reachFrom(pt) {
+  let n = 0, near = null, nd = Infinity;
+  for (const c of SHOWS.cin) {
+    const d = km(pt, { lat: c.lat, lng: c.lng });
+    if (walkable(d)) n++;
+    if (d < nd) { nd = d; near = c; }
+  }
+  return { n, near, nd };
+}
+function reachLine(pt) {
+  const r = reachFrom(pt);
+  const lead = r.n ? `${r.n} ${r.n === 1 ? "cinema" : "cinemas"} within a walk` : "No cinema within a walk";
+  return r.near ? `${lead} · nearest ${r.near.n}, ${far(r.nd).w}` : lead;
+}
+function savedPlaces() {
+  try {
+    const a = JSON.parse(localStorage.getItem("sala.places") || "[]");
+    return Array.isArray(a) ? a.filter(x => x && typeof x.l === "string" && typeof x.n === "string"
+      && Number.isFinite(x.lat) && Number.isFinite(x.lng)) : [];
+  } catch (e) { return []; }
+}
+function writeSaved(list) {
+  try { localStorage.setItem("sala.places", JSON.stringify(list.slice(0, 12))); } catch (e) { /* this launch only */ }
+}
+/** The chosen place, or the park. A saved value that is not a place near this city -- junk,
+ *  or 0,0 -- is the park, never a distance measured from the Gulf of Guinea. */
+function savedOrigin() {
+  try {
+    const o = JSON.parse(localStorage.getItem("sala.origin") || "null");
+    if (o && typeof o.n === "string" && Number.isFinite(o.lat) && Number.isFinite(o.lng)
+        && km(HOME, { lat: o.lat, lng: o.lng }) < 40) return { lat: o.lat, lng: o.lng, name: o.n };
+  } catch (e) { /* the park */ }
+  return { ...HOME };
+}
+function setOrigin(p) {
+  if (liveLoc) { liveLoc = false; $("locbtn").setAttribute("aria-pressed", "false"); }
+  origin = p ? { lat: p.lat, lng: p.lng, name: p.n } : { ...HOME };
+  try {
+    if (p) localStorage.setItem("sala.origin", JSON.stringify({ n: p.n, lat: p.lat, lng: p.lng }));
+    else localStorage.removeItem("sala.origin");
+  } catch (e) { /* this launch only */ }
+  $("fromk").textContent = "Distances from"; $("fromn").textContent = origin.name;
+  renderFilters(); renderShows(); if (S.tab === "films") renderFilms();
+  window.dispatchEvent(new Event("sala:origin"));
+}
+function placeSheet() {
+  const head = `<div><h2>Distances from</h2>
+      <div class="pksrch"><input id="pkq" type="search" inputmode="search" autocomplete="off" enterkeyhint="search"
+        placeholder="Neighbourhood, Metro, postcode" aria-label="Type a neighbourhood, station, landmark or postcode"></div></div>`;
+  openSheet(head, "", `<div id="pkbody"></div>`, "var(--beam)");
+  renderPicker("");
+  loadPlaces().then(() => renderPicker($("pkq") ? $("pkq").value : ""));
+}
+function renderPicker(q) {
+  const box = $("pkbody");
+  if (!box) return;
+  const row = (attrs, name, kind, line, on) => `<button class="pkrow${on ? " on" : ""}" ${attrs}>
+      <span class="pkn">${esc(name)}${kind ? `<em>${esc(kind)}</em>` : ""}</span>
+      <span class="pkl">${esc(line)}</span></button>`;
+  const atHome = !liveLoc && origin.lat === HOME.lat && origin.lng === HOME.lng;
+  let html = "";
+  if (!String(q).trim()) {
+    const saved = savedPlaces();
+    html += row('data-pick="here"', "Where I am", "", liveLoc ? "On now" : "Uses the phone's location", liveLoc)
+      + row('data-pick="home"', HOME.name, "", reachLine(HOME), atHome);
+    if (!atHome && !liveLoc && !saved.some(x => x.lat === origin.lat && x.lng === origin.lng))
+      html += row('data-pick="current"', origin.name, "Now", reachLine(origin), true)
+        + `<div class="pksave"><input id="pklabel" maxlength="24" autocomplete="off"
+            placeholder="Name ${esc(origin.name)}, like Home" aria-label="A name for ${esc(origin.name)}">
+            <button data-pick="save">Save</button></div>`;
+    if (saved.length) html += `<div class="sec"><h3>Saved</h3></div>` + saved.map((x, i) =>
+      `<div class="pksaved">${row(`data-pick="saved" data-i="${i}"`, x.l, x.n !== x.l ? x.n : "", reachLine(x),
+        !liveLoc && origin.lat === x.lat && origin.lng === x.lng)}<button class="pkx" data-forget="${i}"
+        aria-label="Forget ${esc(x.l)}">Forget</button></div>`).join("");
+    html += `<p class="note pkhint">Type a neighbourhood, a Metro or Metrobús station, a landmark or a postcode.
+      Every distance, walking time and the Walkable chip then start from there.</p>`;
+  } else if (PLACES === null) {
+    html = `<p class="note pkhint">Loading places</p>`;
+  } else {
+    LAST_HITS = placeMatches(q);
+    html = LAST_HITS.length
+      ? LAST_HITS.map((p, i) => row(`data-pick="place" data-i="${i}"`, p.n,
+          PLACE_KIND[p.k] + (p.cp ? " · CP " + p.cp : ""), reachLine(p))).join("")
+      : `<p class="note pkhint">Nothing called that within 15 km. Try a colonia, a station or a five-digit postcode.</p>`;
+  }
+  box.innerHTML = html + `<p class="note pkhint pksrc">Places from OpenStreetMap contributors, ODbL.</p>`;
+}
+document.addEventListener("click", e => {
+  if (e.target.closest("#fromopen")) return placeSheet();
+  const pk = e.target.closest("[data-pick]");
+  if (pk) {
+    const kind = pk.dataset.pick;
+    if (kind === "here") { closeSheet(); if (!liveLoc) $("locbtn").click(); return; }
+    if (kind === "home") { closeSheet(); return setOrigin(null); }
+    if (kind === "current") return closeSheet();
+    if (kind === "place") { const p = LAST_HITS[+pk.dataset.i]; if (p) { closeSheet(); setOrigin(p); } return; }
+    if (kind === "saved") {
+      const x = savedPlaces()[+pk.dataset.i];
+      if (x) { closeSheet(); setOrigin({ n: x.n, lat: x.lat, lng: x.lng }); }
+      return;
+    }
+    if (kind === "save") {
+      const label = ((($("pklabel") || {}).value) || "").trim().slice(0, 24) || origin.name;
+      const list = savedPlaces().filter(x => !(x.lat === origin.lat && x.lng === origin.lng));
+      list.unshift({ l: label, n: origin.name, lat: origin.lat, lng: origin.lng });
+      writeSaved(list);
+      return renderPicker("");
+    }
+  }
+  const fg = e.target.closest("[data-forget]");
+  if (fg) { const list = savedPlaces(); list.splice(+fg.dataset.forget, 1); writeSaved(list); renderPicker(""); }
+});
+document.addEventListener("input", e => { if (e.target && e.target.id === "pkq") renderPicker(e.target.value); });
+
 $("locbtn").addEventListener("click", () => {
   if (liveLoc) {
-    liveLoc = false; origin = { ...HOME };
+    liveLoc = false; origin = savedOrigin();
     $("locbtn").setAttribute("aria-pressed", "false");
-    $("fromk").textContent = "Distances from"; $("fromn").textContent = HOME.name;
+    $("fromk").textContent = "Distances from"; $("fromn").textContent = origin.name;
     renderFilters(); renderShows(); if (S.tab === "films") renderFilms();
     window.dispatchEvent(new Event("sala:origin"));
     return;
@@ -2727,7 +2900,7 @@ $("locbtn").addEventListener("click", () => {
     window.dispatchEvent(new Event("sala:origin"));
   }, () => {
     $("fromk").textContent = "Distances from";
-    $("fromn").textContent = HOME.name + " (location refused)";
+    $("fromn").textContent = origin.name + " (location refused)";
     window.dispatchEvent(new Event("sala:origin"));
   }, { enableHighAccuracy: true, timeout: 8000 });
 });
@@ -2737,6 +2910,9 @@ $("locbtn").addEventListener("click", () => {
 const todayIdx = DAYS.findIndex(isToday);
 const liveIdxs = liveDayIdxs();
 S.day = liveIdxs.includes(todayIdx) ? todayIdx : (liveIdxs.length ? liveIdxs[0] : 0);
+// Where distances start comes back before the first list is drawn, or the app would open
+// measuring from the park and jump when it remembered.
+origin = savedOrigin(); $("fromn").textContent = origin.name;
 renderDates(); renderFilters(); renderShows();
 // Movies is the leftmost tab and the one the app opens on, his order on 12 September.
 setTab(S.tab); renderSettings();

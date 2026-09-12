@@ -86,6 +86,11 @@ screen with no browser bars, and works with no signal after the first launch.
   IMAX, Atmos, Platino and Subtitled are solid badges and Premium, Standard, 3D and
   Dubbed are outlines; amber is what is selected. Every small text colour clears WCAG's
   4.5:1 in both themes, which light mode's grey labels and amber did not before.
+- **Type where distances start.** Tap "Distances from" and type a colonia, a Metro or
+  Metrobus station, a landmark or a postcode. Each suggestion says how many cinemas are
+  a walk from there and which is nearest. The places are OpenStreetMap's, baked into
+  `docs/places.json` by `build-places.py`, so it works offline and nothing typed leaves
+  the phone. A chosen place is remembered, and can be saved under a name like Home.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has
