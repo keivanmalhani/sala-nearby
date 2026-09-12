@@ -91,6 +91,9 @@ screen with no browser bars, and works with no signal after the first launch.
   a walk from there and which is nearest. The places are OpenStreetMap's, baked into
   `docs/places.json` by `build-places.py`, so it works offline and nothing typed leaves
   the phone. A chosen place is remembered, and can be saved under a name like Home.
+- **Search that suggests.** From the second letter the box suggests movies (with how many
+  cinemas show them), directors, cinemas (with the walk) and genres. A movie or a cinema
+  opens its sheet; a director or a genre filters the list. A clear button empties it.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has

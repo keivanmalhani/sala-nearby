@@ -96,7 +96,7 @@ check("and the page still carries the truncation rather than a name nobody read"
 
 console.log("\nsection 5 -- the box says what it searches");
 check("the placeholder names the three fields",
-      (SRC.match(/placeholder="Film, director, genre"/g) || []).length === 2);
+      (SRC.match(/placeholder="Movie, director, genre, cinema"/g) || []).length === 2);
 check(`   ... and said only "Find a film" at ${BASELINE}`,
       (BEFORE.match(/placeholder="Find a film"/g) || []).length === 2);
 

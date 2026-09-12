@@ -225,6 +225,23 @@ a{color:var(--lamp);text-decoration:none}
   padding:0 13px;border-radius:11px;border:1px solid var(--line);background:var(--ground);
   color:var(--ink);font:400 15px/1 "Bricolage Grotesque",system-ui,-apple-system,sans-serif}
 .srch input::placeholder{color:var(--ink-3)}
+.srch{position:relative}
+.srch input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.srch input{padding-right:46px}
+/* CLEAR. A drawn cross, 44 points square, inside the box's right edge. */
+.srx{position:absolute;right:14px;bottom:3px;width:44px;height:44px;border-radius:0 12px 12px 0}
+.srx::before,.srx::after{content:"";position:absolute;left:50%;top:50%;width:13px;height:1.8px;background:var(--ink-3);border-radius:1px}
+.srx::before{transform:translate(-50%,-50%) rotate(45deg)}
+.srx::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.srx:active{background:var(--tap)}
+.sugg{position:absolute;left:14px;right:14px;top:calc(100% + 2px);z-index:60;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.22);max-height:62vh;overflow-y:auto;overscroll-behavior:contain;padding:4px 0}
+.sgh{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:9px 14px 3px}
+.sgr{display:block;width:100%;text-align:left;padding:8px 14px;min-height:48px}
+.sgr:active{background:var(--tap)}
+.sgr b{display:block;font-weight:700;font-size:14.5px;letter-spacing:-.01em;line-height:1.25}
+.sgr em{display:block;font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-3);margin-top:2px}
+.sgr.place em{color:var(--beam)}
 .srch input:focus{outline:2px solid var(--lamp);outline-offset:-1px;border-color:var(--lamp)}
 
 .count{padding:11px 16px 7px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
@@ -613,8 +630,10 @@ button.pw:active{opacity:.72}
     <section class="pane" id="pane-shows" role="tabpanel" aria-label="Showtimes">
       <div class="rail dates chrome" id="dates"></div>
       <div class="rail chrome" id="filters"></div>
-      <div class="srch"><input id="q" type="search" inputmode="search" autocomplete="off"
-        placeholder="Film, director, genre" aria-label="Find a film by title, director or genre"></div>
+      <div class="srch"><input id="q" type="search" inputmode="search" autocomplete="off" enterkeyhint="search"
+        placeholder="Movie, director, genre, cinema" aria-label="Find a movie, director, genre or cinema">
+        <button class="srx" data-clear="q" aria-label="Clear the search" hidden></button>
+        <div class="sugg" id="q-sugg" hidden></div></div>
       <div class="count mono" id="scount"></div>
       <div id="showlist"></div>
       <div class="stamp" id="stamp"></div>
@@ -634,8 +653,10 @@ button.pw:active{opacity:.72}
     <!-- FILMS -->
     <section class="pane on" id="pane-films" role="tabpanel" aria-label="Movies">
       <div class="rail chrome" id="ffilters"></div>
-      <div class="srch"><input id="qf" type="search" inputmode="search" autocomplete="off"
-        placeholder="Film, director, genre" aria-label="Find a film by title, director or genre"></div>
+      <div class="srch"><input id="qf" type="search" inputmode="search" autocomplete="off" enterkeyhint="search"
+        placeholder="Movie, director, genre, cinema" aria-label="Find a movie, director, genre or cinema">
+        <button class="srx" data-clear="qf" aria-label="Clear the search" hidden></button>
+        <div class="sugg" id="qf-sugg" hidden></div></div>
       <div class="count mono" id="fcount"></div>
       <div id="filmlist"></div>
     </section>
@@ -2677,6 +2698,103 @@ function onQuery(e) {
 ["q", "qf"].forEach(id => {
   const el = $(id);
   if (el) el.addEventListener("input", onQuery);
+});
+
+/* SUGGESTIONS. Ask 8 on 12 September, "make the search bar better". The box only ever
+   filtered: "insurg" emptied the list while Cinemex Insurgentes was 300 metres away. Now it
+   also suggests, in four groups, from the second letter. Movies and cinemas carry the same
+   data-film and data-cin as the lists, so the tap handler that already opens those sheets
+   opens these too; a person or a genre fills the box instead. */
+let FILM_CINEMAS = null;
+function filmCinemaCounts() {
+  if (FILM_CINEMAS) return FILM_CINEMAS;
+  FILM_CINEMAS = new Map();
+  for (const c of SHOWS.cin) {
+    const seen = new Set(c.s.map(x => String(x[0])));
+    seen.forEach(fid => FILM_CINEMAS.set(fid, (FILM_CINEMAS.get(fid) || 0) + 1));
+  }
+  return FILM_CINEMAS;
+}
+function suggest(q) {
+  const f = fold(q).trim();
+  if (f.length < 2) return [];
+  const rank = t => { const x = fold(t); return x.startsWith(f) ? 0 : x.includes(" " + f) ? 1 : x.includes(f) ? 2 : -1; };
+  const best = (a, b) => a.r - b.r;
+  const counts = filmCinemaCounts();
+  const films = Object.entries(SHOWS.films)
+    .map(([fid, x]) => ({ fid, x, r: Math.min(...[rank(x.n), rank(x.o || "")].map(v => (v < 0 ? 9 : v))) }))
+    .filter(o => o.r < 9)
+    .sort((a, b) => best(a, b) || (b.x.c || 0) - (a.x.c || 0)).slice(0, 4)
+    .map(o => { const n = counts.get(String(o.fid)) || 0;
+      return { g: "Movies", t: "film", id: o.fid, n: o.x.n, d: `at ${n} ${n === 1 ? "cinema" : "cinemas"}` }; });
+  const people = new Map();
+  for (const x of Object.values(SHOWS.films)) {
+    if (!x.dir) continue;
+    for (const who of String(x.dir).split(/\s*,\s*/)) {
+      const r = rank(who);
+      if (r >= 0 && who.length > 2) {
+        const p = people.get(who) || { r, films: [] };
+        p.films.push(x.n); people.set(who, p);
+      }
+    }
+  }
+  const dirs = [...people.entries()].sort((a, b) => a[1].r - b[1].r).slice(0, 2)
+    .map(([who, p]) => ({ g: "People", t: "q", q: who, n: who, d: "Director of " + p.films.slice(0, 2).join(", ") }));
+  const cins = SHOWS.cin.map(c => ({ c, r: rank(c.n) })).filter(o => o.r >= 0)
+    .sort((a, b) => best(a, b) || km(origin, a.c) - km(origin, b.c)).slice(0, 3)
+    .map(o => { const F = far(km(origin, { lat: o.c.lat, lng: o.c.lng }));
+      return { g: "Cinemas", t: "cin", id: o.c.id, n: o.c.n, d: `${F.d} · ${F.w}` }; });
+  const genres = new Map();
+  for (const x of Object.values(SHOWS.films)) for (const g of x.g || []) if (rank(g) >= 0) genres.set(g, (genres.get(g) || 0) + 1);
+  const gens = [...genres.entries()].sort((a, b) => rank(a[0]) - rank(b[0]) || b[1] - a[1]).slice(0, 2)
+    .map(([g, n]) => ({ g: "Genres", t: "q", q: g, n: g, d: `${n} ${n === 1 ? "movie" : "movies"}` }));
+  return [...films, ...dirs, ...cins, ...gens];
+}
+function renderSuggest(input) {
+  const box = $(input.id + "-sugg"), clear = document.querySelector(`[data-clear="${input.id}"]`);
+  if (clear) clear.hidden = !input.value;
+  if (!box) return;
+  const list = document.activeElement === input ? suggest(input.value) : [];
+  if (!list.length) { box.hidden = true; box.innerHTML = ""; return; }
+  let group = "";
+  box.innerHTML = list.map(o => {
+    const head = o.g !== group ? `<div class="sgh">${esc(o.g)}</div>` : "";
+    group = o.g;
+    const attr = o.t === "film" ? `data-film="${esc(String(o.id))}"` : o.t === "cin" ? `data-cin="${esc(String(o.id))}"`
+      : `data-sgq="${esc(o.q)}" data-for="${input.id}"`;
+    return `${head}<button class="sgr${o.t === "cin" ? " place" : ""}" ${attr}><b>${esc(o.n)}</b><em>${esc(o.d)}</em></button>`;
+  }).join("");
+  box.hidden = false;
+}
+["q", "qf"].forEach(id => {
+  const el = $(id);
+  if (!el) return;
+  el.addEventListener("input", () => renderSuggest(el));
+  el.addEventListener("focus", () => renderSuggest(el));
+  // Late enough that a tap on a suggestion lands first; the panel never steals the tap.
+  el.addEventListener("blur", () => setTimeout(() => { const b = $(id + "-sugg"); if (b) b.hidden = true; }, 180));
+  el.addEventListener("keydown", e => { if (e.key === "Enter") { el.blur(); } });
+});
+document.addEventListener("click", e => {
+  const pick = e.target.closest(".sugg [data-film], .sugg [data-cin], .sugg [data-sgq]");
+  if (pick) {
+    const box = pick.closest(".sugg");
+    if (pick.dataset.sgq != null) {
+      const el = $(pick.dataset.for);
+      el.value = pick.dataset.sgq;
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    box.hidden = true;
+    document.activeElement && document.activeElement.blur && document.activeElement.blur();
+    return;   // data-film and data-cin are opened by the lists' own handler
+  }
+  const clr = e.target.closest("[data-clear]");
+  if (clr) {
+    const el = $(clr.dataset.clear);
+    el.value = "";
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.focus();
+  }
 });
 
 /* SETTINGS. The theme left the header on 12 September -- "the toggle in the top right of
