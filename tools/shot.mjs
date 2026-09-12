@@ -46,6 +46,9 @@ const height = Number(flag("h", 844));
 const dsf = Number(flag("dsf", 3));
 const settle = Number(flag("wait", 1400));
 const js = flag("js", null);
+// Evaluated after --js and printed, for a check that needs the page's own answer rather
+// than a picture of it: a count, a label, whether a media query matches.
+const printExpr = flag("print", null);
 const scheme = has("dark") ? "dark" : has("light") ? "light" : null;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -145,6 +148,12 @@ try {
   await sleep(settle);
   if (js) await send("Runtime.evaluate", { expression: js, awaitPromise: true });
   if (js) await sleep(600);
+  if (printExpr) {
+    const r = await send("Runtime.evaluate", { expression: printExpr, returnByValue: true, awaitPromise: true });
+    console.log("print:", r.exceptionDetails
+      ? "THREW " + ((r.exceptionDetails.exception && r.exceptionDetails.exception.description) || r.exceptionDetails.text)
+      : JSON.stringify(r.result.value));
+  }
 
   // The real layout width, so a cropped-looking picture can be told apart from a page
   // that genuinely overflows. This is the number the earlier flag-based screenshots lied

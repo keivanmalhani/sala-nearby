@@ -68,6 +68,12 @@ screen with no browser bars, and works with no signal after the first launch.
   both lists with a small star, and a Starred chip stacks with the others. The stars are
   saved on the phone; the chip is not, for the same reason Starting soon is not -- it is
   a way of looking, and restoring it would open the app with most of the films hidden.
+- **Walkable.** A chip that keeps only the cinemas whose own row says "min walk": up to
+  forty minutes at 4.5 km/h, about three kilometres, which is the line the rows have
+  always used to switch to a drive time. Nobody has measured how far is too far, so it
+  does not invent a new number, and the rows and the chip share one function so they
+  cannot disagree. It measures from wherever the distances do, so it follows the
+  location button, and like Starting soon it is not remembered between launches.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has

@@ -908,17 +908,24 @@ function km(a, b) {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 const walkMin = d => Math.max(1, Math.round(d / 0.075));   // 4.5 km/h
+/* WHERE A WALK STOPS BEING A WALK. Every row says "min walk" up to here and "min drive"
+   past it, leave-by uses the same travel time, and the Walkable chip means exactly the
+   rows that say walk. Nobody measured how far he will go on foot: this is the line the
+   rows have always drawn, kept in one place so the three cannot disagree. Forty minutes
+   at 4.5 km/h is about three kilometres straight-line. */
+const WALK_MAX = 40;
+function walkable(d) { return walkMin(d) <= WALK_MAX; }
 /** Minutes to get there, by whichever means far() is about to name. One function, because
  *  a header that says "19 min walk" and a leave-by computed from a drive time would be two
  *  numbers contradicting each other on the same row. */
 function travelMin(d) {
   const w = walkMin(d);
-  return w <= 40 ? w : Math.round(d / 0.35);
+  return walkable(d) ? w : Math.round(d / 0.35);
 }
 function far(d) {
   const w = walkMin(d);
   return { d: d < 1 ? Math.round(d * 1000) + " m" : d.toFixed(1) + " km",
-           w: w <= 40 ? w + " min walk" : Math.round(d / 0.35) + " min drive" };
+           w: walkable(d) ? w + " min walk" : Math.round(d / 0.35) + " min drive" };
 }
 
 /* WHEN TO LEAVE, against the BILLED time and nothing else.
@@ -1013,7 +1020,7 @@ function loadFilters() {
 }
 function saveFilters() {
   try {
-    localStorage.setItem("sala.filters", JSON.stringify([...S.filters].filter(k => k !== "now" && k !== "star")));
+    localStorage.setItem("sala.filters", JSON.stringify([...S.filters].filter(k => k !== "now" && k !== "star" && k !== "walk")));
   } catch (e) { /* storage refused; the filters still work for this session */ }
 }
 loadFilters();
@@ -1101,7 +1108,7 @@ const hhmm = m => String(Math.floor(m / 60) % 24).padStart(2, "0") + ":" + Strin
 
 /* ---------- filters ---------- */
 /* One chip's question, unchanged from when there was only ever one of them. */
-function passesOne(key, fmtIdx, mins, dayIso, fid) {
+function passesOne(key, fmtIdx, mins, dayIso, fid, cin) {
   const t = SHOWS.fmts[fmtIdx].t || [];
   switch (key) {
     case "now": return isToday(dayIso) && mins >= nowMins() - 10 && mins <= nowMins() + 240;
@@ -1124,6 +1131,9 @@ function passesOne(key, fmtIdx, mins, dayIso, fid) {
     // The one chip that asks about the FILM rather than the format or the time, which is
     // why every caller now hands the id through. No id means no answer, never a pass.
     case "star": return isStarred(fid);
+    // A question about the CINEMA, measured from whichever origin is live, so it moves
+    // with the location button. No cinema means no answer, never a pass.
+    case "walk": return cin != null && walkable(km(origin, { lat: cin.lat, lng: cin.lng }));
     default: return true;
   }
 }
@@ -1131,10 +1141,10 @@ function passesOne(key, fmtIdx, mins, dayIso, fid) {
    `extra` is what makes the counts honest: a chip has to be counted against the set it
    would JOIN, not on its own, or the number on the chip contradicts the list the moment
    two are lit. "all" is the empty set, so it counts everything. */
-function passes(fmtIdx, mins, dayIso, extra, fid) {
+function passes(fmtIdx, mins, dayIso, extra, fid, cin) {
   if (extra === "all") return true;
-  for (const k of S.filters) if (!passesOne(k, fmtIdx, mins, dayIso, fid)) return false;
-  if (extra && !S.filters.has(extra) && !passesOne(extra, fmtIdx, mins, dayIso, fid)) return false;
+  for (const k of S.filters) if (!passesOne(k, fmtIdx, mins, dayIso, fid, cin)) return false;
+  if (extra && !S.filters.has(extra) && !passesOne(extra, fmtIdx, mins, dayIso, fid, cin)) return false;
   return true;
 }
 
@@ -1183,7 +1193,7 @@ function filmRuns() {
   for (const c of SHOWS.cin) {
     const wk = WEEK_AFTER.get(String(c.id));
     for (const x of c.s) {
-      if (!passes(x[1], x[3], DAYS[x[2]], null, x[0])) continue;
+      if (!passes(x[1], x[3], DAYS[x[2]], null, x[0], c)) continue;
       if (!matchesQuery(SHOWS.films[x[0]])) continue;
       const k = String(x[0]);
       let r = out.get(k);
@@ -1239,7 +1249,7 @@ function renderDates() {
       <b>${esc(L.b)}</b><em>${esc(L.e)}</em></button>`;
   }).join("");
 }
-const FILTER_OPTS = [["all", "Everything"], ["now", "Starting soon"], ["star", "Starred"], ["sub", "Subtitled"],
+const FILTER_OPTS = [["all", "Everything"], ["now", "Starting soon"], ["star", "Starred"], ["walk", "Walkable"], ["sub", "Subtitled"],
                      ["imax", "IMAX"], ["atmos", "Atmos"], ["plat", "Platino"]];
 
 /* The count line has to compose now that chips stack. "126 subtitled IMAX showings" is
@@ -1261,7 +1271,7 @@ function filterWords(unlisted) {
 function countLabel(n, unlisted) {
   const w = filterWords(unlisted);
   const noun = n === 1 ? "showing" : "showings";
-  const head = w ? w + " " + noun : noun;
+  const head = (w ? w + " " + noun : noun) + (S.filters.has("walk") ? " within walking distance" : "");
   return S.filters.has("now") ? head + " starting in the next four hours" : head;
 }
 
@@ -1277,8 +1287,8 @@ function filterCounts() {
       // The search narrows these too, or a chip stays lit for showings the search has
       // already taken off the list and tapping it lands on an empty page.
       if (!matchesQuery(SHOWS.films[s[0]])) continue;
-      if (passes(s[1], s[3], dayIso, null, s[0])) out.active++;
-      for (const [k] of FILTER_OPTS) if (passes(s[1], s[3], dayIso, k, s[0])) out[k]++;
+      if (passes(s[1], s[3], dayIso, null, s[0], c)) out.active++;
+      for (const [k] of FILTER_OPTS) if (passes(s[1], s[3], dayIso, k, s[0], c)) out[k]++;
     }
   }
   return out;
@@ -1332,7 +1342,7 @@ function renderShows() {
     for (const s of c.s) {
       if (s[2] !== S.day) continue;
       total++;
-      if (!passes(s[1], s[3], dayIso, null, s[0])) continue;
+      if (!passes(s[1], s[3], dayIso, null, s[0], c)) continue;
       if (!matchesQuery(SHOWS.films[s[0]])) continue;
       shown++;
       // How many of what he is looking at are Cineteca screenings with no language on
@@ -1448,7 +1458,7 @@ function renderFilms() {
         // THE FILTERS APPLY HERE TOO, now that they are a saved preference. A standing
         // "subtitled" honoured by one list and not the other is worse than no preference:
         // the two lists disagree about how many showings a film has and neither says why.
-        if (!passes(s[1], s[3], dayIso, null, s[0])) continue;
+        if (!passes(s[1], s[3], dayIso, null, s[0], c)) continue;
         n++;
         (SHOWS.fmts[s[1]].t || []).forEach(t => types.add(t));
         if (!near) near = c;
@@ -2596,7 +2606,7 @@ $("locbtn").addEventListener("click", () => {
     liveLoc = false; origin = { ...HOME };
     $("locbtn").setAttribute("aria-pressed", "false");
     $("fromk").textContent = "Distances from"; $("fromn").textContent = HOME.name;
-    renderShows(); if (S.tab === "films") renderFilms();
+    renderFilters(); renderShows(); if (S.tab === "films") renderFilms();
     return;
   }
   if (!navigator.geolocation) { $("fromn").textContent = "Location unavailable"; return; }
@@ -2606,7 +2616,10 @@ $("locbtn").addEventListener("click", () => {
     liveLoc = true;
     $("locbtn").setAttribute("aria-pressed", "true");
     $("fromk").textContent = "Distances from"; $("fromn").textContent = "Where you are standing";
-    renderShows(); if (S.tab === "films") renderFilms();
+    // Walkable is measured from here now, so the chips are recounted BEFORE the list, the
+    // same order the date rail uses: a lit Walkable with nothing in reach is dropped rather
+    // than left lit over an empty page.
+    renderFilters(); renderShows(); if (S.tab === "films") renderFilms();
   }, () => {
     $("fromk").textContent = "Distances from";
     $("fromn").textContent = HOME.name + " (location refused)";

@@ -61,6 +61,9 @@ function world(src, storage) {
              cin: [{ id: 5, s: [[1, 0, 0, 600], [1, 0, 0, 720], [2, 0, 0, 660], ["ct-9", 0, 0, 700]] }] },
     isToday: () => false, nowMins: () => 0, matchesQuery: () => true,
     esc: x => String(x),
+    // walkable.py added a chip that measures each cinema's distance. This test is about
+    // stars, so every cinema here counts as in reach and the distance code is not lifted.
+    origin: { lat: 0, lng: 0 }, km: () => 0, walkable: () => true,
   };
   vm.createContext(ctx);
   const code = [
@@ -126,22 +129,25 @@ paired("Starred is never written back as a standing filter", src => {
 });
 
 console.log("3. every caller hands the film id through");
-paired("every passes( call in the page has five arguments, the last a film id", src => {
+paired("every passes( call in the page hands the film id through as its fifth argument", src => {
   const calls = [];
   const re = /(?<![\w.])passes\(/g;
   let m;
   while ((m = re.exec(src))) {
     if (src.slice(m.index - 9, m.index) === "function ") continue;
-    let depth = 0, j = m.index + "passes".length, args = 1;
+    let depth = 0, j = m.index + "passes".length, start = j + 1;
+    const args = [];
     for (; j < src.length; j++) {
       const ch = src[j];
       if (ch === "(" || ch === "[" || ch === "{") depth++;
       else if (ch === ")" || ch === "]" || ch === "}") { if (--depth === 0) break; }
-      else if (ch === "," && depth === 1) args++;
+      else if (ch === "," && depth === 1) { args.push(src.slice(start, j).trim()); start = j + 1; }
     }
+    args.push(src.slice(start, j).trim());
     calls.push({ args, text: src.slice(m.index, j + 1) });
   }
-  const bad = calls.filter(c => c.args !== 5 || !/\[0\]\)$/.test(c.text));
+  // By position, not by being last: walkable.py put the cinema after the film id.
+  const bad = calls.filter(c => c.args.length < 5 || !/\[0\]$/.test(c.args[4]));
   if (bad.length) console.log("       short calls:", bad.map(b => b.text).join("  |  "));
   return calls.length >= 5 && bad.length === 0;
 });

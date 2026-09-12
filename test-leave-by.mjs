@@ -41,6 +41,9 @@ function lift(name) {
 
 const WALK = SRC.match(/const walkMin = [^\n]+/);
 if (!WALK) throw new Error("walkMin is not in the page");
+// walkable.py moved the forty-minute line into WALK_MAX and walkable(), which travelMin calls.
+const LINE = SRC.match(/const WALK_MAX = [^\n]+/);
+if (!LINE) throw new Error("WALK_MAX is not in the page");
 
 // NOW is 18:00 and today is 2026-09-09, for every case below.
 const NOW = 18 * 60;
@@ -48,6 +51,8 @@ const harness = `
   const nowMins = () => ${NOW};
   const isToday = iso => iso === "2026-09-09";
   ${WALK[0]}
+  ${LINE[0]}
+  ${lift("walkable")}
   ${lift("travelMin")}
   ${lift("leaveBy")}
   ({ walkMin, travelMin, leaveBy })
@@ -106,6 +111,8 @@ const bad = eval(`
   const nowMins = () => ${NOW};
   const isToday = iso => iso === "2026-09-09";
   ${WALK[0]}
+  ${LINE[0]}
+  ${lift("walkable")}
   ${lift("travelMin")}
   function leaveBy(startMins, distKm, dayIso) {
     if (!isToday(dayIso)) return null;
