@@ -136,6 +136,28 @@ def get(path, tries=3, cap=12_000_000):
             raise
 
 
+def has_sessions(movies):
+    return any((v.get("sessions") or []) for m in (movies or []) for v in (m.get("versions") or []))
+
+
+def movies_for(cid, waits=(4, 10)):
+    """A cinema's movies, asked again when the answer has no showtimes before it is believed.
+
+    12 September 2026, the first scheduled run on GitHub's machines: Portal Centro came back
+    with nothing, the empty-cinema guard refused the whole refresh, and from the laptop a few
+    minutes later the same endpoint gave 20 movies and 340 sessions for a cinema whose status
+    read open. A 200 with an empty list is sometimes a bad moment, not a closed cinema. It is
+    asked twice more, after 4 and then 10 seconds; if it is still empty the guard in check()
+    decides, exactly as before."""
+    movies = get("cinemas/%s/movies" % cid)
+    for wait in waits:
+        if has_sessions(movies):
+            break
+        time.sleep(wait)
+        movies = get("cinemas/%s/movies" % cid)
+    return movies
+
+
 # ------------------------------------------------------------------ the page's own data
 
 def read_page():
@@ -186,7 +208,7 @@ def fetch():
     out, failed = [], []
     for d, c in near:
         try:
-            movies = get("cinemas/%s/movies" % c["id"])
+            movies = movies_for(c["id"])
         except Exception as e:
             failed.append((c["name"], str(e)[:60]))
             print("  %-36s FAILED %s" % (c["name"][:36], str(e)[:50]))
