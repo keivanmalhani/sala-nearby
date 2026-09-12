@@ -64,6 +64,10 @@ screen with no browser bars, and works with no signal after the first launch.
   with a verbatim quote that gets checked against the source before it ships: `bar.py` and
   `test-bar.py`. A venue with no Drinks row is one whose audit does not mention a drink,
   which is a weaker claim than "no bar", and the page does not make the stronger one.
+- **Star a film.** Every film's sheet has a Star button, starred films sit at the top of
+  both lists with a small star, and a Starred chip stacks with the others. The stars are
+  saved on the phone; the chip is not, for the same reason Starting soon is not -- it is
+  a way of looking, and restoring it would open the app with most of the films hidden.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has

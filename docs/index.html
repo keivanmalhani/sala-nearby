@@ -343,6 +343,16 @@ button.pw:active{opacity:.72}
    the showings count. NOT --c-big: that is the Platino badge, and a film can be both, so
    the two would be the same orange rectangle side by side on the same row. */
 .badge.last{background:var(--lamp);color:var(--lamp-ink)}
+/* STAR. 44 points tall like every other control he taps, and lit in the lamp colour the
+   pressed chips already use, so a starred film reads as the same kind of "on". */
+.starbtn{display:inline-flex;align-items:center;gap:7px;min-height:44px;margin:8px 0 4px;padding:0 14px;
+  border-radius:11px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);
+  font:600 13.5px/1 "Bricolage Grotesque",system-ui,-apple-system,sans-serif}
+.starbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linejoin:round}
+.starbtn:active{background:var(--tap)}
+.starbtn[aria-pressed="true"]{background:var(--lamp);border-color:var(--lamp);color:var(--lamp-ink)}
+.starbtn[aria-pressed="true"] svg{fill:currentColor}
+.stm{width:12px;height:12px;fill:var(--lamp);stroke:none;vertical-align:-1px;margin-right:5px}
 .frow .cnt em{display:block;font-style:normal;font-size:9.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px}
 /* The poster at the top of a film's sheet. Kept small on purpose: the file is 346 px wide,
    so anything above about 120 pt would start to look soft on a 3x screen, which is the
@@ -974,6 +984,7 @@ const S = {
   filters: new Set(),   // any of: now | sub | imax | atmos | plat
   tab: "shows",
   q: "",                // the search box, shared by both lists
+  starred: new Set(),   // film ids he has starred, as strings; saved as sala.starred
 };
 try { const t = localStorage.getItem("sala.theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
 
@@ -1002,10 +1013,36 @@ function loadFilters() {
 }
 function saveFilters() {
   try {
-    localStorage.setItem("sala.filters", JSON.stringify([...S.filters].filter(k => k !== "now")));
+    localStorage.setItem("sala.filters", JSON.stringify([...S.filters].filter(k => k !== "now" && k !== "star")));
   } catch (e) { /* storage refused; the filters still work for this session */ }
 }
 loadFilters();
+
+/* STARRED FILMS, his own short list, saved beside sala.filters under the same rule.
+   Ids are kept as strings: Cinemex ids are numbers and Cineteca's start with "ct-", and
+   the payload hands out both. A starred film that is not in this week's listing stays
+   starred, because it may be back in the next pull. */
+const STAR_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3l2.6 5.5 6 .8-4.4 4.2 1.1 6L12 17l-5.3 2.8 1.1-6-4.4-4.2 6-.8z"/></svg>`;
+const STAR_MARK = `<svg class="stm" viewBox="0 0 24 24" role="img" aria-label="Starred"><path d="M12 3.3l2.6 5.5 6 .8-4.4 4.2 1.1 6L12 17l-5.3 2.8 1.1-6-4.4-4.2 6-.8z"/></svg>`;
+function loadStarred() {
+  try {
+    const raw = localStorage.getItem("sala.starred");
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (!Array.isArray(saved)) return;
+    saved.forEach(id => { if (typeof id === "string" || typeof id === "number") S.starred.add(String(id)); });
+  } catch (e) { /* nothing starred yet, or storage refused */ }
+}
+function saveStarred() {
+  try { localStorage.setItem("sala.starred", JSON.stringify([...S.starred])); }
+  catch (e) { /* storage refused; the stars still work for this session */ }
+}
+function isStarred(fid) { return fid != null && S.starred.has(String(fid)); }
+function starBtn(fid) {
+  const on = isStarred(fid);
+  return `<button class="starbtn" data-star="${esc(String(fid))}" aria-pressed="${on}">${STAR_SVG}<span>${on ? "Starred" : "Star this film"}</span></button>`;
+}
+loadStarred();
 
 /* the day the snapshot was taken, so "today" means the right row */
 const DAYS = SHOWS.days;
@@ -1064,7 +1101,7 @@ const hhmm = m => String(Math.floor(m / 60) % 24).padStart(2, "0") + ":" + Strin
 
 /* ---------- filters ---------- */
 /* One chip's question, unchanged from when there was only ever one of them. */
-function passesOne(key, fmtIdx, mins, dayIso) {
+function passesOne(key, fmtIdx, mins, dayIso, fid) {
   const t = SHOWS.fmts[fmtIdx].t || [];
   switch (key) {
     case "now": return isToday(dayIso) && mins >= nowMins() - 10 && mins <= nowMins() + 240;
@@ -1084,6 +1121,9 @@ function passesOne(key, fmtIdx, mins, dayIso) {
     case "imax": return t.includes("imax");
     case "atmos": return t.includes("dolby_atmos");
     case "plat": return t.includes("platinum");
+    // The one chip that asks about the FILM rather than the format or the time, which is
+    // why every caller now hands the id through. No id means no answer, never a pass.
+    case "star": return isStarred(fid);
     default: return true;
   }
 }
@@ -1091,10 +1131,10 @@ function passesOne(key, fmtIdx, mins, dayIso) {
    `extra` is what makes the counts honest: a chip has to be counted against the set it
    would JOIN, not on its own, or the number on the chip contradicts the list the moment
    two are lit. "all" is the empty set, so it counts everything. */
-function passes(fmtIdx, mins, dayIso, extra) {
+function passes(fmtIdx, mins, dayIso, extra, fid) {
   if (extra === "all") return true;
-  for (const k of S.filters) if (!passesOne(k, fmtIdx, mins, dayIso)) return false;
-  if (extra && !S.filters.has(extra) && !passesOne(extra, fmtIdx, mins, dayIso)) return false;
+  for (const k of S.filters) if (!passesOne(k, fmtIdx, mins, dayIso, fid)) return false;
+  if (extra && !S.filters.has(extra) && !passesOne(extra, fmtIdx, mins, dayIso, fid)) return false;
   return true;
 }
 
@@ -1143,7 +1183,7 @@ function filmRuns() {
   for (const c of SHOWS.cin) {
     const wk = WEEK_AFTER.get(String(c.id));
     for (const x of c.s) {
-      if (!passes(x[1], x[3], DAYS[x[2]])) continue;
+      if (!passes(x[1], x[3], DAYS[x[2]], null, x[0])) continue;
       if (!matchesQuery(SHOWS.films[x[0]])) continue;
       const k = String(x[0]);
       let r = out.get(k);
@@ -1199,15 +1239,15 @@ function renderDates() {
       <b>${esc(L.b)}</b><em>${esc(L.e)}</em></button>`;
   }).join("");
 }
-const FILTER_OPTS = [["all", "Everything"], ["now", "Starting soon"], ["sub", "Subtitled"],
+const FILTER_OPTS = [["all", "Everything"], ["now", "Starting soon"], ["star", "Starred"], ["sub", "Subtitled"],
                      ["imax", "IMAX"], ["atmos", "Atmos"], ["plat", "Platino"]];
 
 /* The count line has to compose now that chips stack. "126 subtitled IMAX showings" is
    the sentence, so the language adjective comes first and the room second, and "starting
    soon" is a clause rather than an adjective because "starting soon subtitled showings"
    is not English. */
-const FILTER_WORD = { sub: "subtitled", imax: "IMAX", atmos: "Dolby Atmos", plat: "Platino" };
-const WORD_ORDER = ["sub", "imax", "atmos", "plat"];
+const FILTER_WORD = { star: "starred", sub: "subtitled", imax: "IMAX", atmos: "Dolby Atmos", plat: "Platino" };
+const WORD_ORDER = ["star", "sub", "imax", "atmos", "plat"];
 /* `unlisted` is how many of the results are Cineteca screenings that do not say which
    language they are. When there are any, the word has to be "subtitled or unlisted": the
    Subtitled chip now includes them, and a line reading "437 subtitled showings" over a
@@ -1237,8 +1277,8 @@ function filterCounts() {
       // The search narrows these too, or a chip stays lit for showings the search has
       // already taken off the list and tapping it lands on an empty page.
       if (!matchesQuery(SHOWS.films[s[0]])) continue;
-      if (passes(s[1], s[3], dayIso)) out.active++;
-      for (const [k] of FILTER_OPTS) if (passes(s[1], s[3], dayIso, k)) out[k]++;
+      if (passes(s[1], s[3], dayIso, null, s[0])) out.active++;
+      for (const [k] of FILTER_OPTS) if (passes(s[1], s[3], dayIso, k, s[0])) out[k]++;
     }
   }
   return out;
@@ -1292,7 +1332,7 @@ function renderShows() {
     for (const s of c.s) {
       if (s[2] !== S.day) continue;
       total++;
-      if (!passes(s[1], s[3], dayIso)) continue;
+      if (!passes(s[1], s[3], dayIso, null, s[0])) continue;
       if (!matchesQuery(SHOWS.films[s[0]])) continue;
       shown++;
       // How many of what he is looking at are Cineteca screenings with no language on
@@ -1323,7 +1363,7 @@ function renderShows() {
     const lv = nextStart === null ? null : leaveBy(nextStart, c.dist, dayIso);
     const v = c.v != null ? V[c.v] : null;
     const films = [...byFilm.entries()]
-      .sort((a, b) => (SHOWS.films[b[0]].c || 0) - (SHOWS.films[a[0]].c || 0))
+      .sort((a, b) => (isStarred(b[0]) - isStarred(a[0])) || (SHOWS.films[b[0]].c || 0) - (SHOWS.films[a[0]].c || 0))
       .map(([fid, fmMap]) => {
         const f = SHOWS.films[fid];
         const vers = [...fmMap.entries()].map(([fi, list]) => {
@@ -1363,7 +1403,7 @@ function renderShows() {
             <div class="times">${chips}</div></div>`;
         }).join("");
         return `<div class="film">${posterCard(fid, f.n, "", true)}
-          <div class="fb"><div class="ft"><b>${esc(f.n)}</b>
+          <div class="fb"><div class="ft"><b>${isStarred(fid) ? STAR_MARK : ""}${esc(f.n)}</b>
           <span>${esc([f.d, f.r, (f.g || [])[0]].filter(Boolean).join(" · "))}</span></div>${vers}</div></div>`;
       }).join("");
     return `<div class="cin">
@@ -1408,14 +1448,14 @@ function renderFilms() {
         // THE FILTERS APPLY HERE TOO, now that they are a saved preference. A standing
         // "subtitled" honoured by one list and not the other is worse than no preference:
         // the two lists disagree about how many showings a film has and neither says why.
-        if (!passes(s[1], s[3], dayIso)) continue;
+        if (!passes(s[1], s[3], dayIso, null, s[0])) continue;
         n++;
         (SHOWS.fmts[s[1]].t || []).forEach(t => types.add(t));
         if (!near) near = c;
       }
     }
     return { fid, f, n, near, types: [...types] };
-  }).filter(r => r.n && matchesQuery(r.f)).sort((a, b) => b.n - a.n);
+  }).filter(r => r.n && matchesQuery(r.f)).sort((a, b) => (isStarred(b.fid) - isStarred(a.fid)) || b.n - a.n);
 
   // Same word, same reason, on the Films count line.
   const unlisted = rows.reduce((a, r) => a + (r.types.includes("lang_unknown") ? 1 : 0), 0);
@@ -1437,7 +1477,7 @@ function renderFilms() {
     const F = r.near ? far(km(origin, { lat: r.near.lat, lng: r.near.lng })) : null;
     return `<button class="frow haspos" data-film="${esc(r.fid)}">
       ${posterCard(r.fid, r.f.n, "", false)}
-      <span><span class="n">${esc(r.f.n)}</span>
+      <span><span class="n">${isStarred(r.fid) ? STAR_MARK : ""}${esc(r.f.n)}</span>
         <span class="s">${esc([r.f.d, r.f.r, (r.f.g || []).join(", ")].filter(Boolean).join(" · "))}</span>
         ${r.near ? `<span class="at"><b>${esc(r.near.n)}</b>${
           // MINUTES, NOT BOTH. The metres and the walking time are the same fact -- the
@@ -2042,7 +2082,7 @@ function filmSheet(fid) {
     : "";
   const head = `<div class="poshead">${bd}
       ${posterCard(fid, f.n, "", false)}
-      <div><h2>${esc(f.n)}</h2><div class="addr">${
+      <div><h2>${esc(f.n)}</h2>${starBtn(fid)}<div class="addr">${
     esc([f.o && f.o !== f.n ? f.o : "", f.d, f.r, (f.g || []).join(", "), f.dir].filter(Boolean).join(" · "))}</div>
       ${syn ? `<div class="syn" id="syn"><p>${esc(syn)}</p>${
         // The toggle is only offered where there is something hidden to reveal. Three
@@ -2476,6 +2516,19 @@ document.addEventListener("click", e => {
     else if (S.filters.has(k)) S.filters.delete(k);
     else S.filters.add(k);
     saveFilters();
+    renderFilters(); renderShows();
+    if (S.tab === "films") renderFilms();
+    return;
+  }
+  // Before [data-cin] and [data-film]: the button sits inside a sheet whose rows carry both.
+  const star = e.target.closest("[data-star]");
+  if (star) {
+    const id = star.dataset.star;
+    if (S.starred.has(id)) S.starred.delete(id); else S.starred.add(id);
+    saveStarred();
+    const on = S.starred.has(id);
+    star.setAttribute("aria-pressed", String(on));
+    star.querySelector("span").textContent = on ? "Starred" : "Star this film";
     renderFilters(); renderShows();
     if (S.tab === "films") renderFilms();
     return;
