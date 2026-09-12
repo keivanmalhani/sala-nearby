@@ -94,6 +94,10 @@ screen with no browser bars, and works with no signal after the first launch.
 - **Search that suggests.** From the second letter the box suggests movies (with how many
   cinemas show them), directors, cinemas (with the walk) and genres. A movie or a cinema
   opens its sheet; a director or a genre filters the list. A clear button empties it.
+- **Swipe down to refresh.** At the top of Movies or Showtimes, a pull checks the site for
+  a new build or newer showtimes and reloads into them, writing the new page into the
+  offline cache first so the reload does not put the old one back. Otherwise it says
+  when the showtimes were read, or that there is no signal.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has
