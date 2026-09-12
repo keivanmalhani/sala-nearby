@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-09-12",
+  "about": "What can be defended about each IMAX room the app knows, per field, with the source for every claim. Data only: nothing in the page reads this yet. Unknown is an answer, not a gap to fill with a guess.",
+  "confidence": {
+    "verified": "Read from the operator's own data (Cinemex's API or seat map), or measured by this project.",
+    "likely": "Stated by independent press, or by the operator only at chain level rather than for this room. Two sources agreeing is still likely, not verified, unless one of them is the operator.",
+    "unknown": "Not published, or the published sources contradict each other. The note says which."
+  },
+  "sources": {
+    "cinemex_landing_imax": {
+      "url": "https://api.cinemex.com/rest/v2.38/landings/imax",
+      "kind": "operator",
+      "what": "Cinemex's IMAX page. Lists its IMAX cinemas, and names four as laser in one sentence.",
+      "quote": "Ven a conocer nuestras nuevas pantallas IMAX Laser en Antara, Santa Fe, Parque Delta y Parque Tezontle y vive las emociones del cine al MAXIMO.",
+      "recorded_in": "docs/cinema-extras.json formats.imax_rooms.laser.quote_es"
+    },
+    "cinemex_seat_maps": {
+      "url": "https://api.cinemex.com/rest/v2.38/sessions/<id>",
+      "kind": "operator, measured",
+      "what": "The seat map of a real session in each room, counted seat by seat.",
+      "recorded_in": "docs/rooms.json venues.<id>.rooms"
+    },
+    "cinepremiere": {
+      "url": "https://cinepremiere.com.mx/cinemex-pantallas-imax.html",
+      "kind": "press",
+      "author": "Gustavo Pineda",
+      "date": "not shown on the page; written before the end of 2023",
+      "quotes": ["A partir de un sistema de proyeccion laser 4K de ultima generacion", "una tecnologia de audio de 12 canales de IMAX"],
+      "fetched": "2026-09-12"
+    },
+    "xataka_2023_12": {
+      "url": "https://www.xataka.com.mx/cine-y-tv/queremos-que-cada-visita-sea-unica-e-irrepetible-tecnologia-imax-laser-llega-a-cinemex-mexico-para-peliculas-eventos-deportes",
+      "kind": "press",
+      "date": "2023-12-22",
+      "quotes": ["Cinemex Santa Fe, Parque Delta y Market Antara son los primeros complejos con salas IMAX con laser de Cinemex", "12 canales de audio", "1.90:1", "la sala IMAX Platino mas grande de Latinoamerica (Market Antara)"],
+      "fetched": "2026-09-12"
+    },
+    "elfinanciero_2026_07": {
+      "url": "https://www.elfinanciero.com.mx/entretenimiento/2026/07/15/cuales-son-las-diferencias-para-ver-la-odisea-en-imax-en-cinepolis-y-cinemex/",
+      "kind": "press, chain-level",
+      "date": "2026-07-15",
+      "quotes": ["Cinemex: Dual Laser ... Sistema de audio de 12 canales ... 1.90:1", "Cinepolis: Sistema de proyeccion dual en 4K con mayor brillo, contraste y resolucion ... 1.90:1"],
+      "fetched": "2026-09-12"
+    },
+    "infobae_2026_07": {
+      "url": "https://www.infobae.com/mexico/2026/07/22/cual-es-la-pantalla-de-cine-mas-grande-de-cdmx-para-ver-la-odisea-de-christopher-nolan/",
+      "kind": "press",
+      "date": "2026-07-21",
+      "quotes": ["Cinemex Antara: pantalla IMAX mas grande de la Ciudad de Mexico y de toda Latinoamerica, con aproximadamente 300 metros cuadrados de superficie", "Cinepolis Universidad: pantalla de 21.3 por 13.7 metros, cerca de 292 metros cuadrados", "Cinepolis Forum Buenavista: alrededor de 280 a 290 metros cuadrados"],
+      "fetched": "2026-09-12"
+    },
+    "page_audit": {
+      "url": "docs/index.html, the venue audit's spec lines",
+      "kind": "this project's own audit, which already tags each line v / l / u",
+      "note": "Cited where the audit records a contradiction between sources that is not fetched again here."
+    }
+  },
+  "rooms": [
+    {
+      "venue_id": "32",
+      "venue": "Cinemex Parque Delta",
+      "chain": "Cinemex",
+      "room": "Sala 3",
+      "has_showtimes_in_app": true,
+      "label": {"value": "IMAX with Laser", "confidence": "verified", "sources": ["cinemex_landing_imax"]},
+      "projection": {"value": "laser", "confidence": "verified", "sources": ["cinemex_landing_imax"]},
+      "resolution": {"value": "4K", "confidence": "likely", "sources": ["cinepremiere"], "note": "Press only. Cinemex's own pages publish no resolution."},
+      "sound": {"value": "IMAX 12-channel", "confidence": "likely", "sources": ["xataka_2023_12", "elfinanciero_2026_07", "cinepremiere"], "note": "Press only. '12-channel' appears nowhere in Cinemex's CMS (docs/cinema-extras.json spec_claims_not_sourced)."},
+      "aspect_ratio": {"value": "1.90:1", "confidence": "likely", "sources": ["xataka_2023_12", "elfinanciero_2026_07"], "note": "The digital IMAX ratio. Not the 1.43:1 of film IMAX, which no screen in Mexico City shows."},
+      "screen_width_m": {"value": null, "confidence": "unknown", "sources": ["page_audit"], "note": "Audit: 'Screen dimensions not published.'"},
+      "screen_height_m": {"value": null, "confidence": "unknown", "sources": ["page_audit"]},
+      "screen_area_m2": {"value": null, "confidence": "unknown", "sources": ["page_audit"]},
+      "seats_total": {"value": 388, "confidence": "verified", "sources": ["cinemex_seat_maps"], "note": "Session 65671066, 2026-12-16. 382 regular."},
+      "wheelchair_spaces": {"value": 6, "confidence": "verified", "sources": ["cinemex_seat_maps"]},
+      "opened_as_laser": {"value": "2023-12", "confidence": "likely", "sources": ["xataka_2023_12"], "note": "Named among the first three Cinemex laser complexes in December 2023."}
+    },
+    {
+      "venue_id": "76",
+      "venue": "Cinemex Antara Platino",
+      "chain": "Cinemex",
+      "room": "Sala 5",
+      "has_showtimes_in_app": true,
+      "label": {"value": "IMAX with Laser, Platino seating", "confidence": "verified", "sources": ["cinemex_landing_imax", "page_audit"]},
+      "projection": {"value": "laser", "confidence": "verified", "sources": ["cinemex_landing_imax"]},
+      "resolution": {"value": "4K", "confidence": "likely", "sources": ["cinepremiere"], "note": "Press only."},
+      "sound": {"value": "IMAX 12-channel", "confidence": "likely", "sources": ["xataka_2023_12", "elfinanciero_2026_07", "cinepremiere"], "note": "Press only."},
+      "aspect_ratio": {"value": "1.90:1", "confidence": "likely", "sources": ["xataka_2023_12", "elfinanciero_2026_07"]},
+      "screen_width_m": {"value": null, "confidence": "unknown", "sources": ["page_audit"], "note": "Not published."},
+      "screen_height_m": {"value": null, "confidence": "unknown", "sources": ["page_audit"], "note": "Sources disagree: 'casi 20 m' against 'mas de 18 m'. Neither is Cinemex's. Do not print a height."},
+      "screen_area_m2": {"value": 300, "approximate": true, "confidence": "likely", "sources": ["infobae_2026_07", "page_audit"], "note": "Press: 'aproximadamente 300 metros cuadrados'. Say 'about 300 m2', never an exact figure."},
+      "billed_as": {"value": "largest IMAX screen in Mexico City and Latin America", "confidence": "likely", "sources": ["infobae_2026_07", "xataka_2023_12"], "note": "A marketing superlative repeated by press, not a measurement."},
+      "seats_total": {"value": 142, "confidence": "verified", "sources": ["cinemex_seat_maps"], "note": "Session 65659658, 2026-12-16. 140 regular. Platino recliners, so few seats for the screen size."},
+      "wheelchair_spaces": {"value": 2, "confidence": "verified", "sources": ["cinemex_seat_maps"]},
+      "opened_as_laser": {"value": "2023-12", "confidence": "likely", "sources": ["xataka_2023_12"]}
+    },
+    {
+      "venue_id": "410",
+      "venue": "Cinemex Encuentro Oceania",
+      "chain": "Cinemex",
+      "room": "Sala 1",
+      "has_showtimes_in_app": true,
+      "label": {"value": "IMAX", "confidence": "verified", "sources": ["cinemex_landing_imax"], "note": "On Cinemex's IMAX list. Do NOT label it 'IMAX with Laser': see projection."},
+      "projection": {"value": null, "confidence": "unknown", "sources": ["cinemex_landing_imax", "cinepremiere", "elfinanciero_2026_07"], "note": "Contradicted. Cinemex's own laser sentence names Antara, Santa Fe, Parque Delta and Parque Tezontle and leaves Oceania out. Cine PREMIERE listed it among the planned laser rooms in 2023, and El Financiero calls Cinemex IMAX dual laser chain-wide. The operator's omission is the stronger evidence until Cinemex names it."},
+      "resolution": {"value": null, "confidence": "unknown", "sources": [], "note": "Nothing published for this room."},
+      "sound": {"value": "IMAX 12-channel", "confidence": "likely", "sources": ["elfinanciero_2026_07"], "note": "Chain-level claim only, not about this room."},
+      "aspect_ratio": {"value": "1.90:1", "confidence": "likely", "sources": ["elfinanciero_2026_07"], "note": "Chain-level claim only."},
+      "screen_width_m": {"value": null, "confidence": "unknown", "sources": []},
+      "screen_height_m": {"value": null, "confidence": "unknown", "sources": []},
+      "screen_area_m2": {"value": null, "confidence": "unknown", "sources": []},
+      "seats_total": {"value": 236, "confidence": "verified", "sources": ["cinemex_seat_maps"], "note": "Session 65660546, 2026-12-16. 229 regular."},
+      "wheelchair_spaces": {"value": 7, "confidence": "verified", "sources": ["cinemex_seat_maps"]}
+    },
+    {
+      "venue_id": null,
+      "venue": "Cinepolis Universidad",
+      "chain": "Cinepolis",
+      "room": null,
+      "has_showtimes_in_app": false,
+      "label": {"value": "IMAX", "confidence": "likely", "sources": ["elfinanciero_2026_07", "infobae_2026_07", "page_audit"], "note": "Cinepolis' own site cannot be read from this network, so no operator source."},
+      "projection": {"value": null, "confidence": "unknown", "sources": ["page_audit", "elfinanciero_2026_07"], "note": "Contested. The audit records Infobae calling Cinepolis' CDMX IMAX sites laser and Omelete and Xataka saying dual xenon. El Financiero says only 'dual 4K projection', which fits either."},
+      "resolution": {"value": "4K, dual projector", "confidence": "likely", "sources": ["elfinanciero_2026_07"], "note": "Chain-level claim only."},
+      "sound": {"value": null, "confidence": "unknown", "sources": ["elfinanciero_2026_07"], "note": "Only 'audio optimizado'. No channel count."},
+      "aspect_ratio": {"value": "1.90:1", "confidence": "likely", "sources": ["elfinanciero_2026_07"], "note": "Chain-level claim only."},
+      "screen_width_m": {"value": 21.3, "confidence": "likely", "sources": ["infobae_2026_07", "page_audit"]},
+      "screen_height_m": {"value": 13.7, "confidence": "likely", "sources": ["infobae_2026_07", "page_audit"]},
+      "screen_area_m2": {"value": 292, "approximate": true, "confidence": "likely", "sources": ["infobae_2026_07"], "note": "21.3 x 13.7 is 291.8. Press calls it the largest Cinepolis screen in CDMX."},
+      "seats_total": {"value": null, "confidence": "unknown", "sources": []},
+      "wheelchair_spaces": {"value": null, "confidence": "unknown", "sources": []}
+    },
+    {
+      "venue_id": null,
+      "venue": "Cinepolis Forum Buenavista",
+      "chain": "Cinepolis",
+      "room": null,
+      "has_showtimes_in_app": false,
+      "label": {"value": "IMAX", "confidence": "likely", "sources": ["elfinanciero_2026_07", "infobae_2026_07", "page_audit"]},
+      "projection": {"value": null, "confidence": "unknown", "sources": ["page_audit"], "note": "Contested, same as Universidad: laser against dual xenon."},
+      "resolution": {"value": "4K, dual projector", "confidence": "likely", "sources": ["elfinanciero_2026_07"], "note": "Chain-level claim only."},
+      "sound": {"value": null, "confidence": "unknown", "sources": []},
+      "aspect_ratio": {"value": "1.90:1", "confidence": "likely", "sources": ["elfinanciero_2026_07", "page_audit"]},
+      "screen_width_m": {"value": null, "confidence": "unknown", "sources": []},
+      "screen_height_m": {"value": null, "confidence": "unknown", "sources": []},
+      "screen_area_m2": {"value": "280-290", "approximate": true, "confidence": "likely", "sources": ["infobae_2026_07", "page_audit"], "note": "A range in the source, so show it as a range."},
+      "seats_total": {"value": null, "confidence": "unknown", "sources": []},
+      "wheelchair_spaces": {"value": null, "confidence": "unknown", "sources": []}
+    }
+  ],
+  "imax_in_cdmx_not_in_app": [
+    {"venue": "Cinemex Santa Fe", "venue_id": "84", "projection": "laser", "confidence": "verified", "sources": ["cinemex_landing_imax"]},
+    {"venue": "Cinemex Parque Tezontle", "venue_id": "236", "projection": "laser", "confidence": "verified", "sources": ["cinemex_landing_imax"]},
+    {"venue": "Cinepolis Perisur", "venue_id": null, "projection": null, "confidence": "likely", "sources": ["elfinanciero_2026_07"], "note": "Listed as a Cinepolis IMAX site. Nothing else known."}
+  ],
+  "what_not_to_say": [
+    "Never '1.43:1' or 'IMAX 70mm' or 'IMAX GT' for any of these. All are digital 1.90:1.",
+    "Never 'IMAX with Laser' for Encuentro Oceania, Universidad or Forum Buenavista.",
+    "Never an exact screen height for Antara. The two press figures disagree.",
+    "'2K xenon' is not established for any room here. The contested Cinepolis sites are unknown, not xenon."
+  ]
+}

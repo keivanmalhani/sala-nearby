@@ -2137,11 +2137,32 @@ function cinemaSheet(cid) {
    question. A film sheet shows only the formats that film actually plays in, so nobody
    reads about Platino for a film that is not in one. Wording is the audited copy from the
    old guide, unchanged. Nothing is written here for a format the audit did not cover. */
+/* IMAX, ROOM BY ROOM. Ask 10 on 12 September: "IMAX 4K digital? IMAX 2K digital? Screen
+   size?". Baked from docs/imax-specs.json by imax-rooms.py, where every value has a source
+   and a confidence. Keyed "cinema id|room". Likely facts say "(press)"; unknown ones say "not
+   published", because that is the honest answer to the question he asked. */
+const IMAX_ROOMS = {"32|Sala 3":{"label":["IMAX with Laser","verified"],"projection":["laser","verified"],"resolution":["4K","likely"],"sound":["IMAX 12-channel","likely"],"aspect_ratio":["1.90:1","likely"],"screen_area_m2":[null,"unknown"]},"76|Sala 5":{"label":["IMAX with Laser, Platino seating","verified"],"projection":["laser","verified"],"resolution":["4K","likely"],"sound":["IMAX 12-channel","likely"],"aspect_ratio":["1.90:1","likely"],"screen_area_m2":[300,"likely"],"billed_as":["largest IMAX screen in Mexico City and Latin America","likely"]},"410|Sala 1":{"label":["IMAX","verified"],"projection":[null,"unknown"],"resolution":[null,"unknown"],"sound":["IMAX 12-channel","likely"],"aspect_ratio":["1.90:1","likely"],"screen_area_m2":[null,"unknown"]}};
+function imaxLine(cid, room) {
+  const r = IMAX_ROOMS[String(cid) + "|" + room];
+  if (!r) return "";
+  const v = (k, fmt) => {
+    const x = r[k];
+    if (!x || x[1] === "unknown" || x[0] == null) return null;
+    return (fmt ? fmt(x[0]) : String(x[0])) + (x[1] === "likely" ? " (press)" : "");
+  };
+  const parts = [
+    v("label"),
+    r.projection && r.projection[1] !== "unknown" ? v("projection", p => p + " projection") : "projector not published",
+    v("resolution"), v("sound", x => x + " sound"), v("aspect_ratio"),
+    r.screen_area_m2 && r.screen_area_m2[1] !== "unknown" ? v("screen_area_m2", a => "about " + a + " m² screen") : "screen size not published",
+  ].filter(Boolean);
+  return parts.join(", ");
+}
 const FORMAT_NOTE = {
-  imax: ["IMAX with Laser",
-    "A 4K laser projector, twelve channels of sound and a 1.90:1 screen. Every IMAX in "
-    + "Mexico is that kind; the tall 1.43:1 rooms do not exist here. Parque Delta and "
-    + "Antara are the two near Roma."],
+  imax: ["IMAX",
+    "IMAX's own digital format: a 1.90:1 screen and IMAX's twelve-channel sound. None of the "
+    + "tall 1.43:1 rooms exists in Mexico. Cinemex names Parque Delta and Antara as laser; "
+    + "each room's own line under its times says what else is known about it."],
   dolby_atmos: ["Dolby Atmos",
     "Speakers overhead as well as around you. You hear it most in a room built for it, "
     + "which here means the CinemeXtremo screens."],
@@ -2251,7 +2272,8 @@ function filmSheet(fid) {
         }
       }
       const rline = seen.map(([k, r]) =>
-        `${esc(k)}: ${r[1]} seats, ${r[2] ? r[2] + " wheelchair" : "no wheelchair space"}`
+        `${esc(k)}: ${r[1]} seats, ${r[2] ? r[2] + " wheelchair" : "no wheelchair space"}${
+          imaxLine(c.id, k) ? " &middot; " + esc(imaxLine(c.id, k)) : ""}`
       ).join(" &middot; ");
       const price = isCineteca(c.id)
         ? (DETAIL && DETAIL.cineteca_price ? DETAIL.cineteca_price.general : null)

@@ -98,6 +98,10 @@ screen with no browser bars, and works with no signal after the first launch.
   a new build or newer showtimes and reloads into them, writing the new page into the
   offline cache first so the reload does not put the old one back. Otherwise it says
   when the showtimes were read, or that there is no signal.
+- **IMAX, room by room.** Under the times on a film's sheet, an IMAX room says whether it
+  is laser, 4K, its sound and aspect ratio, and its screen size or that it is not
+  published, with "(press)" on anything Cinemex has not said itself. From
+  `docs/imax-specs.json`, where every value carries its source.
 - **When to leave.** Each cinema says "leave 20:11 for the 20:30", computed from the
   travel time already on the row. There is deliberately no allowance for the ad reel in
   that subtraction. Cinemex reels do run fifteen to twenty minutes, but nobody has
