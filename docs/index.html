@@ -521,6 +521,7 @@ button.pw:active{opacity:.72}
    long one. */
 .sheet .go a.yt{flex:none;padding:0 18px}
 .sheet .made{color:var(--ink-2);font-size:12.5px;line-height:1.45;margin-top:5px}
+.sheet .rate{color:var(--ink-2);font-size:12px;line-height:1.4;margin-top:6px}
 .sheet .body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:20px}
 .sheet .plain{font-family:Newsreader,Georgia,serif;font-size:16.5px;line-height:1.55;padding:14px 18px 4px;margin:0;color:var(--ink)}
 .sec{padding:14px 18px;border-top:1px solid var(--line-2)}
@@ -1516,7 +1517,7 @@ function renderShows() {
         }).join("");
         return `<div class="film">${posterCard(fid, f.n, "", true)}
           <div class="fb"><div class="ft"><b>${isStarred(fid) ? STAR_MARK : ""}${esc(f.n)}</b>
-          <span>${esc([f.d, f.r, (f.g || [])[0]].filter(Boolean).join(" · "))}</span></div>${vers}</div></div>`;
+          <span>${esc([f.d, (f.g || [])[0]].filter(Boolean).join(" · "))}</span></div>${vers}</div></div>`;
       }).join("");
     return `<div class="cin">
       <button class="hdr" data-cin="${c.id}">
@@ -1590,7 +1591,7 @@ function renderFilms() {
     return `<button class="frow haspos" data-film="${esc(r.fid)}">
       ${posterCard(r.fid, r.f.n, "", false)}
       <span><span class="n">${isStarred(r.fid) ? STAR_MARK : ""}${esc(r.f.n)}</span>
-        <span class="s">${esc([r.f.d, r.f.r, (r.f.g || []).join(", ")].filter(Boolean).join(" · "))}</span>
+        <span class="s">${esc([r.f.d, (r.f.g || []).join(", ")].filter(Boolean).join(" · "))}</span>
         ${r.near ? `<span class="at"><b>${esc(r.near.n)}</b>${
           // MINUTES, NOT BOTH. The metres and the walking time are the same fact -- the
           // one is computed from the other at 4.5 km/h -- and carrying both pushed the
@@ -1631,7 +1632,7 @@ function renderFilms() {
       return `<button class="frow haspos" data-film="${esc(r.fid)}" data-jump="${ds[0]}">
         ${posterCard(r.fid, f.n, "", false)}
         <span><span class="n">${esc(f.n)}</span>
-          <span class="s">${esc([f.d, f.r, (f.g || []).join(", ")].filter(Boolean).join(" \u00b7 "))}</span>
+          <span class="s">${esc([f.d, (f.g || []).join(", ")].filter(Boolean).join(" \u00b7 "))}</span>
           <span class="at"><b>${when}</b> <span>${r.cin.size} ${
             r.cin.size === 1 ? "cinema" : "cinemas"}</span></span></span>
         <span class="cnt"><b>${r.n}</b><em>showings</em></span></button>`;
@@ -2197,6 +2198,26 @@ addEventListener("click", e => {
   b.textContent = open ? "Read less" : "Read more";
 });
 
+/* AGE RATINGS SIT LOW ON PURPOSE. His words, 12 September: nobody looks at them "unless they
+   click on the movie or want to book a ticket", so they are off every list row and appear
+   once, here, saying what the letter means. The meanings are Article 51 of the Ley Federal de
+   Cine y el Audiovisual, DOF 22 May 2026 (diputados.gob.mx/LeyesBiblio/pdf/LFCA.pdf), not a
+   press summary. Only C and D keep anyone out; the other four are guidance. */
+const RATING = {
+  AA: "for everyone, made for children under 7",
+  A: "for everyone",
+  B: "for teens 12 and up",
+  B15: "for teens over 15",
+  C: "adults 18 and up, checked at the door",
+  D: "adults only, explicit sex or extreme violence",
+};
+function rateLine(r) {
+  const k = String(r || "").trim().toUpperCase();
+  if (!k) return "";
+  const txt = RATING[k] ? `Rated ${k}, ${RATING[k]}` : k === "TBC" ? "Age rating not published yet" : `Rated ${k}`;
+  return `<div class="rate">${esc(txt)}</div>`;
+}
+
 function filmSheet(fid) {
   const f = SHOWS.films[fid];
   if (!f) return;
@@ -2224,13 +2245,13 @@ function filmSheet(fid) {
   const head = `<div class="poshead">${bd}
       ${posterCard(fid, f.n, "", false)}
       <div><h2>${esc(f.n)}</h2>${starBtn(fid)}<div class="addr">${
-    esc([f.o && f.o !== f.n ? f.o : "", f.d, f.r, (f.g || []).join(", "), f.dir].filter(Boolean).join(" · "))}</div>
+    esc([f.o && f.o !== f.n ? f.o : "", f.d, (f.g || []).join(", "), f.dir].filter(Boolean).join(" · "))}</div>
       ${made ? `<div class="made">${esc(made)}</div>` : ""}
       ${syn ? `<div class="syn" id="syn"><p>${esc(syn)}</p>${
         // The toggle is only offered where there is something hidden to reveal. Three
         // lines at 13px over this column is about 150 characters; below that the clamp
         // never bites and a "more" button that reveals nothing is a small lie.
-        syn.length > 150 ? `<button class="more" data-syn="1">Read more</button>` : ""}</div>` : ""}</div></div>`;
+        syn.length > 150 ? `<button class="more" data-syn="1">Read more</button>` : ""}</div>` : ""}${rateLine(f.r)}</div></div>`;
   // NOT THE AMBER SLAB. On a cinema's sheet "Walk me there" is the action and earns the
   // primary style; on a film's sheet it was the loudest thing on the screen for a link
   // that only repeats the first row of the list underneath it. Left neutral, and it names
