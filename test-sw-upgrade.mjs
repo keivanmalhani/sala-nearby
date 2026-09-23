@@ -32,9 +32,11 @@ class Cache {
   async keys() { return [...this.entries.keys()].map(url => new Request(url)); }
   async addAll(requests) {
     assert(requests.length > 0 && requests.every(req => req.cache === "reload"));
+    precached = requests.map(req => req.url);
     // The fixture seeds each published shell; this models its successful precache.
   }
 }
+let precached = [];
 const registry = new Map();
 const caches = {
   async keys() { return [...registry.keys()]; },
@@ -48,7 +50,7 @@ let networkResult = null;
 let skipWaitingCalls = 0;
 let fetchOptions = [];
 const self = {
-  location: { origin: BASE.slice(0, -1) },
+  location: { origin: BASE.slice(0, -1), href: BASE + "sw.js" },
   addEventListener(type, handler) { listeners.set(type, handler); },
   clients: { async claim() {} },
   async skipWaiting() { skipWaitingCalls++; },
@@ -87,6 +89,8 @@ async function install() {
   return installing;
 }
 await install();
+// Where an older worker filed the synopses: as a poster, cache-first and never refreshed.
+await put("sala-assets-v1-posters", BASE + "posters/index.json", "frozen synopses");
 let activation;
 listeners.get("activate")({ waitUntil(p) { activation = p; } });
 await activation;
@@ -121,6 +125,19 @@ const bodies = retained.flat().map(response => response.body);
 const retainedBytes = bodies.reduce((sum, body) => sum + Buffer.byteLength(body), 0);
 assert.equal(bodies.length, 3);
 assert.equal(retainedBytes, 29);
+
+// THE SYNOPSES. Precached with the shell so one launch with a signal is enough, cleared out
+// of the poster cache where an older worker froze them, and refreshed in the background so
+// a film added by a later build gets its synopsis.
+assert(precached.includes(BASE + "posters/index.json"));
+assert.equal(await get("sala-assets-v1-posters", BASE + "posters/index.json"), undefined);
+await put(`sala-v${version}-shell`, BASE + "posters/index.json", "old synopses");
+networkResult = new Response("new synopses");
+await offlineGet(BASE + "posters/index.json");
+assert.equal((await get(`sala-v${version}-shell`, BASE + "posters/index.json")).body, "new synopses");
+networkResult = null;
+assert.equal((await offlineGet(BASE + "posters/index.json")).body, "new synopses");
+assert.equal(await get("sala-assets-v1-posters", BASE + "posters/index.json"), undefined);
 
 // A second daily shell bump must leave the stable asset caches untouched.
 await put(`sala-v${version + 1}-shell`, BASE + "index.html", "second listing");
@@ -207,4 +224,4 @@ assert.equal(await keep({ type: "keep-posters", urls: "posters/16.jpg" }), false
 networkCalls = 0;                                   // the next launch, offline, is served from it
 assert.equal((await offlineGet(BASE + "posters/10.jpg")).body, "first-visit poster");
 assert.equal(networkCalls, 0);
-console.log(`PASS: two upgrades retained ${bodies.length} reusable fixture assets (${retainedBytes} bytes), kept the newest shell and unrelated cache, skipped invalid entries, rejected a quota-blocked install, returned a live asset despite a full cache, then retried within 100 library and 300 poster entry caps, and kept one first-visit poster while refusing foreign, non-poster, failed and offline entries`);
+console.log(`PASS: synopses precached, unfrozen and refreshed; two upgrades retained ${bodies.length} reusable fixture assets (${retainedBytes} bytes), kept the newest shell and unrelated cache, skipped invalid entries, rejected a quota-blocked install, returned a live asset despite a full cache, then retried within 100 library and 300 poster entry caps, and kept one first-visit poster while refusing foreign, non-poster, failed and offline entries`);

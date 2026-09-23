@@ -83,6 +83,7 @@ try {
     count: $("scount").textContent.trim(),
     prices: document.querySelectorAll("#showlist .pri").length,
     posters: document.querySelectorAll("#showlist .pw img").length,
+    synopses: Object.values(POSTERS).filter(p => p && p.syn).length,
     maplibre: typeof maplibregl,
     faces: document.fonts ? document.fonts.size : 0
   })`;
@@ -104,7 +105,7 @@ try {
   console.log("  online: ", JSON.stringify(on));
   // A floor, so that "offline equals online" cannot pass on two empty pages.
   check("the page has something on it to begin with",
-        on.cinemas > 5 && on.prices > 50 && on.posters > 20, on.count);
+        on.cinemas > 5 && on.prices > 50 && on.posters > 20 && on.synopses > 10, on.count);
   check("the worker is controlling the page", warm.controlled);
   // THE POSTERS, read out of the caches rather than off the screen. The on-screen count
   // below cannot fail: it counts poster tags, and a lazy poster on a tab nobody opened
@@ -180,6 +181,8 @@ try {
   check("the prices came back, so detail.json was cached", off.prices === on.prices,
         `${off.prices} of ${on.prices}`);
   check("the posters came back", off.posters === on.posters, `${off.posters} of ${on.posters}`);
+  check("the synopses came back, so posters/index.json was cached", off.synopses === on.synopses,
+        `${off.synopses} of ${on.synopses}`);
   check("MapLibre loaded with no network at all", off.maplibre === "object");
   check("the typeface rules survived, so it is not falling back to system fonts",
         off.faces > 10, off.faces + " faces");

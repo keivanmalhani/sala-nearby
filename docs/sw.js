@@ -15,7 +15,7 @@
 // BUMPED ON EVERY PUBLISH. Only the shell changes with the listing snapshot. The library,
 // map tiles and posters survive a shell upgrade so a daily refresh does not erase the
 // assets someone already downloaded for offline use.
-const V = "sala-v57";
+const V = "sala-v58";
 const SHELL = V + "-shell";
 const LIB = "sala-assets-v1-lib";
 const TILES = "sala-assets-v1-tiles";
@@ -33,6 +33,10 @@ const PRECACHE = [
   // empty on every daily bump: measured 23 September, 0 of 381 prices on the next launch
   // with no signal. 30 KB, and it changes with the build, which is when this runs.
   "./detail.json",
+  // Synopses, cast, country, year and trailer for every film: 54 KB. Same first-visit gap
+  // as detail.json, and until 23 September it also went through the poster branch, which
+  // never revalidates, so once it was cached a film added later never got its synopsis.
+  "./posters/index.json",
   "./manifest.webmanifest",
   "./favicon.svg",
   "./icons/icon-180.png",
@@ -119,6 +123,9 @@ self.addEventListener("activate", (e) => {
       if (!keep.has(k) && (/^sala-v[0-9]+-(shell|lib|tiles|posters)$/.test(k)
           || /^sala-assets-v[0-9]+-(lib|tiles|posters)$/.test(k))) await caches.delete(k);
     }
+    // The copy of posters/index.json an older worker filed as a poster, which would
+    // otherwise sit in that cache frozen until trimmed.
+    await (await caches.open(POSTERS)).delete(new URL("posters/index.json", self.location.href).href);
     await self.clients.claim();
   })());
 });
@@ -186,7 +193,7 @@ self.addEventListener("fetch", (e) => {
   // otherwise goes to the network, so a poster never entered the cache at all and every
   // one of them was a broken image with no signal. Cache-first: a poster for a given film
   // id does not change, and refresh-posters.py writes a new file when a film does.
-  if (url.origin === self.location.origin && url.pathname.indexOf("/posters/") >= 0) {
+  if (url.origin === self.location.origin && /\/posters\/[^/]+\.jpg$/.test(url.pathname)) {
     e.respondWith((async () => {
       const c = await caches.open(POSTERS);
       const hit = await c.match(req);
@@ -234,7 +241,9 @@ self.addEventListener("fetch", (e) => {
   // Cache-first with a background refresh rather than never-revalidated: unlike a poster,
   // its contents change when the build runs, and the copy on screen being one launch
   // behind is the right trade for a sheet that opens instantly.
-  if (url.origin === self.location.origin && /\/detail\.json$/.test(url.pathname)) {
+  // posters/index.json takes this branch too, for the same reason: it changes with the
+  // build, so it lives in the shell and refreshes, not in the poster cache.
+  if (url.origin === self.location.origin && /\/(detail|posters\/index)\.json$/.test(url.pathname)) {
     const cache = caches.open(SHELL);
     const fresh = cache.then(c => fetch(req).then(async (r) => {
       if (r && r.ok) {
