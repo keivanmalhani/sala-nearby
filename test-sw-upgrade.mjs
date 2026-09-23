@@ -46,6 +46,7 @@ let listeners = new Map();
 let networkCalls = 0;
 let networkResult = null;
 let skipWaitingCalls = 0;
+let fetchOptions = [];
 const self = {
   location: { origin: BASE.slice(0, -1) },
   addEventListener(type, handler) { listeners.set(type, handler); },
@@ -58,8 +59,9 @@ function loadWorker(v) {
   listeners = new Map();
   vm.runInNewContext(source.replace(/const V = "sala-v\d+"/, `const V = "sala-v${v}"`), {
     self, caches, Request, Response, URL,
-    fetch: async () => {
+    fetch: async (req, options) => {
       networkCalls++;
+      fetchOptions.push(options);
       if (networkResult) return networkResult.clone();
       throw new Error("offline");
     },
@@ -171,4 +173,38 @@ assert.equal((await caches.open("sala-assets-v1-posters")).entries.size, 300);
 assert.equal((await get("sala-assets-v1-posters", BASE + "posters/film-304.jpg")).body, "poster");
 assert(!(await caches.keys()).includes(`sala-v${version + 1}-tiles`));
 assert.equal((await offlineGet(BASE, "navigate")).body, "third listing");
-console.log(`PASS: two upgrades retained ${bodies.length} reusable fixture assets (${retainedBytes} bytes), kept the newest shell and unrelated cache, skipped invalid entries, rejected a quota-blocked install, returned a live asset despite a full cache, then retried within 100 library and 300 poster entry caps`);
+
+// A first visit loads its first screenful of posters before the worker claims the page, so
+// the page names them afterwards and the worker copies them from the HTTP cache.
+registry.delete("sala-assets-v1-posters");
+await put("sala-assets-v1-posters", BASE + "posters/1.jpg", "already kept");
+async function keep(data) {
+  let kept = null;
+  listeners.get("message")({ data, waitUntil(p) { kept = p; } });
+  if (kept) await kept;
+  return kept !== null;
+}
+networkCalls = 0; fetchOptions = [];
+networkResult = new Response("first-visit poster");
+assert.equal(await keep({ type: "keep-posters", urls: [
+  BASE + "posters/10.jpg", "https://elsewhere.example/posters/11.jpg", BASE + "places.json",
+  BASE + "posters/1.jpg", "not a url at all ::", BASE + "posters/../index.html"] }), true);
+assert.equal(networkCalls, 1);                      // only the one new same-origin poster
+assert.equal(JSON.stringify(fetchOptions), JSON.stringify([{ cache: "force-cache" }]));
+assert.equal((await get("sala-assets-v1-posters", BASE + "posters/10.jpg")).body, "first-visit poster");
+assert.equal((await get("sala-assets-v1-posters", BASE + "posters/1.jpg")).body, "already kept");
+assert.equal(await get("sala-assets-v1-posters", "https://elsewhere.example/posters/11.jpg"), undefined);
+assert.equal(await get("sala-assets-v1-posters", BASE + "places.json"), undefined);
+assert.equal(await get("sala-assets-v1-posters", BASE + "index.html"), undefined);
+networkResult = new Response("missing", { status: 404 });
+await keep({ type: "keep-posters", urls: [BASE + "posters/13.jpg"] });
+assert.equal(await get("sala-assets-v1-posters", BASE + "posters/13.jpg"), undefined);
+networkResult = null;                               // offline: must not throw or store
+await keep({ type: "keep-posters", urls: [BASE + "posters/14.jpg"] });
+assert.equal(await get("sala-assets-v1-posters", BASE + "posters/14.jpg"), undefined);
+assert.equal(await keep({ type: "something-else", urls: [BASE + "posters/15.jpg"] }), false);
+assert.equal(await keep({ type: "keep-posters", urls: "posters/16.jpg" }), false);
+networkCalls = 0;                                   // the next launch, offline, is served from it
+assert.equal((await offlineGet(BASE + "posters/10.jpg")).body, "first-visit poster");
+assert.equal(networkCalls, 0);
+console.log(`PASS: two upgrades retained ${bodies.length} reusable fixture assets (${retainedBytes} bytes), kept the newest shell and unrelated cache, skipped invalid entries, rejected a quota-blocked install, returned a live asset despite a full cache, then retried within 100 library and 300 poster entry caps, and kept one first-visit poster while refusing foreign, non-poster, failed and offline entries`);
