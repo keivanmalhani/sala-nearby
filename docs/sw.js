@@ -15,7 +15,7 @@
 // BUMPED ON EVERY PUBLISH. Only the shell changes with the listing snapshot. The library,
 // map tiles and posters survive a shell upgrade so a daily refresh does not erase the
 // assets someone already downloaded for offline use.
-const V = "sala-v54";
+const V = "sala-v55";
 const SHELL = V + "-shell";
 const LIB = "sala-assets-v1-lib";
 const TILES = "sala-assets-v1-tiles";
@@ -252,4 +252,31 @@ self.addEventListener("fetch", (e) => {
   if (url.origin === self.location.origin) {
     e.respondWith(caches.match(req).then((hit) => hit || fetch(req)));
   }
+});
+
+// THE POSTERS A FIRST VISIT ALREADY DOWNLOADED. The fetch handler above only sees requests
+// made after this worker has claimed the page, and on a first visit the posters in the
+// first screenful load before that: measured 23 September, 16 posters on screen and 0 in
+// the poster cache after the first launch. An installed iPhone app keeps its own storage,
+// separate from Safari's, so its first launch is always this case, and the next launch
+// with no signal showed those films as initials. The page names the posters it loaded
+// once this worker is ready; they are copied from the browser's HTTP cache, which the
+// first visit just filled, so this costs no extra download. Same-origin posters only.
+self.addEventListener("message", (e) => {
+  const d = e.data;
+  if (!d || d.type !== "keep-posters" || !Array.isArray(d.urls)) return;
+  e.waitUntil((async () => {
+    const c = await caches.open(POSTERS);
+    for (const u of d.urls.slice(0, POSTER_MAX)) {
+      let url;
+      try { url = new URL(u, self.location.origin); } catch (_) { continue; }
+      if (url.origin !== self.location.origin || !/\/posters\/[^/]+\.jpg$/.test(url.pathname)) continue;
+      if (await c.match(url.href)) continue;
+      try {
+        const r = await fetch(url.href, { cache: "force-cache" });
+        if (r && r.ok) await c.put(url.href, r);
+      } catch (_) { /* offline or evicted: the fetch handler catches it next launch */ }
+    }
+    await trim(POSTERS, POSTER_MAX);
+  })());
 });

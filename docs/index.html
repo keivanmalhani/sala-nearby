@@ -3484,6 +3484,13 @@ requestAnimationFrame(function () { requestAnimationFrame(function () {
 if ("serviceWorker" in navigator) {
   addEventListener("load", function () {
     navigator.serviceWorker.register("sw.js").catch(function () {});
+    // Hand the worker the posters this launch already loaded, which on a first visit it
+    // never saw (see the message handler at the end of sw.js).
+    navigator.serviceWorker.ready.then(function (reg) {
+      var urls = performance.getEntriesByType("resource").map(function (r) { return r.name; })
+        .filter(function (u) { return /\/posters\/[^\/]+\.jpg$/.test(u.split("?")[0]); });
+      if (urls.length && reg.active) reg.active.postMessage({ type: "keep-posters", urls: urls });
+    }).catch(function () {});
   });
 }
 
