@@ -15,7 +15,7 @@
 // BUMPED ON EVERY PUBLISH. Only the shell changes with the listing snapshot. The library,
 // map tiles and posters survive a shell upgrade so a daily refresh does not erase the
 // assets someone already downloaded for offline use.
-const V = "sala-v55";
+const V = "sala-v56";
 const SHELL = V + "-shell";
 const LIB = "sala-assets-v1-lib";
 const TILES = "sala-assets-v1-tiles";

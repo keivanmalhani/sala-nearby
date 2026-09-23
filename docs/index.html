@@ -3487,9 +3487,22 @@ if ("serviceWorker" in navigator) {
     // Hand the worker the posters this launch already loaded, which on a first visit it
     // never saw (see the message handler at the end of sw.js).
     navigator.serviceWorker.ready.then(function (reg) {
-      var urls = performance.getEntriesByType("resource").map(function (r) { return r.name; })
-        .filter(function (u) { return /\/posters\/[^\/]+\.jpg$/.test(u.split("?")[0]); });
-      if (urls.length && reg.active) reg.active.postMessage({ type: "keep-posters", urls: urls });
+      function send(entries) {
+        var urls = entries.map(function (r) { return r.name; })
+          .filter(function (u) { return /\/posters\/[^\/]+\.jpg$/.test(u.split("?")[0]); });
+        if (urls.length && reg.active) reg.active.postMessage({ type: "keep-posters", urls: urls });
+      }
+      send(performance.getEntriesByType("resource"));
+      // A poster still downloading when the worker took over lands after the list above
+      // was read, and the worker never saw its request either: measured 1 of 16 on a fast
+      // first visit and far more on a slow one. Catch those as they finish, for a minute.
+      if (window.PerformanceObserver) {
+        try {
+          var po = new PerformanceObserver(function (l) { send(l.getEntries()); });
+          po.observe({ type: "resource" });
+          setTimeout(function () { po.disconnect(); }, 60000);
+        } catch (_) { /* older browsers: the first list above still went */ }
+      }
     }).catch(function () {});
   });
 }
