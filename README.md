@@ -150,6 +150,23 @@ facts about 9 September rather than about caching, so the run went red on the ca
 moment the payload rolled to a day with 29. It takes the same reading with a signal and
 without one now and requires them to be equal, which is the question it was always asking.
 
+## Listing updates preserve downloaded assets
+
+Daily showtime updates replace the page cache while keeping downloaded map tiles,
+posters and libraries. Existing installations migrate their most recent asset caches
+before removing the old page. Cleanup only touches Sala caches, so other apps hosted
+on the same domain keep their offline data.
+
+The upgrade regression test uses an offline Cache API simulation:
+
+    node test-sw-upgrade.mjs
+
+It checks that an update serves the new listing while retaining valid assets, and that
+another listing update preserves them again. This is an upgrade test, not a measurement
+of load time on a phone. The existing pull-to-refresh controls run separately:
+
+    node test-pull-refresh.mjs
+
 ## How it is built
 
 One self-contained HTML file, no framework, no build step for the page itself. MapLibre GL

@@ -1,6 +1,6 @@
 /* Sala Nearby, offline.
  *
- * The point of this file is that the app opens on the Metro with no signal. Three caches,
+ * The point of this file is that the app opens on the Metro with no signal. Four caches,
  * because the three kinds of thing here go stale on completely different clocks:
  *
  *   shell    the page, the icons, the manifest. Changes when I republish.
@@ -12,18 +12,17 @@
  * shell and there is nothing separate to cache. They are a stamped snapshot either way;
  * every time chip links to Cinemex checkout, which is always live.
  */
-// BUMPED ON EVERY PUBLISH, and it has to be. The activate handler deletes any cache whose
-// name is not in the current set, so changing this is what makes a new version actually
-// reach a phone that already has the old one. Without a bump the navigation handler answers
-// from the cached shell first and he sees the previous build for one more launch -- which
-// is exactly what happened while this change was being tested: the page on screen was two
-// edits behind the file on disk.
-const V = "sala-v52";
+// BUMPED ON EVERY PUBLISH. Only the shell changes with the listing snapshot. The library,
+// map tiles and posters survive a shell upgrade so a daily refresh does not erase the
+// assets someone already downloaded for offline use.
+const V = "sala-v53";
 const SHELL = V + "-shell";
-const LIB = V + "-lib";
-const TILES = V + "-tiles";
-const POSTERS = V + "-posters";
+const LIB = "sala-assets-v1-lib";
+const TILES = "sala-assets-v1-tiles";
+const POSTERS = "sala-assets-v1-posters";
 const TILE_MAX = 700;          // roughly all of Roma, Condesa, Juarez and Doctores at z16
+const POSTER_MAX = 300;       // several full film cycles, without retaining every old film
+const LIB_MAX = 100;          // current script, styles and font variants plus headroom
 
 const PRECACHE = [
   "./",
@@ -83,15 +82,38 @@ self.addEventListener("install", (e) => {
         LIB_WARM.map((u) => fetch(u, { mode: "cors" })
           .then((r) => (r && r.ok ? c.put(u, r) : null))
           .catch(() => null))
-      )))
+      ).then(() => trim(LIB, LIB_MAX))))
+      .then(() => migrateAssets())
       .then(() => self.skipWaiting())
   );
 });
 
+// Copy before skipWaiting. A rejected install leaves the old worker active with its
+// caches; activation would already have stopped that worker.
+async function migrateAssets() {
+  const names = await caches.keys();
+  for (const [suffix, target, max] of [["lib", LIB, LIB_MAX], ["tiles", TILES, TILE_MAX],
+                                       ["posters", POSTERS, POSTER_MAX]]) {
+    const old = names.filter(k => new RegExp("^sala-v[0-9]+-" + suffix + "$").test(k))
+      .sort((a, b) => Number(b.match(/[0-9]+/)[0]) - Number(a.match(/[0-9]+/)[0]))[0];
+    if (!old) continue;
+    const source = await caches.open(old), dest = await caches.open(target);
+    for (const req of await source.keys()) {
+      if (await dest.match(req)) continue;
+      const response = await source.match(req);
+      if (response && response.ok && response.type !== "opaque") await dest.put(req, response);
+    }
+    await trim(target, max);
+  }
+}
+
 self.addEventListener("activate", (e) => {
   e.waitUntil((async () => {
     const keep = new Set([SHELL, LIB, TILES, POSTERS]);
-    for (const k of await caches.keys()) if (!keep.has(k)) await caches.delete(k);
+    for (const k of await caches.keys()) {
+      if (!keep.has(k) && (/^sala-v[0-9]+-(shell|lib|tiles|posters)$/.test(k)
+          || /^sala-assets-v[0-9]+-(lib|tiles|posters)$/.test(k))) await caches.delete(k);
+    }
     await self.clients.claim();
   })());
 });
@@ -114,12 +136,16 @@ self.addEventListener("fetch", (e) => {
   // network-first navigation would hang for the whole timeout underground, which is the
   // exact moment he is most likely to be opening this.
   if (req.mode === "navigate") {
+    const fresh = fetch(req).then(async (r) => {
+      if (r && r.ok) {
+        try { await (await caches.open(SHELL)).put("./index.html", r.clone()); }
+        catch (_) { /* the fetched page is still usable */ }
+      }
+      return r;
+    }).catch(() => null);
+    e.waitUntil(fresh);
     e.respondWith((async () => {
-      const cached = await caches.match("./index.html");
-      const fresh = fetch(req).then((r) => {
-        if (r && r.ok) caches.open(SHELL).then((c) => c.put("./index.html", r.clone()));
-        return r;
-      }).catch(() => null);
+      const cached = await (await caches.open(SHELL)).match("./index.html");
       return cached || (await fresh) || new Response(
         "<h1>Offline</h1><p>Open Sala once with a signal and it will work without one after that.</p>",
         { headers: { "Content-Type": "text/html" } });
@@ -138,7 +164,10 @@ self.addEventListener("fetch", (e) => {
         const r = await fetch(req);
         // Only real responses. An opaque one has status 0 and would be indistinguishable
         // from a cached error, which is how a permanently grey map happens.
-        if (r && r.ok) { await c.put(req, r.clone()); trim(TILES, TILE_MAX); }
+        if (r && r.ok) {
+          try { await c.put(req, r.clone()); await trim(TILES, TILE_MAX); }
+          catch (_) { /* return the fetched tile even if storage is full */ }
+        }
         return r;
       } catch (_) {
         return new Response("", { status: 504 });
@@ -159,7 +188,10 @@ self.addEventListener("fetch", (e) => {
       if (hit) return hit;
       try {
         const r = await fetch(req);
-        if (r && r.ok) await c.put(req, r.clone());
+        if (r && r.ok) {
+          try { await c.put(req, r.clone()); await trim(POSTERS, POSTER_MAX); }
+          catch (_) { /* return the fetched poster even if storage is full */ }
+        }
         return r;
       } catch (_) { return new Response("", { status: 504 }); }
     })());
@@ -171,13 +203,18 @@ self.addEventListener("fetch", (e) => {
   if (url.hostname === "cdnjs.cloudflare.com"
       || url.hostname === "fonts.googleapis.com"
       || url.hostname === "fonts.gstatic.com") {
+    const cache = caches.open(LIB);
+    const fresh = cache.then(c => fetch(req).then(async (r) => {
+      if (r && r.ok) {
+        try { await c.put(req, r.clone()); await trim(LIB, LIB_MAX); }
+        catch (_) { /* return the fetched library file even if storage is full */ }
+      }
+      return r;
+    })).catch(() => null);
+    e.waitUntil(fresh);
     e.respondWith((async () => {
-      const c = await caches.open(LIB);
+      const c = await cache;
       const hit = await c.match(req);
-      const fresh = fetch(req).then((r) => {
-        if (r && r.ok) c.put(req, r.clone());
-        return r;
-      }).catch(() => null);
       return hit || (await fresh) || new Response("", { status: 504 });
     })());
     return;
@@ -193,13 +230,18 @@ self.addEventListener("fetch", (e) => {
   // its contents change when the build runs, and the copy on screen being one launch
   // behind is the right trade for a sheet that opens instantly.
   if (url.origin === self.location.origin && /\/detail\.json$/.test(url.pathname)) {
+    const cache = caches.open(SHELL);
+    const fresh = cache.then(c => fetch(req).then(async (r) => {
+      if (r && r.ok) {
+        try { await c.put(req, r.clone()); }
+        catch (_) { /* return the fetched detail even if storage is full */ }
+      }
+      return r;
+    })).catch(() => null);
+    e.waitUntil(fresh);
     e.respondWith((async () => {
-      const c = await caches.open(SHELL);
+      const c = await cache;
       const hit = await c.match(req);
-      const fresh = fetch(req).then((r) => {
-        if (r && r.ok) c.put(req, r.clone());
-        return r;
-      }).catch(() => null);
       return hit || (await fresh) || new Response("null",
         { headers: { "Content-Type": "application/json" } });
     })());
