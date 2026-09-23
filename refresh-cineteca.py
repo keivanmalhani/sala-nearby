@@ -55,6 +55,7 @@ map centre). Nothing here is geocoded and nothing is guessed.
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import importlib.util
 import json
 import math
@@ -242,11 +243,31 @@ def film_cards(html):
 def sessions_for(html, year):
     """Every showtime on one film's detail page: (cinemacode, date, HH:MM, session_id)."""
     out = []
-    for m in re.finditer(
-            r"visSelectTickets\.aspx\?cinemacode=(\d+)&(?:amp;)?txtSessionId=(\d+)"
-            r".*?<div[^>]*>\s*\w+\s+(\d{1,2})\s+de\s+([A-Za-zÁÉÍÓÚáéíóú]+)\s*<br>\s*"
-            r"(\d{1,2}):(\d{2})\s*H\s*</div>", html, re.S | re.I):
-        code, sid, dd, mes, hh, mm = m.groups()
+    # Each ticket link owns one date/time. Parse inside its anchor so a malformed
+    # showing cannot borrow the date/time from the next link. The current site puts
+    # a room label and <b> around the time after <br>; older pages put it directly
+    # after <br>. Treat those presentational tags as text, not as a schema.
+    for anchor in re.finditer(r"<a\b[^>]*>.*?</a\s*>", html, re.S | re.I):
+        a = html_lib.unescape(anchor.group())
+        ticket = re.search(
+            r"visSelectTickets\.aspx\?cinemacode=(\d+)&txtSessionId=(\d+)", a, re.I)
+        if not ticket:
+            continue
+        body = a.split(">", 1)[1]
+        showing = re.search(r"<div\b[^>]*>(.*?)</div\s*>", body, re.S | re.I)
+        if not showing:
+            continue
+        parts = re.split(r"<br\s*/?>", showing.group(1), maxsplit=1, flags=re.I)
+        if len(parts) != 2:
+            continue
+        day = re.search(r"\b(\d{1,2})\s+de\s+([A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)\b",
+                        strip_tags(parts[0]), re.I)
+        clock = re.search(r"\b(\d{1,2}):(\d{2})\s*H\b", strip_tags(parts[1]), re.I)
+        if not day or not clock:
+            continue
+        code, sid = ticket.groups()
+        dd, mes = day.groups()
+        hh, mm = clock.groups()
         month = MESES.get(unicodedata.normalize("NFKD", mes.lower())
                           .encode("ascii", "ignore").decode())
         if not month:
@@ -320,10 +341,15 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
-    page = open(PAGE, encoding="utf-8").read()
+    with open(PAGE, encoding="utf-8") as source:
+        page = source.read()
     shows, i0, i1 = read_shows(page)
     before = date_set(shows)
     n_before = sum(len(c["s"]) for c in shows["cin"])
+    # The previous Cineteca board is replaced, so only Cinemex rows are required
+    # to survive this merge. Yesterday's screenings may legitimately roll off.
+    before_cinemex = {row for row in before
+                      if not str(row[0]).startswith("cineteca-")}
     print("the page holds %d cinemas, %d showings, %d days"
           % (len(shows["cin"]), n_before, len(shows["days"])))
 
@@ -351,6 +377,13 @@ def main():
             failed.append((f["title"], str(e)[:50]))
             continue
         ss = sessions_for(detail, date.today().year)
+        ticket_ids = set(re.findall(r"visSelectTickets\.aspx\?cinemacode=\d+"
+                                    r"&(?:amp;)?txtSessionId=(\d+)", detail, re.I))
+        parsed_ids = {s[3] for s in ss}
+        if not ss or ticket_ids != parsed_ids:
+            failed.append((f["title"], "%d ticket ids, %d parsed" %
+                           (len(ticket_ids), len(parsed_ids))))
+            continue
         # DEDUPE ON THE SESSION ID, which is unique per showing. The detail page emits
         # every showtime twice -- merging the duplicate cartelera cards was not the cause,
         # the repetition is inside one page -- and the first version of this shipped
@@ -374,7 +407,8 @@ def main():
         time.sleep(0.3)
 
     if failed:
-        print("  %d films could not be read, first: %s" % (len(failed), failed[0]))
+        sys.exit("%d film detail pages were incomplete, first: %s -- refusing to write"
+                 % (len(failed), failed[0]))
     if not rows:
         sys.exit("no showtimes were parsed from any film page -- refusing to write")
     print("%d Cineteca showings across %d films, %d sedes"
@@ -431,13 +465,14 @@ def main():
     # that looks fine and lists the wrong day.
     problems = []
     after = date_set(shows)
-    lost = before - after
+    lost = before_cinemex - after
     if lost:
         problems.append("the remap changed or lost %d existing showings, first %s"
                         % (len(lost), sorted(lost)[0]))
     n_after = sum(len(c["s"]) for c in shows["cin"])
-    if n_after <= n_before:
-        problems.append("showings did not grow: %d -> %d" % (n_before, n_after))
+    if n_after <= len(before_cinemex):
+        problems.append("Cineteca added no showings to %d preserved Cinemex rows"
+                        % len(before_cinemex))
     if len(shows["days"]) < len(days):
         problems.append("the day list shrank")
     for c in shows["cin"]:
@@ -491,8 +526,9 @@ def main():
         for p in problems:
             print("  REFUSING: %s" % p)
         sys.exit(1)
-    print("controls pass: every one of the %d showings already on the page kept its "
-          "exact date and time, and the page gained %d" % (len(before), n_after - n_before))
+    print("controls pass: every one of the %d Cinemex showings kept its exact date "
+          "and time, and Cineteca supplied %d showings"
+          % (len(before_cinemex), n_after - len(before_cinemex)))
 
     # ---- one film, one entry -----------------------------------------------
     # Both chains are on the page now, so this is where "La Odisea" stops being two

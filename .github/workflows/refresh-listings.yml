@@ -36,8 +36,8 @@ jobs:
           python-version: "3.13"
 
       # Each fetch refuses to write a payload materially worse than the published one, so a
-      # blocked or broken source leaves the page as it was. continue-on-error keeps a site
-      # that turns a hosted runner away from failing the job every morning.
+      # blocked or broken source leaves the page as it was. Keep running to summarize all
+      # outcomes, then fail the job below if a required source did not finish successfully.
       - name: Showtimes from Cinemex
         id: cinemex
         continue-on-error: true
@@ -97,3 +97,9 @@ jobs:
             echo "Directors: ${{ steps.directors.outcome }}"
             echo "Published: ${{ steps.publish.outputs.published || 'no' }}"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if a required listing source failed
+        if: always() && (steps.cinemex.outcome != 'success' || steps.cineteca.outcome != 'success' || steps.directors.outcome != 'success')
+        run: |
+          echo 'Required listing refresh failed; the published page was kept unchanged.' >&2
+          exit 1
