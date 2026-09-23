@@ -106,6 +106,27 @@ try {
   check("the page has something on it to begin with",
         on.cinemas > 5 && on.prices > 50 && on.posters > 20, on.count);
   check("the worker is controlling the page", warm.controlled);
+  // THE POSTERS, read out of the caches rather than off the screen. The on-screen count
+  // below cannot fail: it counts poster tags, and a lazy poster on a tab nobody opened
+  // never loads, so it never errors and never drops out. What decides whether a poster
+  // shows with no signal is whether the poster cache holds it, so ask the cache, for
+  // every poster this first visit downloaded. Polled, because the page hands over
+  // posters that were still downloading when the worker took control.
+  let posterGap = null;
+  for (let i = 0; i < 12; i++) {
+    posterGap = JSON.parse(await js(`(async () => {
+      const c = await caches.open("sala-assets-v1-posters");
+      const kept = new Set((await c.keys()).map(r => r.url));
+      const loaded = performance.getEntriesByType("resource").map(e => e.name)
+        .filter(u => u.includes("/posters/") && u.split("?")[0].endsWith(".jpg"));
+      return JSON.stringify({ loaded: loaded.length, missing: loaded.filter(u => !kept.has(u)).length });
+    })()`));
+    if (posterGap.loaded && !posterGap.missing) break;
+    await sleep(500);
+  }
+  check("every poster the first visit downloaded is in the poster cache",
+        posterGap.loaded > 0 && posterGap.missing === 0,
+        `${posterGap.loaded - posterGap.missing} of ${posterGap.loaded}`);
   // THE ASSERTION THIS FILE EXISTS FOR. Before 2026-09-09 there was no lib cache at all
   // after one visit, so this is the line that was red.
   check("maplibre-gl.min.js is in a cache this app controls, after ONE visit",
@@ -121,6 +142,28 @@ try {
   await send("Network.clearBrowserCache");
   await send("Network.emulateNetworkConditions",
     { offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0 });
+  // AND THE WORKER'S NETWORK, which the page's switch does not reach. The service worker
+  // is its own target, so its fetch() still went out to the local server: a poster missing
+  // from every cache came back live and "the posters came back" could not fail. That is
+  // how 0 of 16 first-visit posters in the poster cache passed here until 23 September.
+  const swTarget = (await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json())
+    .find(x => x.type === "service_worker");
+  check("the service worker is a target this check can cut off", !!swTarget);
+  let swWs = null;
+  if (swTarget) {
+    swWs = new WebSocket(swTarget.webSocketDebuggerUrl);
+    await new Promise((res, rej) => { swWs.addEventListener("open", res); swWs.addEventListener("error", rej); });
+    let swId = 0; const swPending = new Map();
+    swWs.addEventListener("message", ev => { const m = JSON.parse(ev.data);
+      if (m.id !== undefined && swPending.has(m.id)) { const p = swPending.get(m.id); swPending.delete(m.id);
+        m.error ? p.reject(new Error(m.error.message)) : p.resolve(m.result); } });
+    const swSend = (method, params = {}) => new Promise((res, rej) => {
+      const mid = ++swId; swPending.set(mid, { resolve: res, reject: rej });
+      swWs.send(JSON.stringify({ id: mid, method, params })); });
+    await swSend("Network.enable");
+    await swSend("Network.emulateNetworkConditions",
+      { offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0 });
+  }
   await send("Page.navigate", { url: URL_ });
   await sleep(4200);
   await js(`localStorage.setItem("sala.install","done"); document.querySelectorAll("[role=dialog]").forEach(d=>d.remove()); true`);
@@ -147,6 +190,7 @@ try {
     markers: document.querySelectorAll(".vdot").length })`));
   check("and the map draws", mapOk.canvas, mapOk.markers + " markers");
   check("nothing threw on the way", thrown.length === 0, thrown[0] || "clean");
+  if (swWs) swWs.close();
   ws.close();
 } catch (e) {
   console.error("offline-check could not run:", e.message);

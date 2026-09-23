@@ -15,7 +15,7 @@
 // BUMPED ON EVERY PUBLISH. Only the shell changes with the listing snapshot. The library,
 // map tiles and posters survive a shell upgrade so a daily refresh does not erase the
 // assets someone already downloaded for offline use.
-const V = "sala-v56";
+const V = "sala-v57";
 const SHELL = V + "-shell";
 const LIB = "sala-assets-v1-lib";
 const TILES = "sala-assets-v1-tiles";
@@ -28,6 +28,11 @@ const PRECACHE = [
   "./",
   "./index.html",
   "./places.json",
+  // Prices, seat counts and ratings. The page asks for it before this worker claims it,
+  // so the detail branch below never saw it on a first visit, and the shell cache starts
+  // empty on every daily bump: measured 23 September, 0 of 381 prices on the next launch
+  // with no signal. 30 KB, and it changes with the build, which is when this runs.
+  "./detail.json",
   "./manifest.webmanifest",
   "./favicon.svg",
   "./icons/icon-180.png",
